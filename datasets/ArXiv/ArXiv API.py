@@ -24,7 +24,7 @@ API_Output = pd.DataFrame(columns = ["URL", "Title", "Published", "Updated", "Au
 # Examine if 2nd, 3rd Author Possible
 # Include Column for Search Query + Verctorize Search Query to Loop
 # Filter URL to search within quant-ph only, etc
-# TODO: #1 Testing Issue Push @dooglak
+# can write "TO-DO" with no hypen to generate an issue - not yet sure how to assign, @ does not work in python: #1 Testing Issue Push @dooglak (does not assign user)
 
 ######################################
 ########## Calling from API ##########
