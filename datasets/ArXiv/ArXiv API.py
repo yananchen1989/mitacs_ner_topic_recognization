@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# python
 # coding: utf-8
 
 ######################################
@@ -18,21 +18,26 @@ from IPython.display import display
 ######################################
 
 API_Output = pd.DataFrame(columns = ["URL", "Title", "Published", "Updated", "Author", "Abstract"])
-
+# Set Rows = # Total Results to Pre-Allocate (TBD)
+# Sort by Publish Date
+# Remove Update Date
+# Examine if 2nd, 3rd Author Possible
+# Include Column for Search Query + Verctorize Search Query to Loop
+# Filter URL to search within quant-ph only, etc
 
 ######################################
 ########## Calling from API ##########
 ######################################
 
-# Base api query url
-base_url = 'http://export.arxiv.org/api/query?';
+# Base API Query URL
+base_url = 'http://export.arxiv.org/api/query?'
 
-# Search parameters
+# Search Parameters
 search_query = 'all:quantum%20computing'    # search for articles relating to quantum computing
 start = 0                                   # start at the first result
-total_results = 100                          # want # total results (suggested was 20)
-results_per_iteration = 50                  # # of results at a time (suggested was 5)
-wait_time = 3                               # number of seconds to wait beetween calls (suggested was 3)
+total_results = 10                          # want # total results (suggested was 20)
+results_per_iteration = 5                   # Number of results at a time (suggested was 5)
+wait_time = 3                               # number of seconds to wait between calls (suggested was 3)
 
 print('Searching arXiv for: "%s" \n\n' % search_query)
 
@@ -74,7 +79,7 @@ display(API_Output.tail(3))
 
 #Output into CSV
 API_Output.to_csv('nlp4quantumpapers/datasets/ArXiv/API_Output.csv',index=False)
-
+# See if generalized file path w/ Git repo is possible
 
 
 
