@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 ######################################
 ########## Library/Packages ##########
 ######################################
@@ -14,19 +11,13 @@ import pandas as pd
 import urllib
 import time
 import feedparser
-
-
-# In[2]:
-
+from IPython.display import display
 
 ######################################
 ########## Data Frame Prep  ##########
 ######################################
 
 API_Output = pd.DataFrame(columns = ["URL", "Title", "Published", "Updated", "Author", "Abstract"])
-
-
-# In[3]:
 
 
 ######################################
@@ -82,16 +73,8 @@ display(API_Output.head(3))
 display(API_Output.tail(3))
 
 #Output into CSV
-API_Output.to_csv('API_Output.csv',index=False)
+API_Output.to_csv('nlp4quantumpapers/datasets/ArXiv/API_Output.csv',index=False)
 
-
-# In[4]:
-
-
-
-
-
-# In[ ]:
 
 
 
