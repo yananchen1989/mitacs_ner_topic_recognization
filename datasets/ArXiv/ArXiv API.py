@@ -24,7 +24,9 @@ API_Output = pd.DataFrame(columns = ["URL", "Title", "Published", "Updated", "Au
 # Examine if 2nd, 3rd Author Possible
 # Include Column for Search Query + Verctorize Search Query to Loop
 # Filter URL to search within quant-ph only, etc
+
 # can write "TO-DO" with no hypen to generate an issue - not yet sure how to assign, @ does not work in python: #1 Testing Issue Push @dooglak (does not assign user)
+# Source: https://raw.githubusercontent.com/Microsoft/vscode-pull-request-github/362d450dc5267b8ff2a3c44b3eacba01ee7d94b2/.readme/issueDemo.gif
 
 ######################################
 ########## Calling from API ##########
