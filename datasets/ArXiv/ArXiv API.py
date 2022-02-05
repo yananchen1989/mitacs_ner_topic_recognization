@@ -1,4 +1,4 @@
-# python
+# python -u
 # coding: utf-8
 
 ######################################
@@ -22,6 +22,10 @@ import urllib
 import time
 import feedparser
 from IPython.display import display
+
+# For Clearing Terminal
+import os
+os.system("cls")
 
 ######################################
 ########## Calling from API ##########
