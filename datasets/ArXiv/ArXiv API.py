@@ -2,31 +2,26 @@
 # coding: utf-8
 
 ######################################
+##########  Changes to Make  #########
+######################################
+
+# Include Column for Search Query + Verctorize Search Query to Loop
+# Filter URL to search within quant-ph only, etc
+# Can add .replace('\n', ' ') to abstract to remove line breaks... ideal?
+
+######################################
 ########## Library/Packages ##########
 ######################################
 
 #!pip install feedparser
 
 import pandas as pd
+import numpy as np
+
 import urllib
 import time
 import feedparser
 from IPython.display import display
-
-######################################
-########## Data Frame Prep  ##########
-######################################
-
-API_Output = pd.DataFrame(columns = ["URL", "Title", "Published", "Updated", "Author", "Abstract"])
-# Set Rows = # Total Results to Pre-Allocate (TBD)
-# Sort by Publish Date
-# Remove Update Date
-# Examine if 2nd, 3rd Author Possible
-# Include Column for Search Query + Verctorize Search Query to Loop
-# Filter URL to search within quant-ph only, etc
-
-# can write "TO-DO" with no hypen to generate an issue - not yet sure how to assign, @ does not work in python: #1 Testing Issue Push @dooglak (does not assign user)
-# Source: https://raw.githubusercontent.com/Microsoft/vscode-pull-request-github/362d450dc5267b8ff2a3c44b3eacba01ee7d94b2/.readme/issueDemo.gif
 
 ######################################
 ########## Calling from API ##########
@@ -38,11 +33,15 @@ base_url = 'http://export.arxiv.org/api/query?'
 # Search Parameters
 search_query = 'all:quantum%20computing'    # search for articles relating to quantum computing
 start = 0                                   # start at the first result
-total_results = 10                          # want # total results (suggested was 20)
-results_per_iteration = 5                   # Number of results at a time (suggested was 5)
-wait_time = 3                               # number of seconds to wait between calls (suggested was 3)
+total_results = 4                          # want # total results (suggested was 20)
+results_per_iteration = 2                   # Number of results at a time (suggested was 5)
+wait_time = 1                               # number of seconds to wait between calls (suggested was 3)
 
-print('Searching arXiv for: "%s" \n\n' % search_query)
+#Pre-Set
+Cnt=0
+API_Dict={}
+
+print('Searching arXiv for: "%s" ' % search_query)
 
 
 #Looping Through Results
@@ -63,27 +62,22 @@ for i in range(start,total_results,results_per_iteration):
 
     # Run through each entry, and grab selected information
     for entry in feed.entries:
-        API_Output = API_Output.append({"URL":entry.id,
-                                        "Title":entry.title,
-                                        "Published":entry.published[:10],
-                                        "Updated":entry.updated[:10],
-                                        "Author":entry.author, #Note: This is the FIRST Author only.
-                                        "Abstract":entry.summary}, ignore_index=True)
+        #Enter Values into Dictionary
+        API_Dict[Cnt] = [entry.id, entry.title, entry.published[:10], entry.author, entry.summary]
+        Cnt += 1
 
-    
     #Wait to re-call from API
     print('Wait %i Second(s)' % wait_time)
     time.sleep(wait_time)
     
 # Exited For Loop
-print("\n\nData Gathering Complete!")
-display(API_Output.head(3))
-display(API_Output.tail(3))
+print("Data Gathering Complete")
 
-#Output into CSV
+# Generate Dataframe, Make Edits, Sort, Output to CSV
+API_Output = pd.DataFrame.from_dict(API_Dict,orient='index', columns = ["URL", "Title", "Published", "Author", "Abstract"])
+API_Output["Published"] = pd.to_datetime(API_Output["Published"])
+API_Output = API_Output.sort_values(by="Published", ascending=False)
+
 API_Output.to_csv('nlp4quantumpapers/datasets/ArXiv/API_Output.csv',index=False)
-# See if generalized file path w/ Git repo is possible
-
-
-
+print("Output to CSV Complete")
 

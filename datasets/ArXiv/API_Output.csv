@@ -1,10 +1,5 @@
-URL,Title,Published,Updated,Author,Abstract
-http://arxiv.org/abs/quant-ph/0003151v1,Unconventional Quantum Computing Devices,2000-03-31,2000-03-31,Seth Lloyd,"This paper investigates a variety of unconventional quantum computation
-devices, including fermionic quantum computers and computers that exploit
-nonlinear quantum mechanics. It is shown that unconventional quantum computing
-devices can in principle compute some quantities more rapidly than
-`conventional' quantum computers."
-http://arxiv.org/abs/2111.15352v2,Understanding Quantum Technologies,2021-11-24,2021-12-01,Olivier Ezratty,"Understanding Quantum Technologies is a 836 pages creative-commons ebook that
+URL,Title,Published,Author,Abstract
+http://arxiv.org/abs/2111.15352v2,Understanding Quantum Technologies,2021-11-24,Olivier Ezratty,"Understanding Quantum Technologies is a 836 pages creative-commons ebook that
 provides a unique 360 degrees overview of quantum technologies from science and
 technology to geopolitical and societal issues. It covers quantum physics
 history, quantum physics 101, gate-based quantum computing, quantum computing
@@ -16,7 +11,7 @@ quantum fake sciences. The main audience are computer science engineers,
 developers and IT specialists as well as quantum scientists and students who
 want to acquire a global view of how quantum technologies work, and
 particularly quantum computing."
-http://arxiv.org/abs/1311.4939v1,Geometrical perspective on quantum states and quantum computation,2013-11-20,2013-11-20,Zeqian Chen,"We interpret quantum computing as a geometric evolution process by
+http://arxiv.org/abs/1311.4939v1,Geometrical perspective on quantum states and quantum computation,2013-11-20,Zeqian Chen,"We interpret quantum computing as a geometric evolution process by
 reformulating finite quantum systems via Connes' noncommutative geometry. In
 this formulation, quantum states are represented as noncommutative connections,
 while gauge transformations on the connections play a role of unitary quantum
@@ -24,7 +19,7 @@ operations. Thereby, a geometrical model for quantum computation is presented,
 which is equivalent to the quantum circuit model. This result shows a geometric
 way of realizing quantum computing and as such, provides an alternative
 proposal of building a quantum computer."
-http://arxiv.org/abs/1210.0736v1,Quantum Computation and Quantum Information,2012-10-02,2012-10-02,Yazhen Wang,"Quantum computation and quantum information are of great current interest in
+http://arxiv.org/abs/1210.0736v1,Quantum Computation and Quantum Information,2012-10-02,Yazhen Wang,"Quantum computation and quantum information are of great current interest in
 computer science, mathematics, physical sciences and engineering. They will
 likely lead to a new wave of technological innovations in communication,
 computation and cryptography. As the theory of quantum physics is fundamentally
@@ -42,49 +37,8 @@ quantum information. We introduce the basic concepts of quantum computation and
 quantum simulation and present quantum algorithms that are known to be much
 faster than the available classic algorithms. We provide a statistical
 framework for the analysis of quantum algorithms and quantum simulation."
-http://arxiv.org/abs/1610.02500v1,"Probabilistic Process Algebra to Unifying Quantum and Classical
-  Computing in Closed Systems",2016-10-08,2016-10-08,Yong Wang,"We have unified quantum and classical computing in open quantum systems
-called qACP which is a quantum generalization of process algebra ACP. But, an
-axiomatization for quantum and classical processes with an assumption of closed
-quantum systems is still missing. For closed quantum systems, unitary operator,
-quantum measurement and quantum entanglement are three basic components for
-quantum computing. This leads to probability unavoidable. Along the solution of
-qACP to unify quantum and classical computing in open quantum systems, we unify
-quantum and classical computing with an assumption of closed systems under the
-framework of ACP-like probabilistic process algebra. This unification make it
-can be used widely in verification for quantum and classical computing mixed
-systems, such as most quantum communication protocols."
-http://arxiv.org/abs/0804.3401v1,Quantum Computational Complexity,2008-04-21,2008-04-21,John Watrous,"This article surveys quantum computational complexity, with a focus on three
-fundamental notions: polynomial-time quantum computations, the efficient
-verification of quantum proofs, and quantum interactive proof systems.
-Properties of quantum complexity classes based on these notions, such as BQP,
-QMA, and QIP, are presented. Other topics in quantum complexity, including
-quantum advice, space-bounded quantum computation, and bounded-depth quantum
-circuits, are also discussed."
-http://arxiv.org/abs/quant-ph/9603028v1,Simulations of Many-Body Quantum Systems by a Quantum Computer,1996-03-26,1996-03-26,Stephen Wiesner,"We suggest that quantum computers can solve quantum many-body problems that
-are impracticable to solve on a classical computer."
-http://arxiv.org/abs/quant-ph/0703105v1,A bird's eye view of quantum computers,2007-03-13,2007-03-13,Giuliano Strini,"Quantum computers are discussed in the general framework of computation, the
-laws of physics and the foundations of quantum mechanics."
-http://arxiv.org/abs/1507.03200v1,Duality quantum computer and the efficient quantum simulations,2015-07-12,2015-07-12,Gui-Lu Long,"In this paper, we firstly briefly review the duality quantum computer.
-Distinctly, the generalized quantum gates, the basic evolution operators in a
-duality quantum computer are no longer unitary, and they can be expressed in
-terms of linear combinations of unitary operators. All linear bounded operators
-can be realized in a duality quantum computer, and unitary operators are just
-the extreme points of the set of generalized quantum gates. A d-slits duality
-quantum computer can be realized in an ordinary quantum computer with an
-additional qudit using the duality quantum computing mode. Duality quantum
-computer provides flexibility and clear physical picture in designing quantum
-algorithms, serving as a useful bridge between quantum and classical
-algorithms. In this review, we will show that duality quantum computer can
-simulate quantum systems more efficiently than ordinary quantum computers by
-providing descriptions of the recent efficient quantum simulation algorithms of
-Childs et al [Quantum Information & Computation, 12(11-12): 901-924 (2012)] for
-the fast simulation of quantum systems with a sparse Hamiltonian, and the
-quantum simulation algorithm by Berry et al [Phys. Rev. Lett. 114, 090502
-(2015)], which provides exponential improvement in precision for simulating
-systems with a sparse Hamiltonian."
-http://arxiv.org/abs/quant-ph/0201082v1,"Quantum Computers and Quantum Computer Languages: Quantum Assembly
-  Language and Quantum C Language",2002-01-18,2002-01-18,Stephen Blaha,"We show a representation of Quantum Computers defines Quantum Turing Machines
-with associated Quantum Grammars. We then create examples of Quantum Grammars.
-Lastly we develop an algebraic approach to high level Quantum Languages using
-Quantum Assembly language and Quantum C language as examples."
+http://arxiv.org/abs/quant-ph/0003151v1,Unconventional Quantum Computing Devices,2000-03-31,Seth Lloyd,"This paper investigates a variety of unconventional quantum computation
+devices, including fermionic quantum computers and computers that exploit
+nonlinear quantum mechanics. It is shown that unconventional quantum computing
+devices can in principle compute some quantities more rapidly than
+`conventional' quantum computers."
