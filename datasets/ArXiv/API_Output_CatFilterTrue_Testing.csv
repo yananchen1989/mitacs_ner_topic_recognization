@@ -1,0 +1,2041 @@
+URL,Title,Published,Author,Abstract,Atom Category,Specified Category,Search Term
+http://arxiv.org/abs/2112.06078v1,A Note on the Post-Quantum Security of (Ring) Signatures,2021-12-11,Giulio Malavolta,"This work revisits the security of classical signatures and ring signatures
+in a quantum world. For (ordinary) signatures, we focus on the arguably
+preferable security notion of blind-unforgeability recently proposed by Alagic
+et al. (Eurocrypt'20). We present two short signature schemes achieving this
+notion: one is in the quantum random oracle model, assuming quantum hardness of
+SIS; and the other is in the plain model, assuming quantum hardness of LWE with
+super-polynomial modulus. Prior to this work, the only known blind-unforgeable
+schemes are Lamport's one-time signature and the Winternitz one-time signature,
+and both of them are in the quantum random oracle model.
+  For ring signatures, the recent work by Chatterjee et al. (Crypto'21)
+proposes a definition trying to capture adversaries with quantum access to the
+signer. However, it is unclear if their definition, when restricted to the
+classical world, is as strong as the standard security notion for ring
+signatures. They also present a construction that only partially achieves
+(even) this seeming weak definition, in the sense that the adversary can only
+conduct superposition attacks over the messages, but not the rings. We propose
+a new definition that does not suffer from the above issue. Our definition is
+an analog to the blind-unforgeability in the ring signature setting. Moreover,
+assuming the quantum hardness of LWE, we construct a compiler converting any
+blind-unforgeable (ordinary) signatures to a ring signature satisfying our
+definition.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/2112.06078v1,A Note on the Post-Quantum Security of (Ring) Signatures,2021-12-11,Giulio Malavolta,"This work revisits the security of classical signatures and ring signatures
+in a quantum world. For (ordinary) signatures, we focus on the arguably
+preferable security notion of blind-unforgeability recently proposed by Alagic
+et al. (Eurocrypt'20). We present two short signature schemes achieving this
+notion: one is in the quantum random oracle model, assuming quantum hardness of
+SIS; and the other is in the plain model, assuming quantum hardness of LWE with
+super-polynomial modulus. Prior to this work, the only known blind-unforgeable
+schemes are Lamport's one-time signature and the Winternitz one-time signature,
+and both of them are in the quantum random oracle model.
+  For ring signatures, the recent work by Chatterjee et al. (Crypto'21)
+proposes a definition trying to capture adversaries with quantum access to the
+signer. However, it is unclear if their definition, when restricted to the
+classical world, is as strong as the standard security notion for ring
+signatures. They also present a construction that only partially achieves
+(even) this seeming weak definition, in the sense that the adversary can only
+conduct superposition attacks over the messages, but not the rings. We propose
+a new definition that does not suffer from the above issue. Our definition is
+an analog to the blind-unforgeability in the ring signature setting. Moreover,
+assuming the quantum hardness of LWE, we construct a compiler converting any
+blind-unforgeable (ordinary) signatures to a ring signature satisfying our
+definition.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/2112.06078v1,A Note on the Post-Quantum Security of (Ring) Signatures,2021-12-11,Giulio Malavolta,"This work revisits the security of classical signatures and ring signatures
+in a quantum world. For (ordinary) signatures, we focus on the arguably
+preferable security notion of blind-unforgeability recently proposed by Alagic
+et al. (Eurocrypt'20). We present two short signature schemes achieving this
+notion: one is in the quantum random oracle model, assuming quantum hardness of
+SIS; and the other is in the plain model, assuming quantum hardness of LWE with
+super-polynomial modulus. Prior to this work, the only known blind-unforgeable
+schemes are Lamport's one-time signature and the Winternitz one-time signature,
+and both of them are in the quantum random oracle model.
+  For ring signatures, the recent work by Chatterjee et al. (Crypto'21)
+proposes a definition trying to capture adversaries with quantum access to the
+signer. However, it is unclear if their definition, when restricted to the
+classical world, is as strong as the standard security notion for ring
+signatures. They also present a construction that only partially achieves
+(even) this seeming weak definition, in the sense that the adversary can only
+conduct superposition attacks over the messages, but not the rings. We propose
+a new definition that does not suffer from the above issue. Our definition is
+an analog to the blind-unforgeability in the ring signature setting. Moreover,
+assuming the quantum hardness of LWE, we construct a compiler converting any
+blind-unforgeable (ordinary) signatures to a ring signature satisfying our
+definition.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/2112.06078v1,A Note on the Post-Quantum Security of (Ring) Signatures,2021-12-11,Giulio Malavolta,"This work revisits the security of classical signatures and ring signatures
+in a quantum world. For (ordinary) signatures, we focus on the arguably
+preferable security notion of blind-unforgeability recently proposed by Alagic
+et al. (Eurocrypt'20). We present two short signature schemes achieving this
+notion: one is in the quantum random oracle model, assuming quantum hardness of
+SIS; and the other is in the plain model, assuming quantum hardness of LWE with
+super-polynomial modulus. Prior to this work, the only known blind-unforgeable
+schemes are Lamport's one-time signature and the Winternitz one-time signature,
+and both of them are in the quantum random oracle model.
+  For ring signatures, the recent work by Chatterjee et al. (Crypto'21)
+proposes a definition trying to capture adversaries with quantum access to the
+signer. However, it is unclear if their definition, when restricted to the
+classical world, is as strong as the standard security notion for ring
+signatures. They also present a construction that only partially achieves
+(even) this seeming weak definition, in the sense that the adversary can only
+conduct superposition attacks over the messages, but not the rings. We propose
+a new definition that does not suffer from the above issue. Our definition is
+an analog to the blind-unforgeability in the ring signature setting. Moreover,
+assuming the quantum hardness of LWE, we construct a compiler converting any
+blind-unforgeable (ordinary) signatures to a ring signature satisfying our
+definition.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/2106.10488v1,Superconducting quantum computer: a hint for building architectures,2021-06-19,Shinichi Yorozu,"We discuss the scalability of superconducting quantum computers, especially
+in a wiring problem. The number of wiring inside a cryostat is almost
+proportional to the number of qubits in current wiring architectures. We
+introduce regularity, modularity, and hierarchy to an architecture design of
+superconducting quantum computers. The key to the wiring elimination is found
+in the quantum error correction codes having thresholds and spatial
+translational symmetry, i.e., the surface code. We show a
+superconducting-digital-logic-based architecture and introduce a stacked
+heterogeneous structure of the quantum module.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/2106.10488v1,Superconducting quantum computer: a hint for building architectures,2021-06-19,Shinichi Yorozu,"We discuss the scalability of superconducting quantum computers, especially
+in a wiring problem. The number of wiring inside a cryostat is almost
+proportional to the number of qubits in current wiring architectures. We
+introduce regularity, modularity, and hierarchy to an architecture design of
+superconducting quantum computers. The key to the wiring elimination is found
+in the quantum error correction codes having thresholds and spatial
+translational symmetry, i.e., the surface code. We show a
+superconducting-digital-logic-based architecture and introduce a stacked
+heterogeneous structure of the quantum module.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/2106.10488v1,Superconducting quantum computer: a hint for building architectures,2021-06-19,Shinichi Yorozu,"We discuss the scalability of superconducting quantum computers, especially
+in a wiring problem. The number of wiring inside a cryostat is almost
+proportional to the number of qubits in current wiring architectures. We
+introduce regularity, modularity, and hierarchy to an architecture design of
+superconducting quantum computers. The key to the wiring elimination is found
+in the quantum error correction codes having thresholds and spatial
+translational symmetry, i.e., the surface code. We show a
+superconducting-digital-logic-based architecture and introduce a stacked
+heterogeneous structure of the quantum module.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/2106.10488v1,Superconducting quantum computer: a hint for building architectures,2021-06-19,Shinichi Yorozu,"We discuss the scalability of superconducting quantum computers, especially
+in a wiring problem. The number of wiring inside a cryostat is almost
+proportional to the number of qubits in current wiring architectures. We
+introduce regularity, modularity, and hierarchy to an architecture design of
+superconducting quantum computers. The key to the wiring elimination is found
+in the quantum error correction codes having thresholds and spatial
+translational symmetry, i.e., the surface code. We show a
+superconducting-digital-logic-based architecture and introduce a stacked
+heterogeneous structure of the quantum module.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/2009.10001v3,Time-reversal symmetry breaking in a square lattice,2020-09-21,Jose Reslen,"The bulk conductivity of a two-dimensional system is studied assuming that
+quantum interference effects break time-reversal symmetry in the presence of
+strong spin-orbit interaction and strong lattice potential. The study is
+carried out by direct diagonalization in order to explore the
+nonlinear-response regime. The system displays a quantized conductivity that
+depends on the intensity of the electric field and under specific conditions
+the conductivity limit at zero electric field shows a nonvanishing value.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/2009.10001v3,Time-reversal symmetry breaking in a square lattice,2020-09-21,Jose Reslen,"The bulk conductivity of a two-dimensional system is studied assuming that
+quantum interference effects break time-reversal symmetry in the presence of
+strong spin-orbit interaction and strong lattice potential. The study is
+carried out by direct diagonalization in order to explore the
+nonlinear-response regime. The system displays a quantized conductivity that
+depends on the intensity of the electric field and under specific conditions
+the conductivity limit at zero electric field shows a nonvanishing value.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/2009.10001v3,Time-reversal symmetry breaking in a square lattice,2020-09-21,Jose Reslen,"The bulk conductivity of a two-dimensional system is studied assuming that
+quantum interference effects break time-reversal symmetry in the presence of
+strong spin-orbit interaction and strong lattice potential. The study is
+carried out by direct diagonalization in order to explore the
+nonlinear-response regime. The system displays a quantized conductivity that
+depends on the intensity of the electric field and under specific conditions
+the conductivity limit at zero electric field shows a nonvanishing value.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/2009.10001v3,Time-reversal symmetry breaking in a square lattice,2020-09-21,Jose Reslen,"The bulk conductivity of a two-dimensional system is studied assuming that
+quantum interference effects break time-reversal symmetry in the presence of
+strong spin-orbit interaction and strong lattice potential. The study is
+carried out by direct diagonalization in order to explore the
+nonlinear-response regime. The system displays a quantized conductivity that
+depends on the intensity of the electric field and under specific conditions
+the conductivity limit at zero electric field shows a nonvanishing value.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1912.00777v2,"Electromagnetically induced acoustic transparency with a superconducting
+  circuit",2019-12-02,Per Delsing,"We report the observation of Electromagnetically Induced Transparency (EIT)
+of a mechanical field, where a superconducting artificial atom is coupled to a
+1D-transmission line for surface acoustic waves. An electromagnetic microwave
+drive is used as the control field, rendering the superconducting transmon
+qubit transparent to the acoustic probe beam. The strong frequency dependence
+of the acoustic coupling enables EIT in a ladder configuration due to the
+suppressed relaxation of the upper level. Our results show that superconducting
+circuits can be engineered to interact with acoustic fields in parameter
+regimes not readily accessible to purely electromagnetic systems.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1912.00777v2,"Electromagnetically induced acoustic transparency with a superconducting
+  circuit",2019-12-02,Per Delsing,"We report the observation of Electromagnetically Induced Transparency (EIT)
+of a mechanical field, where a superconducting artificial atom is coupled to a
+1D-transmission line for surface acoustic waves. An electromagnetic microwave
+drive is used as the control field, rendering the superconducting transmon
+qubit transparent to the acoustic probe beam. The strong frequency dependence
+of the acoustic coupling enables EIT in a ladder configuration due to the
+suppressed relaxation of the upper level. Our results show that superconducting
+circuits can be engineered to interact with acoustic fields in parameter
+regimes not readily accessible to purely electromagnetic systems.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1912.00777v2,"Electromagnetically induced acoustic transparency with a superconducting
+  circuit",2019-12-02,Per Delsing,"We report the observation of Electromagnetically Induced Transparency (EIT)
+of a mechanical field, where a superconducting artificial atom is coupled to a
+1D-transmission line for surface acoustic waves. An electromagnetic microwave
+drive is used as the control field, rendering the superconducting transmon
+qubit transparent to the acoustic probe beam. The strong frequency dependence
+of the acoustic coupling enables EIT in a ladder configuration due to the
+suppressed relaxation of the upper level. Our results show that superconducting
+circuits can be engineered to interact with acoustic fields in parameter
+regimes not readily accessible to purely electromagnetic systems.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1912.00777v2,"Electromagnetically induced acoustic transparency with a superconducting
+  circuit",2019-12-02,Per Delsing,"We report the observation of Electromagnetically Induced Transparency (EIT)
+of a mechanical field, where a superconducting artificial atom is coupled to a
+1D-transmission line for surface acoustic waves. An electromagnetic microwave
+drive is used as the control field, rendering the superconducting transmon
+qubit transparent to the acoustic probe beam. The strong frequency dependence
+of the acoustic coupling enables EIT in a ladder configuration due to the
+suppressed relaxation of the upper level. Our results show that superconducting
+circuits can be engineered to interact with acoustic fields in parameter
+regimes not readily accessible to purely electromagnetic systems.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/1810.03094v2,Entangled multi-knot lattice model of anyon current,2018-10-07,Tieyan Si,"We proposed an entangled multi-knot lattice model to explore the exotic
+statistics of anyon. This knot lattice model bears abelian and non-abelian
+anyons as well as integral and fractional filling states that is similar to
+quantum Hall system. The fusion rules of anyon are explicitly demonstrated by
+braiding on crossing states of the multi-knot lattice. The statistical
+character of anyon is quantified by topological linking number of multi-knot
+link. Long-range coupling interaction is a fundamental character of this knot
+lattice model. The short range coupling models, such as Ising model, fermion
+paring model, Kitaev honeycomb lattice model and so on, appears as the short
+range coupling case of the knot lattice model. We introduced link lattice
+pattern as geometric representation of the eigenstate of quantum many body
+model to explore the topological nature of quantum eigen-states. For example, a
+convection flow loop is introduced into the well-know BCS fermions pairing
+model to show the Pseudo-gap state in unconventional super-conducting state.
+The integral and fractional filling numbers in quantum Hall system is directly
+quantized by topological linking number. The quantum phase transition between
+different quantum states in quantum spin model is also directly quantified by
+the change of topological linking number, which revealed topological character
+of phase transition. This multi-knot lattice has a promising physical
+implementation by circularized photons in optical firbre network. It may also
+provide another different path to topological quantum computation.",cond-mat.str-el,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1809.08747v1,"Design of an on-chip superconducting microwave circulator with octave
+  bandwidth",2018-09-24,K. W. Lehnert,"We present a design for a superconducting, on-chip circulator composed of
+dynamically modulated transfer switches and delays. Design goals are set for
+the multiplexed readout of superconducting qubits. Simulations of the device
+show that it allows for low-loss circulation (insertion loss < 0.35 dB and
+isolation >20 dB) over an instantaneous bandwidth of 2.3 GHz. As the device is
+estimated to be linear for input powers up to -65 dBm, this design improves on
+the bandwidth and power-handling of previous superconducting circulators by
+over a factor of 50, making it ideal for integration with broadband quantum
+limited amplifiers.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1809.08747v1,"Design of an on-chip superconducting microwave circulator with octave
+  bandwidth",2018-09-24,K. W. Lehnert,"We present a design for a superconducting, on-chip circulator composed of
+dynamically modulated transfer switches and delays. Design goals are set for
+the multiplexed readout of superconducting qubits. Simulations of the device
+show that it allows for low-loss circulation (insertion loss < 0.35 dB and
+isolation >20 dB) over an instantaneous bandwidth of 2.3 GHz. As the device is
+estimated to be linear for input powers up to -65 dBm, this design improves on
+the bandwidth and power-handling of previous superconducting circulators by
+over a factor of 50, making it ideal for integration with broadband quantum
+limited amplifiers.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1809.08747v1,"Design of an on-chip superconducting microwave circulator with octave
+  bandwidth",2018-09-24,K. W. Lehnert,"We present a design for a superconducting, on-chip circulator composed of
+dynamically modulated transfer switches and delays. Design goals are set for
+the multiplexed readout of superconducting qubits. Simulations of the device
+show that it allows for low-loss circulation (insertion loss < 0.35 dB and
+isolation >20 dB) over an instantaneous bandwidth of 2.3 GHz. As the device is
+estimated to be linear for input powers up to -65 dBm, this design improves on
+the bandwidth and power-handling of previous superconducting circulators by
+over a factor of 50, making it ideal for integration with broadband quantum
+limited amplifiers.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1809.08747v1,"Design of an on-chip superconducting microwave circulator with octave
+  bandwidth",2018-09-24,K. W. Lehnert,"We present a design for a superconducting, on-chip circulator composed of
+dynamically modulated transfer switches and delays. Design goals are set for
+the multiplexed readout of superconducting qubits. Simulations of the device
+show that it allows for low-loss circulation (insertion loss < 0.35 dB and
+isolation >20 dB) over an instantaneous bandwidth of 2.3 GHz. As the device is
+estimated to be linear for input powers up to -65 dBm, this design improves on
+the bandwidth and power-handling of previous superconducting circulators by
+over a factor of 50, making it ideal for integration with broadband quantum
+limited amplifiers.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1801.00286v1,Blocking-state influence on shot noise and conductance in quantum dots,2017-12-31,C. Schönenberger,"Quantum dots (QDs) investigated through electron transport measurements often
+exhibit varying, state-dependent tunnel couplings to the leads. Under specific
+conditions, weakly coupled states can result in a strong suppression of the
+electrical current and they are correspondingly called blocking states. Using
+the combination of conductance and shot noise measurements, we investigate
+blocking states in carbon nanotube (CNT) QDs. We report negative differential
+conductance and super-Poissonian noise. The enhanced noise is the signature of
+electron bunching, which originates from random switches between the strongly
+and weakly conducting states of the QD. Negative differential conductance
+appears here when the blocking state is an excited state. In this case, at the
+threshold voltage where the blocking state becomes populated, the current is
+reduced. Using a master equation approach, we provide numerical simulations
+reproducing both the conductance and the shot noise pattern observed in our
+measurements.",cond-mat.mes-hall,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1801.00286v1,Blocking-state influence on shot noise and conductance in quantum dots,2017-12-31,C. Schönenberger,"Quantum dots (QDs) investigated through electron transport measurements often
+exhibit varying, state-dependent tunnel couplings to the leads. Under specific
+conditions, weakly coupled states can result in a strong suppression of the
+electrical current and they are correspondingly called blocking states. Using
+the combination of conductance and shot noise measurements, we investigate
+blocking states in carbon nanotube (CNT) QDs. We report negative differential
+conductance and super-Poissonian noise. The enhanced noise is the signature of
+electron bunching, which originates from random switches between the strongly
+and weakly conducting states of the QD. Negative differential conductance
+appears here when the blocking state is an excited state. In this case, at the
+threshold voltage where the blocking state becomes populated, the current is
+reduced. Using a master equation approach, we provide numerical simulations
+reproducing both the conductance and the shot noise pattern observed in our
+measurements.",cond-mat.mes-hall,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1801.00286v1,Blocking-state influence on shot noise and conductance in quantum dots,2017-12-31,C. Schönenberger,"Quantum dots (QDs) investigated through electron transport measurements often
+exhibit varying, state-dependent tunnel couplings to the leads. Under specific
+conditions, weakly coupled states can result in a strong suppression of the
+electrical current and they are correspondingly called blocking states. Using
+the combination of conductance and shot noise measurements, we investigate
+blocking states in carbon nanotube (CNT) QDs. We report negative differential
+conductance and super-Poissonian noise. The enhanced noise is the signature of
+electron bunching, which originates from random switches between the strongly
+and weakly conducting states of the QD. Negative differential conductance
+appears here when the blocking state is an excited state. In this case, at the
+threshold voltage where the blocking state becomes populated, the current is
+reduced. Using a master equation approach, we provide numerical simulations
+reproducing both the conductance and the shot noise pattern observed in our
+measurements.",cond-mat.mes-hall,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1801.00286v1,Blocking-state influence on shot noise and conductance in quantum dots,2017-12-31,C. Schönenberger,"Quantum dots (QDs) investigated through electron transport measurements often
+exhibit varying, state-dependent tunnel couplings to the leads. Under specific
+conditions, weakly coupled states can result in a strong suppression of the
+electrical current and they are correspondingly called blocking states. Using
+the combination of conductance and shot noise measurements, we investigate
+blocking states in carbon nanotube (CNT) QDs. We report negative differential
+conductance and super-Poissonian noise. The enhanced noise is the signature of
+electron bunching, which originates from random switches between the strongly
+and weakly conducting states of the QD. Negative differential conductance
+appears here when the blocking state is an excited state. In this case, at the
+threshold voltage where the blocking state becomes populated, the current is
+reduced. Using a master equation approach, we provide numerical simulations
+reproducing both the conductance and the shot noise pattern observed in our
+measurements.",cond-mat.mes-hall,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/1705.00670v2,"Experimental realization of nondestructive discrimination of Bell states
+  using a five-qubit quantum computer",2017-05-01,Anirban Pathak,"A scheme for distributed quantum measurement that allows nondestructive or
+indirect Bell measurement was proposed by Gupta et al., (Int. J. Quant. Infor.
+\textbf{5} (2007) 627) and subsequently realized experimentally using an
+NMR-based three-qubit quantum computer by Samal et al., (J. Phys. B,
+\textbf{43} (2010) 095508). In the present work, a similar experiment is
+performed using the five-qubit super-conductivity-based quantum computer, which
+has been recently placed in cloud by IBM Corporation. The experiment confirmed
+that the Bell state can be constructed and measured in a nondestructive manner
+with a reasonably high fidelity. A comparison of the outcomes of this study and
+the results obtained earlier in the NMR-based experiment has also been
+performed. The study indicates that to make a scalable SQUID-based computer,
+errors by the gates (in the present technology) have to be reduced
+considerably.",quant-ph,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/1612.01130v1,"Solutions of the Bogoliubov-de Gennes equation with position dependent
+  Fermi--velocity and gap profiles",2016-12-04,P. Roy,"It is shown that bound state solutions of the one dimensional Bogoliubov-de
+Gennes (BdG) equation may exist when the Fermi velocity becomes dependent on
+the space coordinate. The existence of bound states in continuum (BIC) like
+solutions has also been confirmed both in the normal phase as well as in the
+super-conducting phase. We also show that a combination of Fermi velocity and
+gap parameter step-like profiles provides scattering solutions with normal
+reflection and transmission.",cond-mat.mes-hall,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/1612.01130v1,"Solutions of the Bogoliubov-de Gennes equation with position dependent
+  Fermi--velocity and gap profiles",2016-12-04,P. Roy,"It is shown that bound state solutions of the one dimensional Bogoliubov-de
+Gennes (BdG) equation may exist when the Fermi velocity becomes dependent on
+the space coordinate. The existence of bound states in continuum (BIC) like
+solutions has also been confirmed both in the normal phase as well as in the
+super-conducting phase. We also show that a combination of Fermi velocity and
+gap parameter step-like profiles provides scattering solutions with normal
+reflection and transmission.",cond-mat.mes-hall,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/1612.01130v1,"Solutions of the Bogoliubov-de Gennes equation with position dependent
+  Fermi--velocity and gap profiles",2016-12-04,P. Roy,"It is shown that bound state solutions of the one dimensional Bogoliubov-de
+Gennes (BdG) equation may exist when the Fermi velocity becomes dependent on
+the space coordinate. The existence of bound states in continuum (BIC) like
+solutions has also been confirmed both in the normal phase as well as in the
+super-conducting phase. We also show that a combination of Fermi velocity and
+gap parameter step-like profiles provides scattering solutions with normal
+reflection and transmission.",cond-mat.mes-hall,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/1612.01130v1,"Solutions of the Bogoliubov-de Gennes equation with position dependent
+  Fermi--velocity and gap profiles",2016-12-04,P. Roy,"It is shown that bound state solutions of the one dimensional Bogoliubov-de
+Gennes (BdG) equation may exist when the Fermi velocity becomes dependent on
+the space coordinate. The existence of bound states in continuum (BIC) like
+solutions has also been confirmed both in the normal phase as well as in the
+super-conducting phase. We also show that a combination of Fermi velocity and
+gap parameter step-like profiles provides scattering solutions with normal
+reflection and transmission.",cond-mat.mes-hall,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/1606.04222v1,"Observation of collective coupling between an engineered ensemble of
+  macroscopic artificial atoms and a superconducting resonator",2016-06-14,Shiro Saito,"The hybridization of distinct quantum systems is now seen as an effective way
+to engineer the properties of an entire system leading to applications in
+quantum metamaterials, quantum simulation, and quantum metrology. One well
+known example is superconducting circuits coupled to ensembles of microscopic
+natural atoms. In such cases, the properties of the individual atom are
+intrinsic, and so are unchangeable. However, current technology allows us to
+fabricate large ensembles of macroscopic artificial atoms such as
+superconducting flux qubits, where we can really tailor and control the
+properties of individual qubits. Here, we demonstrate coherent coupling between
+a microwave resonator and several thousand superconducting flux qubits, where
+we observe a large dispersive frequency shift in the spectrum of 250 MHz
+induced by collective behavior. These results represent the largest number of
+coupled superconducting qubits realized so far. Our approach shows that it is
+now possible to engineer the properties of the ensemble, opening up the way for
+the controlled exploration of the quantum many-body system.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1606.04222v1,"Observation of collective coupling between an engineered ensemble of
+  macroscopic artificial atoms and a superconducting resonator",2016-06-14,Shiro Saito,"The hybridization of distinct quantum systems is now seen as an effective way
+to engineer the properties of an entire system leading to applications in
+quantum metamaterials, quantum simulation, and quantum metrology. One well
+known example is superconducting circuits coupled to ensembles of microscopic
+natural atoms. In such cases, the properties of the individual atom are
+intrinsic, and so are unchangeable. However, current technology allows us to
+fabricate large ensembles of macroscopic artificial atoms such as
+superconducting flux qubits, where we can really tailor and control the
+properties of individual qubits. Here, we demonstrate coherent coupling between
+a microwave resonator and several thousand superconducting flux qubits, where
+we observe a large dispersive frequency shift in the spectrum of 250 MHz
+induced by collective behavior. These results represent the largest number of
+coupled superconducting qubits realized so far. Our approach shows that it is
+now possible to engineer the properties of the ensemble, opening up the way for
+the controlled exploration of the quantum many-body system.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1606.04222v1,"Observation of collective coupling between an engineered ensemble of
+  macroscopic artificial atoms and a superconducting resonator",2016-06-14,Shiro Saito,"The hybridization of distinct quantum systems is now seen as an effective way
+to engineer the properties of an entire system leading to applications in
+quantum metamaterials, quantum simulation, and quantum metrology. One well
+known example is superconducting circuits coupled to ensembles of microscopic
+natural atoms. In such cases, the properties of the individual atom are
+intrinsic, and so are unchangeable. However, current technology allows us to
+fabricate large ensembles of macroscopic artificial atoms such as
+superconducting flux qubits, where we can really tailor and control the
+properties of individual qubits. Here, we demonstrate coherent coupling between
+a microwave resonator and several thousand superconducting flux qubits, where
+we observe a large dispersive frequency shift in the spectrum of 250 MHz
+induced by collective behavior. These results represent the largest number of
+coupled superconducting qubits realized so far. Our approach shows that it is
+now possible to engineer the properties of the ensemble, opening up the way for
+the controlled exploration of the quantum many-body system.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1606.04222v1,"Observation of collective coupling between an engineered ensemble of
+  macroscopic artificial atoms and a superconducting resonator",2016-06-14,Shiro Saito,"The hybridization of distinct quantum systems is now seen as an effective way
+to engineer the properties of an entire system leading to applications in
+quantum metamaterials, quantum simulation, and quantum metrology. One well
+known example is superconducting circuits coupled to ensembles of microscopic
+natural atoms. In such cases, the properties of the individual atom are
+intrinsic, and so are unchangeable. However, current technology allows us to
+fabricate large ensembles of macroscopic artificial atoms such as
+superconducting flux qubits, where we can really tailor and control the
+properties of individual qubits. Here, we demonstrate coherent coupling between
+a microwave resonator and several thousand superconducting flux qubits, where
+we observe a large dispersive frequency shift in the spectrum of 250 MHz
+induced by collective behavior. These results represent the largest number of
+coupled superconducting qubits realized so far. Our approach shows that it is
+now possible to engineer the properties of the ensemble, opening up the way for
+the controlled exploration of the quantum many-body system.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1605.08009v1,Investigating surface loss effects in superconducting transmon qubits,2016-05-25,M. Steffen,"Superconducting qubits are sensitive to a variety of loss mechanisms
+including dielectric loss from interfaces. By changing the physical footprint
+of the qubit it is possible to modulate sensitivity to surface loss. Here we
+show a systematic study of planar superconducting transmons of differing
+physical footprints to optimize the qubit design for maximum coherence. We find
+that qubits with small footprints are limited by surface loss and that qubits
+with large footprints are limited by other loss mechanisms which are currently
+not understood.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1605.08009v1,Investigating surface loss effects in superconducting transmon qubits,2016-05-25,M. Steffen,"Superconducting qubits are sensitive to a variety of loss mechanisms
+including dielectric loss from interfaces. By changing the physical footprint
+of the qubit it is possible to modulate sensitivity to surface loss. Here we
+show a systematic study of planar superconducting transmons of differing
+physical footprints to optimize the qubit design for maximum coherence. We find
+that qubits with small footprints are limited by surface loss and that qubits
+with large footprints are limited by other loss mechanisms which are currently
+not understood.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1605.08009v1,Investigating surface loss effects in superconducting transmon qubits,2016-05-25,M. Steffen,"Superconducting qubits are sensitive to a variety of loss mechanisms
+including dielectric loss from interfaces. By changing the physical footprint
+of the qubit it is possible to modulate sensitivity to surface loss. Here we
+show a systematic study of planar superconducting transmons of differing
+physical footprints to optimize the qubit design for maximum coherence. We find
+that qubits with small footprints are limited by surface loss and that qubits
+with large footprints are limited by other loss mechanisms which are currently
+not understood.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1605.08009v1,Investigating surface loss effects in superconducting transmon qubits,2016-05-25,M. Steffen,"Superconducting qubits are sensitive to a variety of loss mechanisms
+including dielectric loss from interfaces. By changing the physical footprint
+of the qubit it is possible to modulate sensitivity to surface loss. Here we
+show a systematic study of planar superconducting transmons of differing
+physical footprints to optimize the qubit design for maximum coherence. We find
+that qubits with small footprints are limited by surface loss and that qubits
+with large footprints are limited by other loss mechanisms which are currently
+not understood.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1602.08919v2,"Entanglement concentration of microwave photons based on Kerr effect in
+  circuit QED",2016-02-29,Haibo Wang,"In recent years, superconducting qubits show great potential in quantum
+computation. Hence, microwave photons become very interesting qubits for
+quantum information processing assisted by superconducting quantum computation.
+Here, we present the first protocol for the entanglement concentration on
+microwave photons, resorting to the cross-Kerr effect in circuit quantum
+electrodynamics (QED). Two superconducting transmission line resonators (TLRs)
+coupled to superconducting molecule with the N-type level structure induce the
+effective cross-Kerr effect for realizing the quantum nondemolition (QND)
+measurement on microwave photons. With this device, we present a two-qubit
+polarization parity QND detector on the photon states of the superconducting
+TLRs, which can be used to concentrate efficiently the nonlocal non-maximally
+entangled states of microwave photons assisted by several linear microwave
+elements. This protocol has a high efficiency and it may be useful for
+solid-state quantum information processing assisted by microwave photons.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1602.08919v2,"Entanglement concentration of microwave photons based on Kerr effect in
+  circuit QED",2016-02-29,Haibo Wang,"In recent years, superconducting qubits show great potential in quantum
+computation. Hence, microwave photons become very interesting qubits for
+quantum information processing assisted by superconducting quantum computation.
+Here, we present the first protocol for the entanglement concentration on
+microwave photons, resorting to the cross-Kerr effect in circuit quantum
+electrodynamics (QED). Two superconducting transmission line resonators (TLRs)
+coupled to superconducting molecule with the N-type level structure induce the
+effective cross-Kerr effect for realizing the quantum nondemolition (QND)
+measurement on microwave photons. With this device, we present a two-qubit
+polarization parity QND detector on the photon states of the superconducting
+TLRs, which can be used to concentrate efficiently the nonlocal non-maximally
+entangled states of microwave photons assisted by several linear microwave
+elements. This protocol has a high efficiency and it may be useful for
+solid-state quantum information processing assisted by microwave photons.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1602.08919v2,"Entanglement concentration of microwave photons based on Kerr effect in
+  circuit QED",2016-02-29,Haibo Wang,"In recent years, superconducting qubits show great potential in quantum
+computation. Hence, microwave photons become very interesting qubits for
+quantum information processing assisted by superconducting quantum computation.
+Here, we present the first protocol for the entanglement concentration on
+microwave photons, resorting to the cross-Kerr effect in circuit quantum
+electrodynamics (QED). Two superconducting transmission line resonators (TLRs)
+coupled to superconducting molecule with the N-type level structure induce the
+effective cross-Kerr effect for realizing the quantum nondemolition (QND)
+measurement on microwave photons. With this device, we present a two-qubit
+polarization parity QND detector on the photon states of the superconducting
+TLRs, which can be used to concentrate efficiently the nonlocal non-maximally
+entangled states of microwave photons assisted by several linear microwave
+elements. This protocol has a high efficiency and it may be useful for
+solid-state quantum information processing assisted by microwave photons.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1602.08919v2,"Entanglement concentration of microwave photons based on Kerr effect in
+  circuit QED",2016-02-29,Haibo Wang,"In recent years, superconducting qubits show great potential in quantum
+computation. Hence, microwave photons become very interesting qubits for
+quantum information processing assisted by superconducting quantum computation.
+Here, we present the first protocol for the entanglement concentration on
+microwave photons, resorting to the cross-Kerr effect in circuit quantum
+electrodynamics (QED). Two superconducting transmission line resonators (TLRs)
+coupled to superconducting molecule with the N-type level structure induce the
+effective cross-Kerr effect for realizing the quantum nondemolition (QND)
+measurement on microwave photons. With this device, we present a two-qubit
+polarization parity QND detector on the photon states of the superconducting
+TLRs, which can be used to concentrate efficiently the nonlocal non-maximally
+entangled states of microwave photons assisted by several linear microwave
+elements. This protocol has a high efficiency and it may be useful for
+solid-state quantum information processing assisted by microwave photons.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1408.5972v1,"Solid state optical interconnect between distant superconducting quantum
+  chips",2014-08-26,Jason Twamley,"We propose a design for a quantum interface exploiting the electron spins in
+crystals to swap the quantum states between the optical and microwave. Using
+sideband driving of a superconducting flux qubit and a combined
+cavity/solid-state spin ensemble Raman transition, we demonstrate how a
+stimulated Raman adiabatic passage (STIRAP)-type operation can swap the quantum
+state between a superconducting flux qubit and an optical cavity mode with a
+fidelity higher than $90\%$. We further consider two distant superconducting
+qubits with their respective interfaces joined by an optical fiber and show a
+quantum transfer fidelity exceeding $90\%$ between the two distant qubits.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1408.5972v1,"Solid state optical interconnect between distant superconducting quantum
+  chips",2014-08-26,Jason Twamley,"We propose a design for a quantum interface exploiting the electron spins in
+crystals to swap the quantum states between the optical and microwave. Using
+sideband driving of a superconducting flux qubit and a combined
+cavity/solid-state spin ensemble Raman transition, we demonstrate how a
+stimulated Raman adiabatic passage (STIRAP)-type operation can swap the quantum
+state between a superconducting flux qubit and an optical cavity mode with a
+fidelity higher than $90\%$. We further consider two distant superconducting
+qubits with their respective interfaces joined by an optical fiber and show a
+quantum transfer fidelity exceeding $90\%$ between the two distant qubits.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1408.5972v1,"Solid state optical interconnect between distant superconducting quantum
+  chips",2014-08-26,Jason Twamley,"We propose a design for a quantum interface exploiting the electron spins in
+crystals to swap the quantum states between the optical and microwave. Using
+sideband driving of a superconducting flux qubit and a combined
+cavity/solid-state spin ensemble Raman transition, we demonstrate how a
+stimulated Raman adiabatic passage (STIRAP)-type operation can swap the quantum
+state between a superconducting flux qubit and an optical cavity mode with a
+fidelity higher than $90\%$. We further consider two distant superconducting
+qubits with their respective interfaces joined by an optical fiber and show a
+quantum transfer fidelity exceeding $90\%$ between the two distant qubits.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1408.5972v1,"Solid state optical interconnect between distant superconducting quantum
+  chips",2014-08-26,Jason Twamley,"We propose a design for a quantum interface exploiting the electron spins in
+crystals to swap the quantum states between the optical and microwave. Using
+sideband driving of a superconducting flux qubit and a combined
+cavity/solid-state spin ensemble Raman transition, we demonstrate how a
+stimulated Raman adiabatic passage (STIRAP)-type operation can swap the quantum
+state between a superconducting flux qubit and an optical cavity mode with a
+fidelity higher than $90\%$. We further consider two distant superconducting
+qubits with their respective interfaces joined by an optical fiber and show a
+quantum transfer fidelity exceeding $90\%$ between the two distant qubits.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1408.2168v2,"Fast universal quantum gates on microwave photons with all-resonance
+  operations in circuit QED",2014-08-10,Fu-Guo Deng,"Stark shift on a superconducting qubit in circuit quantum electrodynamics
+(QED) has been used to construct universal quantum entangling gates on
+superconducting resonators in previous works. It is a second-order coupling
+effect between the resonator and the qubit in the dispersive regime, which
+leads to a slow state-selective rotation on the qubit. Here, we present two
+proposals to construct the fast universal quantum gates on superconducting
+resonators in a microwave-photon quantum processor composed of multiple
+superconducting resonators coupled to a superconducting transmon qutrit, that
+is, the controlled-phase (c-phase) gate on two microwave-photon resonators and
+the controlled-controlled phase (cc-phase) gates on three resonators, resorting
+to quantum resonance operations, without any drive field. Compared with
+previous works, our universal quantum gates have the higher fidelities and
+shorter operation times in theory. The numerical simulation shows that the
+fidelity of our c-phase gate is 99.57% within about 38.1 ns and that of our
+cc-phase gate is 99.25% within about 73.3 ns.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1408.2168v2,"Fast universal quantum gates on microwave photons with all-resonance
+  operations in circuit QED",2014-08-10,Fu-Guo Deng,"Stark shift on a superconducting qubit in circuit quantum electrodynamics
+(QED) has been used to construct universal quantum entangling gates on
+superconducting resonators in previous works. It is a second-order coupling
+effect between the resonator and the qubit in the dispersive regime, which
+leads to a slow state-selective rotation on the qubit. Here, we present two
+proposals to construct the fast universal quantum gates on superconducting
+resonators in a microwave-photon quantum processor composed of multiple
+superconducting resonators coupled to a superconducting transmon qutrit, that
+is, the controlled-phase (c-phase) gate on two microwave-photon resonators and
+the controlled-controlled phase (cc-phase) gates on three resonators, resorting
+to quantum resonance operations, without any drive field. Compared with
+previous works, our universal quantum gates have the higher fidelities and
+shorter operation times in theory. The numerical simulation shows that the
+fidelity of our c-phase gate is 99.57% within about 38.1 ns and that of our
+cc-phase gate is 99.25% within about 73.3 ns.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1408.2168v2,"Fast universal quantum gates on microwave photons with all-resonance
+  operations in circuit QED",2014-08-10,Fu-Guo Deng,"Stark shift on a superconducting qubit in circuit quantum electrodynamics
+(QED) has been used to construct universal quantum entangling gates on
+superconducting resonators in previous works. It is a second-order coupling
+effect between the resonator and the qubit in the dispersive regime, which
+leads to a slow state-selective rotation on the qubit. Here, we present two
+proposals to construct the fast universal quantum gates on superconducting
+resonators in a microwave-photon quantum processor composed of multiple
+superconducting resonators coupled to a superconducting transmon qutrit, that
+is, the controlled-phase (c-phase) gate on two microwave-photon resonators and
+the controlled-controlled phase (cc-phase) gates on three resonators, resorting
+to quantum resonance operations, without any drive field. Compared with
+previous works, our universal quantum gates have the higher fidelities and
+shorter operation times in theory. The numerical simulation shows that the
+fidelity of our c-phase gate is 99.57% within about 38.1 ns and that of our
+cc-phase gate is 99.25% within about 73.3 ns.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1408.2168v2,"Fast universal quantum gates on microwave photons with all-resonance
+  operations in circuit QED",2014-08-10,Fu-Guo Deng,"Stark shift on a superconducting qubit in circuit quantum electrodynamics
+(QED) has been used to construct universal quantum entangling gates on
+superconducting resonators in previous works. It is a second-order coupling
+effect between the resonator and the qubit in the dispersive regime, which
+leads to a slow state-selective rotation on the qubit. Here, we present two
+proposals to construct the fast universal quantum gates on superconducting
+resonators in a microwave-photon quantum processor composed of multiple
+superconducting resonators coupled to a superconducting transmon qutrit, that
+is, the controlled-phase (c-phase) gate on two microwave-photon resonators and
+the controlled-controlled phase (cc-phase) gates on three resonators, resorting
+to quantum resonance operations, without any drive field. Compared with
+previous works, our universal quantum gates have the higher fidelities and
+shorter operation times in theory. The numerical simulation shows that the
+fidelity of our c-phase gate is 99.57% within about 38.1 ns and that of our
+cc-phase gate is 99.25% within about 73.3 ns.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1408.1556v2,"Robust manipulation of superconducting qubits in the presence of
+  fluctuations",2014-08-07,Franco Nori,"Superconducting quantum systems are promising candidates for quantum
+information processing due to their scalability and design flexibility.
+However, the existence of defects, fluctuations, and inaccuracies is
+unavoidable for practical superconducting quantum circuits. In this paper, a
+sampling-based learning control (SLC) method is used to guide the design of
+control fields for manipulating superconducting quantum systems. Numerical
+results for one-qubit systems and coupled two-qubit systems show that the
+""smart"" fields learned using the SLC method can achieve robust manipulation of
+superconducting qubits, even in the presence of large fluctuations and
+inaccuracies.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1408.1556v2,"Robust manipulation of superconducting qubits in the presence of
+  fluctuations",2014-08-07,Franco Nori,"Superconducting quantum systems are promising candidates for quantum
+information processing due to their scalability and design flexibility.
+However, the existence of defects, fluctuations, and inaccuracies is
+unavoidable for practical superconducting quantum circuits. In this paper, a
+sampling-based learning control (SLC) method is used to guide the design of
+control fields for manipulating superconducting quantum systems. Numerical
+results for one-qubit systems and coupled two-qubit systems show that the
+""smart"" fields learned using the SLC method can achieve robust manipulation of
+superconducting qubits, even in the presence of large fluctuations and
+inaccuracies.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1408.1556v2,"Robust manipulation of superconducting qubits in the presence of
+  fluctuations",2014-08-07,Franco Nori,"Superconducting quantum systems are promising candidates for quantum
+information processing due to their scalability and design flexibility.
+However, the existence of defects, fluctuations, and inaccuracies is
+unavoidable for practical superconducting quantum circuits. In this paper, a
+sampling-based learning control (SLC) method is used to guide the design of
+control fields for manipulating superconducting quantum systems. Numerical
+results for one-qubit systems and coupled two-qubit systems show that the
+""smart"" fields learned using the SLC method can achieve robust manipulation of
+superconducting qubits, even in the presence of large fluctuations and
+inaccuracies.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1408.1556v2,"Robust manipulation of superconducting qubits in the presence of
+  fluctuations",2014-08-07,Franco Nori,"Superconducting quantum systems are promising candidates for quantum
+information processing due to their scalability and design flexibility.
+However, the existence of defects, fluctuations, and inaccuracies is
+unavoidable for practical superconducting quantum circuits. In this paper, a
+sampling-based learning control (SLC) method is used to guide the design of
+control fields for manipulating superconducting quantum systems. Numerical
+results for one-qubit systems and coupled two-qubit systems show that the
+""smart"" fields learned using the SLC method can achieve robust manipulation of
+superconducting qubits, even in the presence of large fluctuations and
+inaccuracies.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1407.4938v2,"Quantum network of superconducting qubits through opto-mechanical
+  interface",2014-07-18,L. M. Duan,"We propose a scheme to realize quantum networking of superconducting qubits
+based on the opto-mechanical interface. The superconducting qubits interact
+with the microwave photons, which then couple to the optical photons through
+the opto-mechanical interface. The interface generates a quantum link between
+superconducting qubits and optical flying qubits with tunable pulse shapes and
+carrier frequencies, enabling transmission of quantum information to other
+superconducting or atomic qubits. We show that the scheme works under realistic
+experimental conditions and it also provides a way for fast initialization of
+the superconducting qubits under 1 K instead of 20 mK operation temperature.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1407.4938v2,"Quantum network of superconducting qubits through opto-mechanical
+  interface",2014-07-18,L. M. Duan,"We propose a scheme to realize quantum networking of superconducting qubits
+based on the opto-mechanical interface. The superconducting qubits interact
+with the microwave photons, which then couple to the optical photons through
+the opto-mechanical interface. The interface generates a quantum link between
+superconducting qubits and optical flying qubits with tunable pulse shapes and
+carrier frequencies, enabling transmission of quantum information to other
+superconducting or atomic qubits. We show that the scheme works under realistic
+experimental conditions and it also provides a way for fast initialization of
+the superconducting qubits under 1 K instead of 20 mK operation temperature.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1407.4938v2,"Quantum network of superconducting qubits through opto-mechanical
+  interface",2014-07-18,L. M. Duan,"We propose a scheme to realize quantum networking of superconducting qubits
+based on the opto-mechanical interface. The superconducting qubits interact
+with the microwave photons, which then couple to the optical photons through
+the opto-mechanical interface. The interface generates a quantum link between
+superconducting qubits and optical flying qubits with tunable pulse shapes and
+carrier frequencies, enabling transmission of quantum information to other
+superconducting or atomic qubits. We show that the scheme works under realistic
+experimental conditions and it also provides a way for fast initialization of
+the superconducting qubits under 1 K instead of 20 mK operation temperature.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1407.4938v2,"Quantum network of superconducting qubits through opto-mechanical
+  interface",2014-07-18,L. M. Duan,"We propose a scheme to realize quantum networking of superconducting qubits
+based on the opto-mechanical interface. The superconducting qubits interact
+with the microwave photons, which then couple to the optical photons through
+the opto-mechanical interface. The interface generates a quantum link between
+superconducting qubits and optical flying qubits with tunable pulse shapes and
+carrier frequencies, enabling transmission of quantum information to other
+superconducting or atomic qubits. We show that the scheme works under realistic
+experimental conditions and it also provides a way for fast initialization of
+the superconducting qubits under 1 K instead of 20 mK operation temperature.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1403.4676v2,Hall conductance and topological invariant for open systems,2014-03-19,X. X. Yi,"The Hall conductivity given by the Kubo formula is a linear response of the
+quantum transverse transport to a weak electric field. It has been intensively
+studied for a quantum system without decoherence, but it is barely explored for
+systems subject to decoherence. In this paper, we develop a formalism to deal
+with this issue for topological insulators. The Hall conductance for a
+topological insulator coupled to an environment is derived, the derivation is
+based on a linear response theory of open system. As an application, the Hall
+conductance of a two-band topological insulator and a two-dimensional lattice
+is presented and discussed.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1403.4676v2,Hall conductance and topological invariant for open systems,2014-03-19,X. X. Yi,"The Hall conductivity given by the Kubo formula is a linear response of the
+quantum transverse transport to a weak electric field. It has been intensively
+studied for a quantum system without decoherence, but it is barely explored for
+systems subject to decoherence. In this paper, we develop a formalism to deal
+with this issue for topological insulators. The Hall conductance for a
+topological insulator coupled to an environment is derived, the derivation is
+based on a linear response theory of open system. As an application, the Hall
+conductance of a two-band topological insulator and a two-dimensional lattice
+is presented and discussed.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1403.4676v2,Hall conductance and topological invariant for open systems,2014-03-19,X. X. Yi,"The Hall conductivity given by the Kubo formula is a linear response of the
+quantum transverse transport to a weak electric field. It has been intensively
+studied for a quantum system without decoherence, but it is barely explored for
+systems subject to decoherence. In this paper, we develop a formalism to deal
+with this issue for topological insulators. The Hall conductance for a
+topological insulator coupled to an environment is derived, the derivation is
+based on a linear response theory of open system. As an application, the Hall
+conductance of a two-band topological insulator and a two-dimensional lattice
+is presented and discussed.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1403.4676v2,Hall conductance and topological invariant for open systems,2014-03-19,X. X. Yi,"The Hall conductivity given by the Kubo formula is a linear response of the
+quantum transverse transport to a weak electric field. It has been intensively
+studied for a quantum system without decoherence, but it is barely explored for
+systems subject to decoherence. In this paper, we develop a formalism to deal
+with this issue for topological insulators. The Hall conductance for a
+topological insulator coupled to an environment is derived, the derivation is
+based on a linear response theory of open system. As an application, the Hall
+conductance of a two-band topological insulator and a two-dimensional lattice
+is presented and discussed.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1305.2023v3,Quantum marginal inequalities and the conjectured entropic inequalities,2013-05-09,Yuan-hong Tao,"A conjecture -- \emph{the modified super-additivity inequality} of relative
+entropy -- was proposed in \cite{Zhang2012}: There exist three unitary
+operators $U_A\in \unitary{\cH_A},U_B\in \unitary{\cH_B}$, and $U_{AB}\in
+\unitary{\cH_A\ot \cH_B}$ such that $$
+\rS(U_{AB}\rho_{AB}U^\dagger_{AB}||\sigma_{AB}) \geqslant
+\rS(U_A\rho_AU^\dagger_A||\sigma_A) + \rS(U_B\rho_BU^\dagger_B||\sigma_B), $$
+where the reference state $\sigma$ is required to be full-ranked. A numerical
+study on the conjectured inequality is conducted in this note. The results
+obtained indicate that the modified super-additivity inequality of relative
+entropy seems to hold for all qubit pairs.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1305.2023v3,Quantum marginal inequalities and the conjectured entropic inequalities,2013-05-09,Yuan-hong Tao,"A conjecture -- \emph{the modified super-additivity inequality} of relative
+entropy -- was proposed in \cite{Zhang2012}: There exist three unitary
+operators $U_A\in \unitary{\cH_A},U_B\in \unitary{\cH_B}$, and $U_{AB}\in
+\unitary{\cH_A\ot \cH_B}$ such that $$
+\rS(U_{AB}\rho_{AB}U^\dagger_{AB}||\sigma_{AB}) \geqslant
+\rS(U_A\rho_AU^\dagger_A||\sigma_A) + \rS(U_B\rho_BU^\dagger_B||\sigma_B), $$
+where the reference state $\sigma$ is required to be full-ranked. A numerical
+study on the conjectured inequality is conducted in this note. The results
+obtained indicate that the modified super-additivity inequality of relative
+entropy seems to hold for all qubit pairs.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1305.2023v3,Quantum marginal inequalities and the conjectured entropic inequalities,2013-05-09,Yuan-hong Tao,"A conjecture -- \emph{the modified super-additivity inequality} of relative
+entropy -- was proposed in \cite{Zhang2012}: There exist three unitary
+operators $U_A\in \unitary{\cH_A},U_B\in \unitary{\cH_B}$, and $U_{AB}\in
+\unitary{\cH_A\ot \cH_B}$ such that $$
+\rS(U_{AB}\rho_{AB}U^\dagger_{AB}||\sigma_{AB}) \geqslant
+\rS(U_A\rho_AU^\dagger_A||\sigma_A) + \rS(U_B\rho_BU^\dagger_B||\sigma_B), $$
+where the reference state $\sigma$ is required to be full-ranked. A numerical
+study on the conjectured inequality is conducted in this note. The results
+obtained indicate that the modified super-additivity inequality of relative
+entropy seems to hold for all qubit pairs.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1305.2023v3,Quantum marginal inequalities and the conjectured entropic inequalities,2013-05-09,Yuan-hong Tao,"A conjecture -- \emph{the modified super-additivity inequality} of relative
+entropy -- was proposed in \cite{Zhang2012}: There exist three unitary
+operators $U_A\in \unitary{\cH_A},U_B\in \unitary{\cH_B}$, and $U_{AB}\in
+\unitary{\cH_A\ot \cH_B}$ such that $$
+\rS(U_{AB}\rho_{AB}U^\dagger_{AB}||\sigma_{AB}) \geqslant
+\rS(U_A\rho_AU^\dagger_A||\sigma_A) + \rS(U_B\rho_BU^\dagger_B||\sigma_B), $$
+where the reference state $\sigma$ is required to be full-ranked. A numerical
+study on the conjectured inequality is conducted in this note. The results
+obtained indicate that the modified super-additivity inequality of relative
+entropy seems to hold for all qubit pairs.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1205.3156v4,"Theory and classification of interacting 'integer' topological phases in
+  two dimensions: A Chern-Simons approach",2012-05-14,Ashvin Vishwanath,"We study topological phases of interacting systems in two spatial dimensions
+in the absence of topological order (i.e. with a unique ground state on closed
+manifolds and no fractional excitations). These are the closest interacting
+analogs of integer Quantum Hall states, topological insulators and
+superconductors. We adapt the well-known Chern-Simons {K}-matrix description of
+Quantum Hall states to classify such `integer' topological phases. Our main
+result is a general formalism that incorporates symmetries into the
+{{K}}-matrix description. Remarkably, this simple analysis yields the same list
+of topological phases as a recent group cohomology classification, and in
+addition provides field theories and explicit edge theories for all these
+phases. The bosonic topological phases, which only appear in the presence of
+interactions and which remain well defined in the presence of disorder include
+(i) bosonic insulators with a Hall conductance quantized to even integers (ii)
+a bosonic analog of quantum spin Hall insulators and (iii) a bosonic analog of
+a chiral topological superconductor, whose K matrix is the Cartan matrix of Lie
+group E$_8$. We also discuss interacting fermion systems where symmetries are
+realized in a projective fashion, where we find the present formalism can
+handle a wider range of symmetries than a recent group super-cohomology
+classification. Lastly we construct microscopic models of these phases from
+coupled one-dimensional systems.",cond-mat.str-el,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1205.3156v4,"Theory and classification of interacting 'integer' topological phases in
+  two dimensions: A Chern-Simons approach",2012-05-14,Ashvin Vishwanath,"We study topological phases of interacting systems in two spatial dimensions
+in the absence of topological order (i.e. with a unique ground state on closed
+manifolds and no fractional excitations). These are the closest interacting
+analogs of integer Quantum Hall states, topological insulators and
+superconductors. We adapt the well-known Chern-Simons {K}-matrix description of
+Quantum Hall states to classify such `integer' topological phases. Our main
+result is a general formalism that incorporates symmetries into the
+{{K}}-matrix description. Remarkably, this simple analysis yields the same list
+of topological phases as a recent group cohomology classification, and in
+addition provides field theories and explicit edge theories for all these
+phases. The bosonic topological phases, which only appear in the presence of
+interactions and which remain well defined in the presence of disorder include
+(i) bosonic insulators with a Hall conductance quantized to even integers (ii)
+a bosonic analog of quantum spin Hall insulators and (iii) a bosonic analog of
+a chiral topological superconductor, whose K matrix is the Cartan matrix of Lie
+group E$_8$. We also discuss interacting fermion systems where symmetries are
+realized in a projective fashion, where we find the present formalism can
+handle a wider range of symmetries than a recent group super-cohomology
+classification. Lastly we construct microscopic models of these phases from
+coupled one-dimensional systems.",cond-mat.str-el,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1205.3156v4,"Theory and classification of interacting 'integer' topological phases in
+  two dimensions: A Chern-Simons approach",2012-05-14,Ashvin Vishwanath,"We study topological phases of interacting systems in two spatial dimensions
+in the absence of topological order (i.e. with a unique ground state on closed
+manifolds and no fractional excitations). These are the closest interacting
+analogs of integer Quantum Hall states, topological insulators and
+superconductors. We adapt the well-known Chern-Simons {K}-matrix description of
+Quantum Hall states to classify such `integer' topological phases. Our main
+result is a general formalism that incorporates symmetries into the
+{{K}}-matrix description. Remarkably, this simple analysis yields the same list
+of topological phases as a recent group cohomology classification, and in
+addition provides field theories and explicit edge theories for all these
+phases. The bosonic topological phases, which only appear in the presence of
+interactions and which remain well defined in the presence of disorder include
+(i) bosonic insulators with a Hall conductance quantized to even integers (ii)
+a bosonic analog of quantum spin Hall insulators and (iii) a bosonic analog of
+a chiral topological superconductor, whose K matrix is the Cartan matrix of Lie
+group E$_8$. We also discuss interacting fermion systems where symmetries are
+realized in a projective fashion, where we find the present formalism can
+handle a wider range of symmetries than a recent group super-cohomology
+classification. Lastly we construct microscopic models of these phases from
+coupled one-dimensional systems.",cond-mat.str-el,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1205.3156v4,"Theory and classification of interacting 'integer' topological phases in
+  two dimensions: A Chern-Simons approach",2012-05-14,Ashvin Vishwanath,"We study topological phases of interacting systems in two spatial dimensions
+in the absence of topological order (i.e. with a unique ground state on closed
+manifolds and no fractional excitations). These are the closest interacting
+analogs of integer Quantum Hall states, topological insulators and
+superconductors. We adapt the well-known Chern-Simons {K}-matrix description of
+Quantum Hall states to classify such `integer' topological phases. Our main
+result is a general formalism that incorporates symmetries into the
+{{K}}-matrix description. Remarkably, this simple analysis yields the same list
+of topological phases as a recent group cohomology classification, and in
+addition provides field theories and explicit edge theories for all these
+phases. The bosonic topological phases, which only appear in the presence of
+interactions and which remain well defined in the presence of disorder include
+(i) bosonic insulators with a Hall conductance quantized to even integers (ii)
+a bosonic analog of quantum spin Hall insulators and (iii) a bosonic analog of
+a chiral topological superconductor, whose K matrix is the Cartan matrix of Lie
+group E$_8$. We also discuss interacting fermion systems where symmetries are
+realized in a projective fashion, where we find the present formalism can
+handle a wider range of symmetries than a recent group super-cohomology
+classification. Lastly we construct microscopic models of these phases from
+coupled one-dimensional systems.",cond-mat.str-el,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1205.0637v2,Coherent control of microwave pulse storage in superconducting circuits,2012-05-03,Barry C. Sanders,"Coherent pulse control for quantum memory is viable in the optical domain but
+nascent in microwave quantum circuits. We show how to realize coherent storage
+and on-demand pulse retrieval entirely within a superconducting circuit by
+exploiting and extending existing electromagnetically induced transparency
+technology in superconducting quantum circuits. Our scheme employs a linear
+array of superconducting artificial atoms coupled to a microwave transmission
+line.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1205.0637v2,Coherent control of microwave pulse storage in superconducting circuits,2012-05-03,Barry C. Sanders,"Coherent pulse control for quantum memory is viable in the optical domain but
+nascent in microwave quantum circuits. We show how to realize coherent storage
+and on-demand pulse retrieval entirely within a superconducting circuit by
+exploiting and extending existing electromagnetically induced transparency
+technology in superconducting quantum circuits. Our scheme employs a linear
+array of superconducting artificial atoms coupled to a microwave transmission
+line.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1205.0637v2,Coherent control of microwave pulse storage in superconducting circuits,2012-05-03,Barry C. Sanders,"Coherent pulse control for quantum memory is viable in the optical domain but
+nascent in microwave quantum circuits. We show how to realize coherent storage
+and on-demand pulse retrieval entirely within a superconducting circuit by
+exploiting and extending existing electromagnetically induced transparency
+technology in superconducting quantum circuits. Our scheme employs a linear
+array of superconducting artificial atoms coupled to a microwave transmission
+line.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1205.0637v2,Coherent control of microwave pulse storage in superconducting circuits,2012-05-03,Barry C. Sanders,"Coherent pulse control for quantum memory is viable in the optical domain but
+nascent in microwave quantum circuits. We show how to realize coherent storage
+and on-demand pulse retrieval entirely within a superconducting circuit by
+exploiting and extending existing electromagnetically induced transparency
+technology in superconducting quantum circuits. Our scheme employs a linear
+array of superconducting artificial atoms coupled to a microwave transmission
+line.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1204.2858v1,"Image method in the calculation of the van der Waals force between an
+  atom and a conducting surface",2012-04-13,C. Farina,"Initially, we make a detailed historical survey of van der Waals forces,
+collecting the main references on the subject. Then, we review a method
+recently proposed by Eberlein and Zietal to compute the dispersion van der
+Waals interaction between a neutral but polarizable atom and a perfectly
+conducting surface of arbitrary shape. This method has the advantage of
+relating the quantum problem to a corresponding classical one in electrostatics
+so that all one needs is to compute an appropriate Green function. We show how
+the image method of electrostatics can be conveniently used together with the
+Eberlein and Zietal mehtod (when the problem admits an image solution). We then
+illustrate this method in a couple of simple but important cases, including the
+atom-sphere system. Particularly, in our last example, we present an original
+result, namely, the van der Waals force between an atom and a boss hat made of
+a grounded conducting material.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1204.2858v1,"Image method in the calculation of the van der Waals force between an
+  atom and a conducting surface",2012-04-13,C. Farina,"Initially, we make a detailed historical survey of van der Waals forces,
+collecting the main references on the subject. Then, we review a method
+recently proposed by Eberlein and Zietal to compute the dispersion van der
+Waals interaction between a neutral but polarizable atom and a perfectly
+conducting surface of arbitrary shape. This method has the advantage of
+relating the quantum problem to a corresponding classical one in electrostatics
+so that all one needs is to compute an appropriate Green function. We show how
+the image method of electrostatics can be conveniently used together with the
+Eberlein and Zietal mehtod (when the problem admits an image solution). We then
+illustrate this method in a couple of simple but important cases, including the
+atom-sphere system. Particularly, in our last example, we present an original
+result, namely, the van der Waals force between an atom and a boss hat made of
+a grounded conducting material.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1204.2858v1,"Image method in the calculation of the van der Waals force between an
+  atom and a conducting surface",2012-04-13,C. Farina,"Initially, we make a detailed historical survey of van der Waals forces,
+collecting the main references on the subject. Then, we review a method
+recently proposed by Eberlein and Zietal to compute the dispersion van der
+Waals interaction between a neutral but polarizable atom and a perfectly
+conducting surface of arbitrary shape. This method has the advantage of
+relating the quantum problem to a corresponding classical one in electrostatics
+so that all one needs is to compute an appropriate Green function. We show how
+the image method of electrostatics can be conveniently used together with the
+Eberlein and Zietal mehtod (when the problem admits an image solution). We then
+illustrate this method in a couple of simple but important cases, including the
+atom-sphere system. Particularly, in our last example, we present an original
+result, namely, the van der Waals force between an atom and a boss hat made of
+a grounded conducting material.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1204.2858v1,"Image method in the calculation of the van der Waals force between an
+  atom and a conducting surface",2012-04-13,C. Farina,"Initially, we make a detailed historical survey of van der Waals forces,
+collecting the main references on the subject. Then, we review a method
+recently proposed by Eberlein and Zietal to compute the dispersion van der
+Waals interaction between a neutral but polarizable atom and a perfectly
+conducting surface of arbitrary shape. This method has the advantage of
+relating the quantum problem to a corresponding classical one in electrostatics
+so that all one needs is to compute an appropriate Green function. We show how
+the image method of electrostatics can be conveniently used together with the
+Eberlein and Zietal mehtod (when the problem admits an image solution). We then
+illustrate this method in a couple of simple but important cases, including the
+atom-sphere system. Particularly, in our last example, we present an original
+result, namely, the van der Waals force between an atom and a boss hat made of
+a grounded conducting material.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/1203.4323v1,"2-GHz clock quantum key distribution over 260 km of standard telecom
+  fiber",2012-03-20,Zheng-Fu Han,"We report a demonstration of quantum key distribution (QKD) over a standard
+telecom fiber exceeding 50 dB in loss and 250 km in length. The differential
+phase shift QKD protocol was chosen and implemented with 2 GHz system clock
+rate. By careful optimization of the 1-bit delayed Faraday-Michelson
+interferometer and the use of the super-conducting single photon detector
+(SSPD), we achieved a quantum bit error rate below 2% when the fiber length was
+no more than 205 km, and of 3.45% for the 260 km length fiber with 52.9 dB
+loss. We also improved the quantum efficiency of SSPD to obtain high key rate
+for 50 km length.",quant-ph,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/1111.2915v1,Ultrafast all-optical switching by single photons,2011-11-12,Atac Imamoglu,"An outstanding goal in quantum optics is the realization of fast optical
+non-linearities at the single-photon level. Such non-linearities would allow
+for the realization of optical devices with new functionalities such as a
+single-photon switch/transistor or a controlled-phase gate, which could form
+the basis of future quantum optical technologies. While non-linear optics
+effects at the single-emitter level have been demonstrated in different
+systems, including atoms coupled to Fabry-Perot or toroidal micro-cavities,
+super-conducting qubits in strip-line resonators or quantum dots (QDs) in
+nano-cavities, none of these experiments so far has demonstrated single-photon
+switching on ultrafast timescales. Here, we demonstrate that in a strongly
+coupled QD-cavity system the presence of a single photon on one of the
+fundamental polariton transitions can turn on light scattering on a transition
+from the first to the second Jaynes-Cummings manifold with a switching time of
+20 ps. As an additional device application, we use this non-linearity to
+implement a single-photon pulse-correlator. Our QD-cavity system could form the
+building-block of future high-bandwidth photonic networks operating in the
+quantum regime.",cond-mat.mes-hall,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/1111.2915v1,Ultrafast all-optical switching by single photons,2011-11-12,Atac Imamoglu,"An outstanding goal in quantum optics is the realization of fast optical
+non-linearities at the single-photon level. Such non-linearities would allow
+for the realization of optical devices with new functionalities such as a
+single-photon switch/transistor or a controlled-phase gate, which could form
+the basis of future quantum optical technologies. While non-linear optics
+effects at the single-emitter level have been demonstrated in different
+systems, including atoms coupled to Fabry-Perot or toroidal micro-cavities,
+super-conducting qubits in strip-line resonators or quantum dots (QDs) in
+nano-cavities, none of these experiments so far has demonstrated single-photon
+switching on ultrafast timescales. Here, we demonstrate that in a strongly
+coupled QD-cavity system the presence of a single photon on one of the
+fundamental polariton transitions can turn on light scattering on a transition
+from the first to the second Jaynes-Cummings manifold with a switching time of
+20 ps. As an additional device application, we use this non-linearity to
+implement a single-photon pulse-correlator. Our QD-cavity system could form the
+building-block of future high-bandwidth photonic networks operating in the
+quantum regime.",cond-mat.mes-hall,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/1111.2915v1,Ultrafast all-optical switching by single photons,2011-11-12,Atac Imamoglu,"An outstanding goal in quantum optics is the realization of fast optical
+non-linearities at the single-photon level. Such non-linearities would allow
+for the realization of optical devices with new functionalities such as a
+single-photon switch/transistor or a controlled-phase gate, which could form
+the basis of future quantum optical technologies. While non-linear optics
+effects at the single-emitter level have been demonstrated in different
+systems, including atoms coupled to Fabry-Perot or toroidal micro-cavities,
+super-conducting qubits in strip-line resonators or quantum dots (QDs) in
+nano-cavities, none of these experiments so far has demonstrated single-photon
+switching on ultrafast timescales. Here, we demonstrate that in a strongly
+coupled QD-cavity system the presence of a single photon on one of the
+fundamental polariton transitions can turn on light scattering on a transition
+from the first to the second Jaynes-Cummings manifold with a switching time of
+20 ps. As an additional device application, we use this non-linearity to
+implement a single-photon pulse-correlator. Our QD-cavity system could form the
+building-block of future high-bandwidth photonic networks operating in the
+quantum regime.",cond-mat.mes-hall,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/1111.2915v1,Ultrafast all-optical switching by single photons,2011-11-12,Atac Imamoglu,"An outstanding goal in quantum optics is the realization of fast optical
+non-linearities at the single-photon level. Such non-linearities would allow
+for the realization of optical devices with new functionalities such as a
+single-photon switch/transistor or a controlled-phase gate, which could form
+the basis of future quantum optical technologies. While non-linear optics
+effects at the single-emitter level have been demonstrated in different
+systems, including atoms coupled to Fabry-Perot or toroidal micro-cavities,
+super-conducting qubits in strip-line resonators or quantum dots (QDs) in
+nano-cavities, none of these experiments so far has demonstrated single-photon
+switching on ultrafast timescales. Here, we demonstrate that in a strongly
+coupled QD-cavity system the presence of a single photon on one of the
+fundamental polariton transitions can turn on light scattering on a transition
+from the first to the second Jaynes-Cummings manifold with a switching time of
+20 ps. As an additional device application, we use this non-linearity to
+implement a single-photon pulse-correlator. Our QD-cavity system could form the
+building-block of future high-bandwidth photonic networks operating in the
+quantum regime.",cond-mat.mes-hall,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/1105.3798v2,"Enhanced energy relaxation process of quantum memory coupled with a
+  superconducting qubit",2011-05-19,Hayato Nakano,"For quantum information processing, each physical system has different
+advantage for the implementation and so hybrid systems to benefit from several
+systems would be able to provide a promising approach. One of the common hybrid
+approach is to combine a superconducting qubit as a controllable qubit and the
+other quantum system with a long coherence time as a memory qubit. The
+superconducting qubit allows us to have an excellent controllability of the
+quantum states and the memory qubit is capable of storing the information for a
+long time. By tuning the energy splitting between the superconducting qubit and
+the memory qubit, it is believed that one can realize a selective coupling
+between them. However, we have shown that this approach has a fundamental
+drawback concerning energy leakage from the memory qubit. The detuned
+superconducting qubit is usually affected by severe decoherence, and this
+causes an incoherent energy relaxation from the memory qubit to the
+superconducting qubit via the imperfect decoupling. We have also found that
+this energy transport can be interpreted as an appearance of anti quantum Zeno
+effect induced by the fluctuation in the superconducting qubit. We also discuss
+a possible solution to avoid such energy relaxation process, which is feasible
+with existing technology.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1105.3798v2,"Enhanced energy relaxation process of quantum memory coupled with a
+  superconducting qubit",2011-05-19,Hayato Nakano,"For quantum information processing, each physical system has different
+advantage for the implementation and so hybrid systems to benefit from several
+systems would be able to provide a promising approach. One of the common hybrid
+approach is to combine a superconducting qubit as a controllable qubit and the
+other quantum system with a long coherence time as a memory qubit. The
+superconducting qubit allows us to have an excellent controllability of the
+quantum states and the memory qubit is capable of storing the information for a
+long time. By tuning the energy splitting between the superconducting qubit and
+the memory qubit, it is believed that one can realize a selective coupling
+between them. However, we have shown that this approach has a fundamental
+drawback concerning energy leakage from the memory qubit. The detuned
+superconducting qubit is usually affected by severe decoherence, and this
+causes an incoherent energy relaxation from the memory qubit to the
+superconducting qubit via the imperfect decoupling. We have also found that
+this energy transport can be interpreted as an appearance of anti quantum Zeno
+effect induced by the fluctuation in the superconducting qubit. We also discuss
+a possible solution to avoid such energy relaxation process, which is feasible
+with existing technology.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1105.3798v2,"Enhanced energy relaxation process of quantum memory coupled with a
+  superconducting qubit",2011-05-19,Hayato Nakano,"For quantum information processing, each physical system has different
+advantage for the implementation and so hybrid systems to benefit from several
+systems would be able to provide a promising approach. One of the common hybrid
+approach is to combine a superconducting qubit as a controllable qubit and the
+other quantum system with a long coherence time as a memory qubit. The
+superconducting qubit allows us to have an excellent controllability of the
+quantum states and the memory qubit is capable of storing the information for a
+long time. By tuning the energy splitting between the superconducting qubit and
+the memory qubit, it is believed that one can realize a selective coupling
+between them. However, we have shown that this approach has a fundamental
+drawback concerning energy leakage from the memory qubit. The detuned
+superconducting qubit is usually affected by severe decoherence, and this
+causes an incoherent energy relaxation from the memory qubit to the
+superconducting qubit via the imperfect decoupling. We have also found that
+this energy transport can be interpreted as an appearance of anti quantum Zeno
+effect induced by the fluctuation in the superconducting qubit. We also discuss
+a possible solution to avoid such energy relaxation process, which is feasible
+with existing technology.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1105.3798v2,"Enhanced energy relaxation process of quantum memory coupled with a
+  superconducting qubit",2011-05-19,Hayato Nakano,"For quantum information processing, each physical system has different
+advantage for the implementation and so hybrid systems to benefit from several
+systems would be able to provide a promising approach. One of the common hybrid
+approach is to combine a superconducting qubit as a controllable qubit and the
+other quantum system with a long coherence time as a memory qubit. The
+superconducting qubit allows us to have an excellent controllability of the
+quantum states and the memory qubit is capable of storing the information for a
+long time. By tuning the energy splitting between the superconducting qubit and
+the memory qubit, it is believed that one can realize a selective coupling
+between them. However, we have shown that this approach has a fundamental
+drawback concerning energy leakage from the memory qubit. The detuned
+superconducting qubit is usually affected by severe decoherence, and this
+causes an incoherent energy relaxation from the memory qubit to the
+superconducting qubit via the imperfect decoupling. We have also found that
+this energy transport can be interpreted as an appearance of anti quantum Zeno
+effect induced by the fluctuation in the superconducting qubit. We also discuss
+a possible solution to avoid such energy relaxation process, which is feasible
+with existing technology.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1104.5462v1,"Super-Radiant Dynamics, Doorways, and Resonances in Nuclei and Other
+  Open Mesoscopic Systems",2011-04-28,Vladimir Zelevinsky,"The phenomenon of super-radiance (Dicke effect, coherent spontaneous
+radiation by a gas of atoms coupled through the common radiation field) is well
+known in quantum optics. The review discusses similar physics that emerges in
+open and marginally stable quantum many-body systems. In the presence of open
+decay channels, the intrinsic states are coupled through the continuum. At
+sufficiently strong continuum coupling, the spectrum of resonances undergoes
+the restructuring with segregation of very broad super-radiant states and
+trapping of remaining long-lived compound states. The appropriate formalism
+describing this phenomenon is based on the Feshbach projection method and
+effective non-Hermitian Hamiltonian. A broader generalization is related to the
+idea of doorway states connecting quantum states of different structure. The
+method is explained in detail and the examples of applications are given to
+nuclear, atomic and particle physics. The interrelation of the collective
+dynamics through continuum and possible intrinsic many-body chaos is studied,
+including universal mesoscopic conductance fluctuations. The theory serves as a
+natural framework for general description of a quantum signal transmission
+through an open mesoscopic system.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/1104.5462v1,"Super-Radiant Dynamics, Doorways, and Resonances in Nuclei and Other
+  Open Mesoscopic Systems",2011-04-28,Vladimir Zelevinsky,"The phenomenon of super-radiance (Dicke effect, coherent spontaneous
+radiation by a gas of atoms coupled through the common radiation field) is well
+known in quantum optics. The review discusses similar physics that emerges in
+open and marginally stable quantum many-body systems. In the presence of open
+decay channels, the intrinsic states are coupled through the continuum. At
+sufficiently strong continuum coupling, the spectrum of resonances undergoes
+the restructuring with segregation of very broad super-radiant states and
+trapping of remaining long-lived compound states. The appropriate formalism
+describing this phenomenon is based on the Feshbach projection method and
+effective non-Hermitian Hamiltonian. A broader generalization is related to the
+idea of doorway states connecting quantum states of different structure. The
+method is explained in detail and the examples of applications are given to
+nuclear, atomic and particle physics. The interrelation of the collective
+dynamics through continuum and possible intrinsic many-body chaos is studied,
+including universal mesoscopic conductance fluctuations. The theory serves as a
+natural framework for general description of a quantum signal transmission
+through an open mesoscopic system.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1104.5462v1,"Super-Radiant Dynamics, Doorways, and Resonances in Nuclei and Other
+  Open Mesoscopic Systems",2011-04-28,Vladimir Zelevinsky,"The phenomenon of super-radiance (Dicke effect, coherent spontaneous
+radiation by a gas of atoms coupled through the common radiation field) is well
+known in quantum optics. The review discusses similar physics that emerges in
+open and marginally stable quantum many-body systems. In the presence of open
+decay channels, the intrinsic states are coupled through the continuum. At
+sufficiently strong continuum coupling, the spectrum of resonances undergoes
+the restructuring with segregation of very broad super-radiant states and
+trapping of remaining long-lived compound states. The appropriate formalism
+describing this phenomenon is based on the Feshbach projection method and
+effective non-Hermitian Hamiltonian. A broader generalization is related to the
+idea of doorway states connecting quantum states of different structure. The
+method is explained in detail and the examples of applications are given to
+nuclear, atomic and particle physics. The interrelation of the collective
+dynamics through continuum and possible intrinsic many-body chaos is studied,
+including universal mesoscopic conductance fluctuations. The theory serves as a
+natural framework for general description of a quantum signal transmission
+through an open mesoscopic system.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1104.5462v1,"Super-Radiant Dynamics, Doorways, and Resonances in Nuclei and Other
+  Open Mesoscopic Systems",2011-04-28,Vladimir Zelevinsky,"The phenomenon of super-radiance (Dicke effect, coherent spontaneous
+radiation by a gas of atoms coupled through the common radiation field) is well
+known in quantum optics. The review discusses similar physics that emerges in
+open and marginally stable quantum many-body systems. In the presence of open
+decay channels, the intrinsic states are coupled through the continuum. At
+sufficiently strong continuum coupling, the spectrum of resonances undergoes
+the restructuring with segregation of very broad super-radiant states and
+trapping of remaining long-lived compound states. The appropriate formalism
+describing this phenomenon is based on the Feshbach projection method and
+effective non-Hermitian Hamiltonian. A broader generalization is related to the
+idea of doorway states connecting quantum states of different structure. The
+method is explained in detail and the examples of applications are given to
+nuclear, atomic and particle physics. The interrelation of the collective
+dynamics through continuum and possible intrinsic many-body chaos is studied,
+including universal mesoscopic conductance fluctuations. The theory serves as a
+natural framework for general description of a quantum signal transmission
+through an open mesoscopic system.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1010.6108v2,Superconducting microfabricated ion traps,2010-10-28,Isaac L. Chuang,"We fabricate superconducting ion traps with niobium and niobium nitride and
+trap single 88Sr ions at cryogenic temperatures. The superconducting transition
+is verified and characterized by measuring the resistance and critical current
+using a 4-wire measurement on the trap structure, and observing change in the
+rf reflection. The lowest observed heating rate is 2.1(3) quanta/sec at 800 kHz
+at 6 K and shows no significant change across the superconducting transition,
+suggesting that anomalous heating is primarily caused by noise sources on the
+surface. This demonstration of superconducting ion traps opens up possibilities
+for integrating trapped ions and molecular ions with superconducting devices.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/1010.6108v2,Superconducting microfabricated ion traps,2010-10-28,Isaac L. Chuang,"We fabricate superconducting ion traps with niobium and niobium nitride and
+trap single 88Sr ions at cryogenic temperatures. The superconducting transition
+is verified and characterized by measuring the resistance and critical current
+using a 4-wire measurement on the trap structure, and observing change in the
+rf reflection. The lowest observed heating rate is 2.1(3) quanta/sec at 800 kHz
+at 6 K and shows no significant change across the superconducting transition,
+suggesting that anomalous heating is primarily caused by noise sources on the
+surface. This demonstration of superconducting ion traps opens up possibilities
+for integrating trapped ions and molecular ions with superconducting devices.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/1010.6108v2,Superconducting microfabricated ion traps,2010-10-28,Isaac L. Chuang,"We fabricate superconducting ion traps with niobium and niobium nitride and
+trap single 88Sr ions at cryogenic temperatures. The superconducting transition
+is verified and characterized by measuring the resistance and critical current
+using a 4-wire measurement on the trap structure, and observing change in the
+rf reflection. The lowest observed heating rate is 2.1(3) quanta/sec at 800 kHz
+at 6 K and shows no significant change across the superconducting transition,
+suggesting that anomalous heating is primarily caused by noise sources on the
+surface. This demonstration of superconducting ion traps opens up possibilities
+for integrating trapped ions and molecular ions with superconducting devices.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/1010.6108v2,Superconducting microfabricated ion traps,2010-10-28,Isaac L. Chuang,"We fabricate superconducting ion traps with niobium and niobium nitride and
+trap single 88Sr ions at cryogenic temperatures. The superconducting transition
+is verified and characterized by measuring the resistance and critical current
+using a 4-wire measurement on the trap structure, and observing change in the
+rf reflection. The lowest observed heating rate is 2.1(3) quanta/sec at 800 kHz
+at 6 K and shows no significant change across the superconducting transition,
+suggesting that anomalous heating is primarily caused by noise sources on the
+surface. This demonstration of superconducting ion traps opens up possibilities
+for integrating trapped ions and molecular ions with superconducting devices.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/1004.5298v1,"Counting statistics for mesoscopic conductors with internal degrees of
+  freedom",2010-04-29,Henning Schomerus,"We consider the transport of electrons passing through a mesoscopic device
+possessing internal dynamical quantum degrees of freedom. The mutual
+interaction between the system and the conduction electrons contributes to the
+current fluctuations, which we describe in terms of full counting statistics.
+We identify conditions where this discriminates coherent from incoherent
+internal dynamics, and also identify and illustrate conditions under which the
+device acts to dynamically bunch transmitted or reflected electrons, thereby
+generating super-Poissonian noise.",cond-mat.mes-hall,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/1004.5298v1,"Counting statistics for mesoscopic conductors with internal degrees of
+  freedom",2010-04-29,Henning Schomerus,"We consider the transport of electrons passing through a mesoscopic device
+possessing internal dynamical quantum degrees of freedom. The mutual
+interaction between the system and the conduction electrons contributes to the
+current fluctuations, which we describe in terms of full counting statistics.
+We identify conditions where this discriminates coherent from incoherent
+internal dynamics, and also identify and illustrate conditions under which the
+device acts to dynamically bunch transmitted or reflected electrons, thereby
+generating super-Poissonian noise.",cond-mat.mes-hall,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/1004.5298v1,"Counting statistics for mesoscopic conductors with internal degrees of
+  freedom",2010-04-29,Henning Schomerus,"We consider the transport of electrons passing through a mesoscopic device
+possessing internal dynamical quantum degrees of freedom. The mutual
+interaction between the system and the conduction electrons contributes to the
+current fluctuations, which we describe in terms of full counting statistics.
+We identify conditions where this discriminates coherent from incoherent
+internal dynamics, and also identify and illustrate conditions under which the
+device acts to dynamically bunch transmitted or reflected electrons, thereby
+generating super-Poissonian noise.",cond-mat.mes-hall,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/1004.5298v1,"Counting statistics for mesoscopic conductors with internal degrees of
+  freedom",2010-04-29,Henning Schomerus,"We consider the transport of electrons passing through a mesoscopic device
+possessing internal dynamical quantum degrees of freedom. The mutual
+interaction between the system and the conduction electrons contributes to the
+current fluctuations, which we describe in terms of full counting statistics.
+We identify conditions where this discriminates coherent from incoherent
+internal dynamics, and also identify and illustrate conditions under which the
+device acts to dynamically bunch transmitted or reflected electrons, thereby
+generating super-Poissonian noise.",cond-mat.mes-hall,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/0912.3586v1,"A superconducting cavity bus for single Nitrogen Vacancy defect centres
+  in diamond",2009-12-18,S. D. Barrett,"Circuit-QED has demonstrated very strong coupling between individual
+microwave photons trapped in a superconducting coplanar resonator and nearby
+superconducting qubits. In this work we show how, by designing a novel
+interconnect, one can strongly connect the superconducting resonator, via a
+magnetic interaction, to a small number (perhaps single), of electronic spins.
+By choosing the electronic spin to be within a Nitrogen Vacancy centre in
+diamond one can perform optical readout, polarization and control of this
+electron spin using microwave and radio frequency irradiation. More
+importantly, by utilising Nitrogen Vacancy centres with nearby 13C nuclei,
+using this interconnect, one has the potential build a quantum device where the
+nuclear spin qubits are connected over centimeter distances via the Nitrogen
+Vacancy electronic spins interacting through the superconducting bus.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/0912.3586v1,"A superconducting cavity bus for single Nitrogen Vacancy defect centres
+  in diamond",2009-12-18,S. D. Barrett,"Circuit-QED has demonstrated very strong coupling between individual
+microwave photons trapped in a superconducting coplanar resonator and nearby
+superconducting qubits. In this work we show how, by designing a novel
+interconnect, one can strongly connect the superconducting resonator, via a
+magnetic interaction, to a small number (perhaps single), of electronic spins.
+By choosing the electronic spin to be within a Nitrogen Vacancy centre in
+diamond one can perform optical readout, polarization and control of this
+electron spin using microwave and radio frequency irradiation. More
+importantly, by utilising Nitrogen Vacancy centres with nearby 13C nuclei,
+using this interconnect, one has the potential build a quantum device where the
+nuclear spin qubits are connected over centimeter distances via the Nitrogen
+Vacancy electronic spins interacting through the superconducting bus.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/0912.3586v1,"A superconducting cavity bus for single Nitrogen Vacancy defect centres
+  in diamond",2009-12-18,S. D. Barrett,"Circuit-QED has demonstrated very strong coupling between individual
+microwave photons trapped in a superconducting coplanar resonator and nearby
+superconducting qubits. In this work we show how, by designing a novel
+interconnect, one can strongly connect the superconducting resonator, via a
+magnetic interaction, to a small number (perhaps single), of electronic spins.
+By choosing the electronic spin to be within a Nitrogen Vacancy centre in
+diamond one can perform optical readout, polarization and control of this
+electron spin using microwave and radio frequency irradiation. More
+importantly, by utilising Nitrogen Vacancy centres with nearby 13C nuclei,
+using this interconnect, one has the potential build a quantum device where the
+nuclear spin qubits are connected over centimeter distances via the Nitrogen
+Vacancy electronic spins interacting through the superconducting bus.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/0912.3586v1,"A superconducting cavity bus for single Nitrogen Vacancy defect centres
+  in diamond",2009-12-18,S. D. Barrett,"Circuit-QED has demonstrated very strong coupling between individual
+microwave photons trapped in a superconducting coplanar resonator and nearby
+superconducting qubits. In this work we show how, by designing a novel
+interconnect, one can strongly connect the superconducting resonator, via a
+magnetic interaction, to a small number (perhaps single), of electronic spins.
+By choosing the electronic spin to be within a Nitrogen Vacancy centre in
+diamond one can perform optical readout, polarization and control of this
+electron spin using microwave and radio frequency irradiation. More
+importantly, by utilising Nitrogen Vacancy centres with nearby 13C nuclei,
+using this interconnect, one has the potential build a quantum device where the
+nuclear spin qubits are connected over centimeter distances via the Nitrogen
+Vacancy electronic spins interacting through the superconducting bus.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/0909.1577v1,"Multi-frequency control pulses for multi-level superconducting quantum
+  circuits",2009-09-08,Frederick W. Strauch,"Superconducting quantum circuits, such as the superconducting phase qubit,
+have multiple quantum states that can interfere with ideal qubit operation. The
+use of multiple frequency control pulses, resonant with the energy differences
+of the multi-state system, is theoretically explored. An analytical method to
+design such control pulses is developed, using a generalization of the Floquet
+method to multiple frequency controls. This method is applicable to optimizing
+the control of both superconducting qubits and qudits, and is found to be in
+excellent agreement with time-dependent numerical simulations.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/0909.1577v1,"Multi-frequency control pulses for multi-level superconducting quantum
+  circuits",2009-09-08,Frederick W. Strauch,"Superconducting quantum circuits, such as the superconducting phase qubit,
+have multiple quantum states that can interfere with ideal qubit operation. The
+use of multiple frequency control pulses, resonant with the energy differences
+of the multi-state system, is theoretically explored. An analytical method to
+design such control pulses is developed, using a generalization of the Floquet
+method to multiple frequency controls. This method is applicable to optimizing
+the control of both superconducting qubits and qudits, and is found to be in
+excellent agreement with time-dependent numerical simulations.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/0909.1577v1,"Multi-frequency control pulses for multi-level superconducting quantum
+  circuits",2009-09-08,Frederick W. Strauch,"Superconducting quantum circuits, such as the superconducting phase qubit,
+have multiple quantum states that can interfere with ideal qubit operation. The
+use of multiple frequency control pulses, resonant with the energy differences
+of the multi-state system, is theoretically explored. An analytical method to
+design such control pulses is developed, using a generalization of the Floquet
+method to multiple frequency controls. This method is applicable to optimizing
+the control of both superconducting qubits and qudits, and is found to be in
+excellent agreement with time-dependent numerical simulations.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/0909.1577v1,"Multi-frequency control pulses for multi-level superconducting quantum
+  circuits",2009-09-08,Frederick W. Strauch,"Superconducting quantum circuits, such as the superconducting phase qubit,
+have multiple quantum states that can interfere with ideal qubit operation. The
+use of multiple frequency control pulses, resonant with the energy differences
+of the multi-state system, is theoretically explored. An analytical method to
+design such control pulses is developed, using a generalization of the Floquet
+method to multiple frequency controls. This method is applicable to optimizing
+the control of both superconducting qubits and qudits, and is found to be in
+excellent agreement with time-dependent numerical simulations.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/0908.4063v1,200km Decoy-state quantum key distribution with photon polarization,2009-08-27,Jian-Wei Pan,"We demonstrate the decoy-state quantum key distribution over 200 km with
+photon polarization through optical fiber, by using super-conducting single
+photon detector with a repetition rate of 320 Mega Hz and a dark count rate of
+lower than 1 Hz. Since we have used the polarization coding, the
+synchronization pulses can be run in a low frequency. The final key rate is
+14.1 Hz. The experiment lasts for 3089 seconds with 43555 total final bits.",quant-ph,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/0903.2091v1,Dispersive interaction between an atom and a conducting sphere,2009-03-12,C. Farina,"We calculate the van der Waals dispersive interaction between a neutral but
+polarizable atom and a perfectly conducting isolated sphere in the nonretarded
+case. We make use of two separate models, one being the semiclassical
+fluctuating-dipoles method, the other using ordinary quantum mechanics.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/0903.2091v1,Dispersive interaction between an atom and a conducting sphere,2009-03-12,C. Farina,"We calculate the van der Waals dispersive interaction between a neutral but
+polarizable atom and a perfectly conducting isolated sphere in the nonretarded
+case. We make use of two separate models, one being the semiclassical
+fluctuating-dipoles method, the other using ordinary quantum mechanics.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/0903.2091v1,Dispersive interaction between an atom and a conducting sphere,2009-03-12,C. Farina,"We calculate the van der Waals dispersive interaction between a neutral but
+polarizable atom and a perfectly conducting isolated sphere in the nonretarded
+case. We make use of two separate models, one being the semiclassical
+fluctuating-dipoles method, the other using ordinary quantum mechanics.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/0903.2091v1,Dispersive interaction between an atom and a conducting sphere,2009-03-12,C. Farina,"We calculate the van der Waals dispersive interaction between a neutral but
+polarizable atom and a perfectly conducting isolated sphere in the nonretarded
+case. We make use of two separate models, one being the semiclassical
+fluctuating-dipoles method, the other using ordinary quantum mechanics.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/0809.0749v2,"Entangling two superconducting LC coherent modes via a superconducting
+  flux qubit",2008-09-04,Wei-Min Zhang,"Based on a pure solid-state device consisting of two superconducting LC
+circuits coupled to a superconducting flux qubit, we propose in this paper that
+the maximally entangled coherent states of the two LC modes can be generated
+for arbitrary coherent states through flux qubit controls.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/0809.0749v2,"Entangling two superconducting LC coherent modes via a superconducting
+  flux qubit",2008-09-04,Wei-Min Zhang,"Based on a pure solid-state device consisting of two superconducting LC
+circuits coupled to a superconducting flux qubit, we propose in this paper that
+the maximally entangled coherent states of the two LC modes can be generated
+for arbitrary coherent states through flux qubit controls.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/0809.0749v2,"Entangling two superconducting LC coherent modes via a superconducting
+  flux qubit",2008-09-04,Wei-Min Zhang,"Based on a pure solid-state device consisting of two superconducting LC
+circuits coupled to a superconducting flux qubit, we propose in this paper that
+the maximally entangled coherent states of the two LC modes can be generated
+for arbitrary coherent states through flux qubit controls.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/0809.0749v2,"Entangling two superconducting LC coherent modes via a superconducting
+  flux qubit",2008-09-04,Wei-Min Zhang,"Based on a pure solid-state device consisting of two superconducting LC
+circuits coupled to a superconducting flux qubit, we propose in this paper that
+the maximally entangled coherent states of the two LC modes can be generated
+for arbitrary coherent states through flux qubit controls.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/0708.1332v2,Quantum Electric Circuits Analogous to Ballistic Conductors,2007-08-09,Daniela Dragoman,"The conductance steps in a constricted two-dimensional electron gas and the
+minimum conductivity in graphene are related to a new uncertainty relation
+between electric charge and conductance in a quantized electric circuit that
+mimics the electric transport in mesoscopic systems. This uncertainty relation
+makes specific use of the discreteness of electric charge. Quantum electric
+circuits analogous to both constricted two-dimensional electron gas and
+graphene are introduced. In the latter case a new insight into the origin of
+minimum conductivity is obtained.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/0708.1332v2,Quantum Electric Circuits Analogous to Ballistic Conductors,2007-08-09,Daniela Dragoman,"The conductance steps in a constricted two-dimensional electron gas and the
+minimum conductivity in graphene are related to a new uncertainty relation
+between electric charge and conductance in a quantized electric circuit that
+mimics the electric transport in mesoscopic systems. This uncertainty relation
+makes specific use of the discreteness of electric charge. Quantum electric
+circuits analogous to both constricted two-dimensional electron gas and
+graphene are introduced. In the latter case a new insight into the origin of
+minimum conductivity is obtained.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/0708.1332v2,Quantum Electric Circuits Analogous to Ballistic Conductors,2007-08-09,Daniela Dragoman,"The conductance steps in a constricted two-dimensional electron gas and the
+minimum conductivity in graphene are related to a new uncertainty relation
+between electric charge and conductance in a quantized electric circuit that
+mimics the electric transport in mesoscopic systems. This uncertainty relation
+makes specific use of the discreteness of electric charge. Quantum electric
+circuits analogous to both constricted two-dimensional electron gas and
+graphene are introduced. In the latter case a new insight into the origin of
+minimum conductivity is obtained.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/0708.1332v2,Quantum Electric Circuits Analogous to Ballistic Conductors,2007-08-09,Daniela Dragoman,"The conductance steps in a constricted two-dimensional electron gas and the
+minimum conductivity in graphene are related to a new uncertainty relation
+between electric charge and conductance in a quantized electric circuit that
+mimics the electric transport in mesoscopic systems. This uncertainty relation
+makes specific use of the discreteness of electric charge. Quantum electric
+circuits analogous to both constricted two-dimensional electron gas and
+graphene are introduced. In the latter case a new insight into the origin of
+minimum conductivity is obtained.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/math-ph/0703041v1,"The spherically symmetric alpha2-dynamo and some of its spectral
+  peculiarities",2007-03-13,Frank Stefani,"A brief overview is given over recent results on the spectral properties of
+spherically symmetric MHD alpha2-dynamos. In particular, the spectra of
+sphere-confined fluid or plasma configurations with physically realistic
+boundary conditions (BCs) (surrounding vacuum) and with idealized BCs
+(super-conducting surrounding) are discussed. The subjects comprise third-order
+branch points of the spectrum, self-adjointness of the dynamo operator in a
+Krein space as well as the resonant unfolding of diabolical points. It is
+sketched how certain classes of dynamos with a strongly localized alpha-profile
+embedded in a conducting surrounding can be mode decoupled by a diagonalization
+of the dynamo operator matrix. A mapping of the dynamo eigenvalue problem to
+that of a quantum mechanical Hamiltonian with energy dependent potential is
+used to obtain qualitative information about the spectral behavior. Links to
+supersymmetric Quantum Mechanics and to the Dirac equation are indicated.",math-ph,cat:quant-ph,"all:""super%20conduct"""
+http://arxiv.org/abs/math-ph/0703041v1,"The spherically symmetric alpha2-dynamo and some of its spectral
+  peculiarities",2007-03-13,Frank Stefani,"A brief overview is given over recent results on the spectral properties of
+spherically symmetric MHD alpha2-dynamos. In particular, the spectra of
+sphere-confined fluid or plasma configurations with physically realistic
+boundary conditions (BCs) (surrounding vacuum) and with idealized BCs
+(super-conducting surrounding) are discussed. The subjects comprise third-order
+branch points of the spectrum, self-adjointness of the dynamo operator in a
+Krein space as well as the resonant unfolding of diabolical points. It is
+sketched how certain classes of dynamos with a strongly localized alpha-profile
+embedded in a conducting surrounding can be mode decoupled by a diagonalization
+of the dynamo operator matrix. A mapping of the dynamo eigenvalue problem to
+that of a quantum mechanical Hamiltonian with energy dependent potential is
+used to obtain qualitative information about the spectral behavior. Links to
+supersymmetric Quantum Mechanics and to the Dirac equation are indicated.",math-ph,cat:quant-ph,"all:""super%20conducting"""
+http://arxiv.org/abs/math-ph/0703041v1,"The spherically symmetric alpha2-dynamo and some of its spectral
+  peculiarities",2007-03-13,Frank Stefani,"A brief overview is given over recent results on the spectral properties of
+spherically symmetric MHD alpha2-dynamos. In particular, the spectra of
+sphere-confined fluid or plasma configurations with physically realistic
+boundary conditions (BCs) (surrounding vacuum) and with idealized BCs
+(super-conducting surrounding) are discussed. The subjects comprise third-order
+branch points of the spectrum, self-adjointness of the dynamo operator in a
+Krein space as well as the resonant unfolding of diabolical points. It is
+sketched how certain classes of dynamos with a strongly localized alpha-profile
+embedded in a conducting surrounding can be mode decoupled by a diagonalization
+of the dynamo operator matrix. A mapping of the dynamo eigenvalue problem to
+that of a quantum mechanical Hamiltonian with energy dependent potential is
+used to obtain qualitative information about the spectral behavior. Links to
+supersymmetric Quantum Mechanics and to the Dirac equation are indicated.",math-ph,cat:quant-ph,"all:""super+conducting"""
+http://arxiv.org/abs/math-ph/0703041v1,"The spherically symmetric alpha2-dynamo and some of its spectral
+  peculiarities",2007-03-13,Frank Stefani,"A brief overview is given over recent results on the spectral properties of
+spherically symmetric MHD alpha2-dynamos. In particular, the spectra of
+sphere-confined fluid or plasma configurations with physically realistic
+boundary conditions (BCs) (surrounding vacuum) and with idealized BCs
+(super-conducting surrounding) are discussed. The subjects comprise third-order
+branch points of the spectrum, self-adjointness of the dynamo operator in a
+Krein space as well as the resonant unfolding of diabolical points. It is
+sketched how certain classes of dynamos with a strongly localized alpha-profile
+embedded in a conducting surrounding can be mode decoupled by a diagonalization
+of the dynamo operator matrix. A mapping of the dynamo eigenvalue problem to
+that of a quantum mechanical Hamiltonian with energy dependent potential is
+used to obtain qualitative information about the spectral behavior. Links to
+supersymmetric Quantum Mechanics and to the Dirac equation are indicated.",math-ph,cat:quant-ph,"all:""super+conduct"""
+http://arxiv.org/abs/quant-ph/0702104v2,Scalable quantum computer using superconducting charge qubits,2007-02-12,G. L. Long,"We present a scalable scheme for superconducting charge qubits with the
+assistance of one-dimensional superconducting transmission line resonator
+(STLR) playing the role of data bus. The coupling between qubit and data bus
+may be turned on and off by just controlling the gate voltage and externally
+applied flux of superconducting charge qubit. In our proposal, the entanglement
+between arbitrary two qubits and $W$ states of three qubits can be generated
+quickly and easily.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/quant-ph/0702104v2,Scalable quantum computer using superconducting charge qubits,2007-02-12,G. L. Long,"We present a scalable scheme for superconducting charge qubits with the
+assistance of one-dimensional superconducting transmission line resonator
+(STLR) playing the role of data bus. The coupling between qubit and data bus
+may be turned on and off by just controlling the gate voltage and externally
+applied flux of superconducting charge qubit. In our proposal, the entanglement
+between arbitrary two qubits and $W$ states of three qubits can be generated
+quickly and easily.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/quant-ph/0702104v2,Scalable quantum computer using superconducting charge qubits,2007-02-12,G. L. Long,"We present a scalable scheme for superconducting charge qubits with the
+assistance of one-dimensional superconducting transmission line resonator
+(STLR) playing the role of data bus. The coupling between qubit and data bus
+may be turned on and off by just controlling the gate voltage and externally
+applied flux of superconducting charge qubit. In our proposal, the entanglement
+between arbitrary two qubits and $W$ states of three qubits can be generated
+quickly and easily.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/quant-ph/0702104v2,Scalable quantum computer using superconducting charge qubits,2007-02-12,G. L. Long,"We present a scalable scheme for superconducting charge qubits with the
+assistance of one-dimensional superconducting transmission line resonator
+(STLR) playing the role of data bus. The coupling between qubit and data bus
+may be turned on and off by just controlling the gate voltage and externally
+applied flux of superconducting charge qubit. In our proposal, the entanglement
+between arbitrary two qubits and $W$ states of three qubits can be generated
+quickly and easily.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/quant-ph/0610251v1,Reply to Comment on 'Spin Decoherence in Superconducting Atom Chips',2006-10-30,Per Kristian Rekdal,"This is a reply to the Comment on 'Spin Decoherence in Superconducting Atom
+Chips' [arXiv:quant-ph/0610095 (2006)].",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/quant-ph/0610251v1,Reply to Comment on 'Spin Decoherence in Superconducting Atom Chips',2006-10-30,Per Kristian Rekdal,"This is a reply to the Comment on 'Spin Decoherence in Superconducting Atom
+Chips' [arXiv:quant-ph/0610095 (2006)].",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/quant-ph/0610251v1,Reply to Comment on 'Spin Decoherence in Superconducting Atom Chips',2006-10-30,Per Kristian Rekdal,"This is a reply to the Comment on 'Spin Decoherence in Superconducting Atom
+Chips' [arXiv:quant-ph/0610095 (2006)].",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/quant-ph/0610251v1,Reply to Comment on 'Spin Decoherence in Superconducting Atom Chips',2006-10-30,Per Kristian Rekdal,"This is a reply to the Comment on 'Spin Decoherence in Superconducting Atom
+Chips' [arXiv:quant-ph/0610095 (2006)].",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/quant-ph/0601166v1,Entanglement of an impurity and conduction spins in the Kondo model,2006-01-25,Jaewan Kim,"Based on Yosida's ground state of the single-impurity Kondo Hamiltonian, we
+study three kinds of entanglement between an impurity and conduction electron
+spins. First, it is shown that the impurity spin is maximally entangled with
+all the conduction electrons. Second, a two-spin density matrix of the impurity
+spin and one conduction electron spin is given by a Werner state. We find that
+the impurity spin is not entangled with one conduction electron spin even
+within the Kondo screening length $\xi_K$, although there is the spin-spin
+correlation between them. Third, we show the density matrix of two conduction
+electron spins is nearly same to that of a free electron gas. The single
+impurity does not change the entanglement structure of the conduction electrons
+in contrast to the dramatic change in electrical resistance.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/quant-ph/0601166v1,Entanglement of an impurity and conduction spins in the Kondo model,2006-01-25,Jaewan Kim,"Based on Yosida's ground state of the single-impurity Kondo Hamiltonian, we
+study three kinds of entanglement between an impurity and conduction electron
+spins. First, it is shown that the impurity spin is maximally entangled with
+all the conduction electrons. Second, a two-spin density matrix of the impurity
+spin and one conduction electron spin is given by a Werner state. We find that
+the impurity spin is not entangled with one conduction electron spin even
+within the Kondo screening length $\xi_K$, although there is the spin-spin
+correlation between them. Third, we show the density matrix of two conduction
+electron spins is nearly same to that of a free electron gas. The single
+impurity does not change the entanglement structure of the conduction electrons
+in contrast to the dramatic change in electrical resistance.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/quant-ph/0601166v1,Entanglement of an impurity and conduction spins in the Kondo model,2006-01-25,Jaewan Kim,"Based on Yosida's ground state of the single-impurity Kondo Hamiltonian, we
+study three kinds of entanglement between an impurity and conduction electron
+spins. First, it is shown that the impurity spin is maximally entangled with
+all the conduction electrons. Second, a two-spin density matrix of the impurity
+spin and one conduction electron spin is given by a Werner state. We find that
+the impurity spin is not entangled with one conduction electron spin even
+within the Kondo screening length $\xi_K$, although there is the spin-spin
+correlation between them. Third, we show the density matrix of two conduction
+electron spins is nearly same to that of a free electron gas. The single
+impurity does not change the entanglement structure of the conduction electrons
+in contrast to the dramatic change in electrical resistance.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/quant-ph/0601166v1,Entanglement of an impurity and conduction spins in the Kondo model,2006-01-25,Jaewan Kim,"Based on Yosida's ground state of the single-impurity Kondo Hamiltonian, we
+study three kinds of entanglement between an impurity and conduction electron
+spins. First, it is shown that the impurity spin is maximally entangled with
+all the conduction electrons. Second, a two-spin density matrix of the impurity
+spin and one conduction electron spin is given by a Werner state. We find that
+the impurity spin is not entangled with one conduction electron spin even
+within the Kondo screening length $\xi_K$, although there is the spin-spin
+correlation between them. Third, we show the density matrix of two conduction
+electron spins is nearly same to that of a free electron gas. The single
+impurity does not change the entanglement structure of the conduction electrons
+in contrast to the dramatic change in electrical resistance.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/quant-ph/0311032v1,Casimir-Polder interaction in the presence of parallel walls,2003-11-06,A. C. Tort,"Making use of the quantum correlators associated with the Maxwell field
+vacuum distorted by the presence of plane parallel material surfaces we derive
+the Casimir-Polder interaction in the presence of plane parallel conducting
+walls and in the presence of a conducting wall and a magnetically permeable
+one.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/quant-ph/0311032v1,Casimir-Polder interaction in the presence of parallel walls,2003-11-06,A. C. Tort,"Making use of the quantum correlators associated with the Maxwell field
+vacuum distorted by the presence of plane parallel material surfaces we derive
+the Casimir-Polder interaction in the presence of plane parallel conducting
+walls and in the presence of a conducting wall and a magnetically permeable
+one.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/quant-ph/0311032v1,Casimir-Polder interaction in the presence of parallel walls,2003-11-06,A. C. Tort,"Making use of the quantum correlators associated with the Maxwell field
+vacuum distorted by the presence of plane parallel material surfaces we derive
+the Casimir-Polder interaction in the presence of plane parallel conducting
+walls and in the presence of a conducting wall and a magnetically permeable
+one.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/quant-ph/0311032v1,Casimir-Polder interaction in the presence of parallel walls,2003-11-06,A. C. Tort,"Making use of the quantum correlators associated with the Maxwell field
+vacuum distorted by the presence of plane parallel material surfaces we derive
+the Casimir-Polder interaction in the presence of plane parallel conducting
+walls and in the presence of a conducting wall and a magnetically permeable
+one.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/quant-ph/0211158v1,Superconducting Quantum Computing without Switches,2002-11-25,Xingxiang Zhou,"This paper presents a very simple architecture for a large-scale
+superconducting quantum computer. All of the SQUID qubits are fixed-coupled to
+a single large superconducting loop.",quant-ph,cat:quant-ph,"all:""superconduct"""
+http://arxiv.org/abs/quant-ph/0211158v1,Superconducting Quantum Computing without Switches,2002-11-25,Xingxiang Zhou,"This paper presents a very simple architecture for a large-scale
+superconducting quantum computer. All of the SQUID qubits are fixed-coupled to
+a single large superconducting loop.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/quant-ph/0211158v1,Superconducting Quantum Computing without Switches,2002-11-25,Xingxiang Zhou,"This paper presents a very simple architecture for a large-scale
+superconducting quantum computer. All of the SQUID qubits are fixed-coupled to
+a single large superconducting loop.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/quant-ph/0211158v1,Superconducting Quantum Computing without Switches,2002-11-25,Xingxiang Zhou,"This paper presents a very simple architecture for a large-scale
+superconducting quantum computer. All of the SQUID qubits are fixed-coupled to
+a single large superconducting loop.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/quant-ph/0202038v1,3 omega method for specific heat and thermal conductivity measurements,2002-02-06,D. L. Zhang,"We present a 3 omega method for simultaneously measuring the specific heat
+and thermal conductivity of a rod- or filament-like specimen using a way
+similar to a four-probe resistance measurement. The specimen in this method
+needs to be electrically conductive and with a temperature-dependent
+resistance, for acting both as a heater to create a temperature fluctuation and
+as a sensor to measure its thermal response. With this method we have
+successfully measured the specific heat and thermal conductivity of platinum
+wire specimens at cryogenic temperatures, and measured those thermal quantities
+of tiny carbon nanotube bundles some of which are only 10^-9 g in mass.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/quant-ph/0202038v1,3 omega method for specific heat and thermal conductivity measurements,2002-02-06,D. L. Zhang,"We present a 3 omega method for simultaneously measuring the specific heat
+and thermal conductivity of a rod- or filament-like specimen using a way
+similar to a four-probe resistance measurement. The specimen in this method
+needs to be electrically conductive and with a temperature-dependent
+resistance, for acting both as a heater to create a temperature fluctuation and
+as a sensor to measure its thermal response. With this method we have
+successfully measured the specific heat and thermal conductivity of platinum
+wire specimens at cryogenic temperatures, and measured those thermal quantities
+of tiny carbon nanotube bundles some of which are only 10^-9 g in mass.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/quant-ph/0202038v1,3 omega method for specific heat and thermal conductivity measurements,2002-02-06,D. L. Zhang,"We present a 3 omega method for simultaneously measuring the specific heat
+and thermal conductivity of a rod- or filament-like specimen using a way
+similar to a four-probe resistance measurement. The specimen in this method
+needs to be electrically conductive and with a temperature-dependent
+resistance, for acting both as a heater to create a temperature fluctuation and
+as a sensor to measure its thermal response. With this method we have
+successfully measured the specific heat and thermal conductivity of platinum
+wire specimens at cryogenic temperatures, and measured those thermal quantities
+of tiny carbon nanotube bundles some of which are only 10^-9 g in mass.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/quant-ph/0202038v1,3 omega method for specific heat and thermal conductivity measurements,2002-02-06,D. L. Zhang,"We present a 3 omega method for simultaneously measuring the specific heat
+and thermal conductivity of a rod- or filament-like specimen using a way
+similar to a four-probe resistance measurement. The specimen in this method
+needs to be electrically conductive and with a temperature-dependent
+resistance, for acting both as a heater to create a temperature fluctuation and
+as a sensor to measure its thermal response. With this method we have
+successfully measured the specific heat and thermal conductivity of platinum
+wire specimens at cryogenic temperatures, and measured those thermal quantities
+of tiny carbon nanotube bundles some of which are only 10^-9 g in mass.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/quant-ph/0112125v1,Photoconductance Quantization in a Single-Photon Detector,2001-12-20,Eli Yablonovitch,"We have made a single-photon detector that relies on photoconductive gain in
+a narrow electron channel in an AlGaAs/GaAs 2-dimensional electron gas. Given
+that the electron channel is 1-dimensional, the photo-induced conductance has
+plateaus at multiples of the quantum conductance 2e$^{2}$/h. Super-imposed on
+these broad conductance plateaus are many sharp, small, conductance steps
+associated with single-photon absorption events that produce individual
+photo-carriers. This type of photoconductive detector could measure a single
+photon, while safely storing and protecting the spin degree of freedom of its
+photo-carrier. This function is valuable for a quantum repeater that would
+allow very long distance teleportation of quantum information.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/quant-ph/0112125v1,Photoconductance Quantization in a Single-Photon Detector,2001-12-20,Eli Yablonovitch,"We have made a single-photon detector that relies on photoconductive gain in
+a narrow electron channel in an AlGaAs/GaAs 2-dimensional electron gas. Given
+that the electron channel is 1-dimensional, the photo-induced conductance has
+plateaus at multiples of the quantum conductance 2e$^{2}$/h. Super-imposed on
+these broad conductance plateaus are many sharp, small, conductance steps
+associated with single-photon absorption events that produce individual
+photo-carriers. This type of photoconductive detector could measure a single
+photon, while safely storing and protecting the spin degree of freedom of its
+photo-carrier. This function is valuable for a quantum repeater that would
+allow very long distance teleportation of quantum information.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/quant-ph/0112125v1,Photoconductance Quantization in a Single-Photon Detector,2001-12-20,Eli Yablonovitch,"We have made a single-photon detector that relies on photoconductive gain in
+a narrow electron channel in an AlGaAs/GaAs 2-dimensional electron gas. Given
+that the electron channel is 1-dimensional, the photo-induced conductance has
+plateaus at multiples of the quantum conductance 2e$^{2}$/h. Super-imposed on
+these broad conductance plateaus are many sharp, small, conductance steps
+associated with single-photon absorption events that produce individual
+photo-carriers. This type of photoconductive detector could measure a single
+photon, while safely storing and protecting the spin degree of freedom of its
+photo-carrier. This function is valuable for a quantum repeater that would
+allow very long distance teleportation of quantum information.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/quant-ph/0112125v1,Photoconductance Quantization in a Single-Photon Detector,2001-12-20,Eli Yablonovitch,"We have made a single-photon detector that relies on photoconductive gain in
+a narrow electron channel in an AlGaAs/GaAs 2-dimensional electron gas. Given
+that the electron channel is 1-dimensional, the photo-induced conductance has
+plateaus at multiples of the quantum conductance 2e$^{2}$/h. Super-imposed on
+these broad conductance plateaus are many sharp, small, conductance steps
+associated with single-photon absorption events that produce individual
+photo-carriers. This type of photoconductive detector could measure a single
+photon, while safely storing and protecting the spin degree of freedom of its
+photo-carrier. This function is valuable for a quantum repeater that would
+allow very long distance teleportation of quantum information.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/quant-ph/9912090v1,Higher order conductivity corrections to the Casimir force,1999-12-19,V. M. Mostepanenko,"The finite conductivity corrections to the Casimir force in two
+configurations are calculated in the third and fourth orders in relative
+penetration depth of electromagnetic zero oscillations into the metal. The
+obtained analytical perturbation results are compared with recent computations.
+Applications to the modern experiments are discussed.",quant-ph,cat:quant-ph,all:super%20conduct
+http://arxiv.org/abs/quant-ph/9912090v1,Higher order conductivity corrections to the Casimir force,1999-12-19,V. M. Mostepanenko,"The finite conductivity corrections to the Casimir force in two
+configurations are calculated in the third and fourth orders in relative
+penetration depth of electromagnetic zero oscillations into the metal. The
+obtained analytical perturbation results are compared with recent computations.
+Applications to the modern experiments are discussed.",quant-ph,cat:quant-ph,all:super%20conducting
+http://arxiv.org/abs/quant-ph/9912090v1,Higher order conductivity corrections to the Casimir force,1999-12-19,V. M. Mostepanenko,"The finite conductivity corrections to the Casimir force in two
+configurations are calculated in the third and fourth orders in relative
+penetration depth of electromagnetic zero oscillations into the metal. The
+obtained analytical perturbation results are compared with recent computations.
+Applications to the modern experiments are discussed.",quant-ph,cat:quant-ph,all:super+conducting
+http://arxiv.org/abs/quant-ph/9912090v1,Higher order conductivity corrections to the Casimir force,1999-12-19,V. M. Mostepanenko,"The finite conductivity corrections to the Casimir force in two
+configurations are calculated in the third and fourth orders in relative
+penetration depth of electromagnetic zero oscillations into the metal. The
+obtained analytical perturbation results are compared with recent computations.
+Applications to the modern experiments are discussed.",quant-ph,cat:quant-ph,all:super+conduct
+http://arxiv.org/abs/quant-ph/9603013v1,On The relation between Superconductivity and Quantum Hall Effect,1996-03-08,F. Ghaboussi,"We introduce a model of superconductivity and discuss its relation to the
+quantum Hall-effect. This kind of relation is supported by the well known SQUID
+results. The concept of pure gauge potential as it is involved in various
+theoretical models concerning solid state effects in magnetic fields is also
+discussed.",quant-ph,cat:quant-ph,"all:""superconducting"""
+http://arxiv.org/abs/quant-ph/9603013v1,On The relation between Superconductivity and Quantum Hall Effect,1996-03-08,F. Ghaboussi,"We introduce a model of superconductivity and discuss its relation to the
+quantum Hall-effect. This kind of relation is supported by the well known SQUID
+results. The concept of pure gauge potential as it is involved in various
+theoretical models concerning solid state effects in magnetic fields is also
+discussed.",quant-ph,cat:quant-ph,all:superconduct
+http://arxiv.org/abs/quant-ph/9603013v1,On The relation between Superconductivity and Quantum Hall Effect,1996-03-08,F. Ghaboussi,"We introduce a model of superconductivity and discuss its relation to the
+quantum Hall-effect. This kind of relation is supported by the well known SQUID
+results. The concept of pure gauge potential as it is involved in various
+theoretical models concerning solid state effects in magnetic fields is also
+discussed.",quant-ph,cat:quant-ph,all:superconducting
+http://arxiv.org/abs/quant-ph/9603013v1,On The relation between Superconductivity and Quantum Hall Effect,1996-03-08,F. Ghaboussi,"We introduce a model of superconductivity and discuss its relation to the
+quantum Hall-effect. This kind of relation is supported by the well known SQUID
+results. The concept of pure gauge potential as it is involved in various
+theoretical models concerning solid state effects in magnetic fields is also
+discussed.",quant-ph,cat:quant-ph,"all:""superconduct"""
