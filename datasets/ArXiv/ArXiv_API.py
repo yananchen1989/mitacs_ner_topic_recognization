@@ -50,7 +50,7 @@ base_url = 'http://export.arxiv.org/api/query?search_query='
 # Search Parameters
 filter_cat = False                       # True or False --> Fix Query to ArXiv Categories (True = search specific categories)
 start = 0                                   # start at the first result
-total_results = 1600                          # want # total results (suggested was 20)
+total_results = 1000                          # want # total results (suggested was 20)
 results_per_iteration = 20                   # Number of results at a time (suggested was 5)
 wait_time = 3                               # number of seconds to wait between calls (suggested was 3)
 
@@ -112,6 +112,6 @@ if filter_cat == False: CSV_Path = 'nlp4quantumpapers/datasets/ArXiv/API_Output_
 #Temporarily Make General Single-Search Term Output
 CSV_Path = 'nlp4quantumpapers/datasets/ArXiv/API_Output.csv'
 
-API_Output.to_csv(CSV_Path,index=False)
+API_Output.to_csv("test_output.csv", index=False)
 print("Output to CSV Complete")
 
