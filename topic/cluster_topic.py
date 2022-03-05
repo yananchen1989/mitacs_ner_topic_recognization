@@ -1,9 +1,11 @@
 
+import pandas as pd 
 
-data = df.sample(1024)['abstract'].tolist()
+df = pd.read_csv("arxiv.csv")
+data = df['abstract'].tolist()
 
 from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('all-mpnet-base-v2', device='cuda:2')
+model = SentenceTransformer('all-mpnet-base-v2', device='cuda:1')
 embeddings = model.encode(data, show_progress_bar=True, batch_size=512)
 
 
@@ -22,7 +24,7 @@ umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, min_dist=0.0, metric
 import hdbscan
 cluster = hdbscan.HDBSCAN(min_cluster_size=15,
                           metric='euclidean',                      
-                          cluster_selection_method='eom').fit(umap_embeddings)
+                          cluster_selection_method='eom').fit(embeddings)
 
                           
 result = pd.DataFrame(umap_data, columns=['x', 'y'])

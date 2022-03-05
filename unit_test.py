@@ -1,69 +1,48 @@
-# import json
-# import pandas as pd 
-
-# with open('articles_full.json', 'r') as f:
-#     jfull = json.load(f)
-
-
-
-
-# df = pd.DataFrame(jfull)
-
-# df['article_ID'] = df['article_ID'].astype(int)
-
-
-
-# with open('articles_sample.xml.json', 'r') as f:
-#     jxml = json.load(f)
-
-
-# for d in jxml:
-#     if d['article_id'] == '9882':
-#         print(d)
-#         break 
-
-# df_ent = pd.DataFrame(jxml)
-
-# df_ent['article_id'] = df_ent['article_id'].astype(int)
-
-# df_ = pd.merge(df, df_ent, left_on='article_ID', right_on='article_id', how='inner')
-
-# row = df_.sample(1)
-# print(row['post_content'].tolist()[0])
-# print(row['Name'].tolist()[0])
-
 
 
 
 #############  arxiv ##########
 import pandas as pd 
 import json
-
+import seaborn as sns
+import matplotlib.pyplot as plt
 target_categories = ['cond-mat.supr-con', 'math.QA', 'quant-ph', 'stat.CO']
 
+def clean_text(sent):
+    tokens = sent.replace('\n',' ').strip().split()
+    tokens_clean = [ii for ii in tokens if not ii.startswith("$") and not ii.endswith("$") and ii]
+    return ' '.join(tokens_clean)
 
-infos = []
-with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f:
-    for line in f:
-        js = json.loads(line)
-        if js['categories'] in target_categories:
+def make_df():
+    infos = []
+    with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f:
+        for line in f:
+            js = json.loads(line)
+            #if js['categories'] == 'quant-ph' :
+            js['abstract'] = clean_text(js['abstract'])
             infos.append(js)
 
-df = pd.DataFrame(infos)
+    df = pd.DataFrame(infos) # 78160
+    #df['abstract'] = df['abstract'].map(lambda x: x.lower())
+    df.drop_duplicates(['abstract'], inplace=True)
+    df['yymm'] = pd.to_datetime(df['update_date'].map(lambda x: '-'.join(x.split('-')[:2] )))
+    return df 
+
+df = make_df()
+print(df.sample(1)["abstract"].tolist()[0])
+
+from sklearn.model_selection import train_test_split
+df_train, df_test = train_test_split(df, test_size=0.02)
 
 
-df['yymm'] = df['update_date'].map(lambda x: '-'.join(x.split('-')[:2] ))
+with open ("./food/df_arxiv.train.txt", 'w') as f:
+    for ix, row in df_train.iterrows():
+        f.write(row['abstract'] + '\n')
 
 
-
-df_dates_cnt = df.yymm.value_counts().reset_index()
-
-df_dates_cnt.sort_values(by=['index'], ascending=False)
-
-
-
-
-
+with open ("./food/df_arxiv.test.txt", 'w') as f:
+    for ix, row in df_test.iterrows():
+        f.write(row['abstract'] + '\n')
 
 
 
@@ -71,4 +50,17 @@ df_dates_cnt.sort_values(by=['index'], ascending=False)
 
 
 
+import datasets
+raw_datasets = datasets.load_dataset('davanstrien/crowdsourced-keywords')
+
+
+
+
+
+from transformers import AutoTokenizer, AutoModel
+tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased", cache_dir='./cache')
+model = AutoModel.from_pretrained("allenai/scibert_scivocab_uncased", cache_dir='./cache')
+
+sent = df.sample(1)["abstract"].tolist()[0]
+tokenizer(sent)
 
