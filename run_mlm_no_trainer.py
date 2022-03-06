@@ -286,7 +286,7 @@ def main():
         extension = args.train_file.split(".")[-1]
         if extension == "txt":
             extension = "text"
-        raw_datasets = load_dataset(extension, data_files=data_files)
+        raw_datasets = load_dataset(extension, data_files=data_files, cache_dir='/scratch/w/wluyliu/yananc/cache')
         # If no validation data is there, validation_split_percentage will be used to divide the dataset.
         if "validation" not in raw_datasets.keys():
             raw_datasets["validation"] = load_dataset(
@@ -544,15 +544,7 @@ def main():
 
         logger.info(f"epoch {epoch}: perplexity: {perplexity}")
 
-        if args.push_to_hub and epoch < args.num_train_epochs - 1:
-            accelerator.wait_for_everyone()
-            unwrapped_model = accelerator.unwrap_model(model)
-            unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
-            if accelerator.is_main_process:
-                tokenizer.save_pretrained(args.output_dir)
-                repo.push_to_hub(
-                    commit_message=f"Training in progress epoch {epoch}", blocking=False, auto_lfs_prune=True
-                )
+
 
     if args.output_dir is not None:
         accelerator.wait_for_everyone()

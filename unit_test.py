@@ -18,9 +18,9 @@ def make_df():
     with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f:
         for line in f:
             js = json.loads(line)
-            #if js['categories'] == 'quant-ph' :
-            js['abstract'] = clean_text(js['abstract'])
-            infos.append(js)
+            if js['categories'] == 'quant-ph' :
+                js['abstract'] = clean_text(js['abstract'])
+                infos.append(js)
 
     df = pd.DataFrame(infos) # 78160
     #df['abstract'] = df['abstract'].map(lambda x: x.lower())
@@ -35,12 +35,12 @@ from sklearn.model_selection import train_test_split
 df_train, df_test = train_test_split(df, test_size=0.02)
 
 
-with open ("./food/df_arxiv.train.txt", 'w') as f:
+with open ("./df_arxiv.train.quantph.txt", 'w') as f:
     for ix, row in df_train.iterrows():
         f.write(row['abstract'] + '\n')
 
 
-with open ("./food/df_arxiv.test.txt", 'w') as f:
+with open ("./df_arxiv.test.quantph.txt", 'w') as f:
     for ix, row in df_test.iterrows():
         f.write(row['abstract'] + '\n')
 
