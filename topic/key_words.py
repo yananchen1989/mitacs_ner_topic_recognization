@@ -1,7 +1,5 @@
 from keybert import KeyBERT
 import pandas as pd 
-
-
 from sentence_transformers import SentenceTransformer
 
 
@@ -11,8 +9,11 @@ from sentence_transformers import SentenceTransformer
 sentence_model = SentenceTransformer("allenai/scibert_scivocab_uncased")
 kw_model = KeyBERT(model=sentence_model)
 
-sentence_model_ = SentenceTransformer("allenai/scibert_scivocab_uncased")
-kw_model_ = KeyBERT(model=sentence_model_)
+sentence_model= SentenceTransformer("/Users/yanan/Downloads/finetune/arxiv_scibert_quantph")
+kw_model = KeyBERT(model=sentence_model)
+
+
+
 
 sent = '''
 This model is one of the possible geometrical interpretations of Quantum

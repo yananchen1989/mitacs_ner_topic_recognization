@@ -4,22 +4,20 @@ import json
 
 
 import pandas as pd 
-
-df = pd.read_csv("arxiv.csv")
-
 from bertopic import BERTopic
 
 from sentence_transformers import SentenceTransformer
-embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cpu', cache_folder='./cache_sentbert')
+#embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cpu', cache_folder='./cache_sentbert')
+embedding_model = SentenceTransformer("/Users/yanan/Downloads/finetune/arxiv_scibert_quantph", device='cpu')
 
 topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=50)
-topics, probs = topic_model.fit_transform(df['abstract'].tolist()); 
+topics, probs = topic_model.fit_transform(df['abstract'].tolist())
 
-topic_model.save("mpnet_topic_model")
+topic_model.save("mpnet_topic_model_sci")
 
 
 
-topic_model = BERTopic.load("mpnet_topic_128_model")
+topic_model = BERTopic.load("mpnet_topic_model_sci")
 
 len(topic_model.get_topic_info())
 
