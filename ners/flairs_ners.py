@@ -12,22 +12,28 @@ tagger = SequenceTagger.load("flair/ner-english-fast")
 
 
 text = '''
-The Josephson junction quantum computer was demonstrated in 1999 by Nakamura
-and the coworkers. In this computer a Cooper pair box, which is a small superconducting
-island electrode is weakly coupled to a bulk superconductor. Weak coupling between the
-superconductors create a Josephson junction between them which behaves as a capacitor.
-If the Cooper box is small as a quantum dot, the charging current breaks into discrete
-transfer of individual Cooper pairs, so that ultimately it is possible to just transfer a single
-Cooper pair across the junction. Like quantum dot, computers in Josephson junction
-computers, qubits are controlled electrically. Josephson junction’s quantum computers
-are one of the promising candidates for future developments.
+The distinctive non-classical features of quantum physics were first
+discussed in the seminal paper by A. Einstein, B. Podolsky and N. Rosen (EPR)
+in 1935. In his immediate response E. Schr\"odinger introduced the notion of
+entanglement, now seen as the essential resource in quantum information as well
+as in quantum metrology. Furthermore he showed that at the core of the EPR
+argument is a phenomenon which he called steering. In contrast to entanglement
+and violations of Bell's inequalities, steering implies a direction between the
+parties involved. Recent theoretical works have precisely defined this
+property. Here we present an experimental realization of two entangled Gaussian
+modes of light by which in fact one party can steer the other but not
+conversely. The generated one-way steering gives a new insight into quantum
+physics and may open a new field of applications in quantum information.
 '''
 
-def get_ners(text):
-    sentence = Sentence(text)
-    tagger.predict(sentence)
-    ners = list(set([ii['text'] for ii in sentence.to_dict(tag_type='ner')['entities']]))
-    return ners
+
+sentence = Sentence(text)
+tagger.predict(sentence)
+#ners = list(set([ii['text'] for ii in sentence.to_dict(tag_type='ner')['ner']]))
+
+for ii in sentence.to_dict(tag_type='ner')['ner']:
+    print(ii)
 
 
-ners = get_ners(text)
+
+

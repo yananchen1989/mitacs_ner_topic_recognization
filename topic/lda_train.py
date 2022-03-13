@@ -11,9 +11,16 @@ import re, string
 from nltk.corpus import stopwords
 sw = set(stopwords.words("english"))
 # from nltk.stem.porter import PorterStemmer
+import datasets
+cc_news = datasets.load_dataset('cc_news', split="train")
+
+df = df.sample(100000)
+df = pd.DataFrame(random.sample(cc_news['text'], 50000), columns=['abstract'])
 
 
-df['abstract'] = df['abstract'].map(lambda x: x.lower())
+
+
+df['abstract'] = df['content'].map(lambda x: x.lower())
 common_dictionary = Dictionary([i.split() for i in df['abstract'].tolist()  ], prune_at=10000)
 
 print (len(common_dictionary.token2id) )
@@ -22,12 +29,11 @@ common_dictionary.save("common_dictionary")
 
 common_dictionary = Dictionary.load("common_dictionary")
 
-from gensim.models import ldamodel
-
-####################  train
-
-
 df['corpus'] = df['abstract'].map(lambda x: common_dictionary.doc2bow(x.split(' ')))
+
+
+
+
 
 #common_dictionary.token2id['computer']
 
@@ -38,10 +44,8 @@ from gensim.models.callbacks import CallbackAny2Vec
 perplexity_logger = PerplexityMetric(corpus=df['corpus'].tolist(), logger='shell')
 
 
-
-
 lda = ldamodel.LdaModel(df['corpus'].tolist(), id2word=common_dictionary, \
-          num_topics=64, iterations=100 , distributed=True, eval_every=10, callbacks=[perplexity_logger])
+          num_topics=64, iterations=100 , passes=10,  eval_every=10, callbacks=[perplexity_logger])
 
 temp_file = datapath("./lda_abstract" )
 lda.save(temp_file)
@@ -53,14 +57,20 @@ temp_file = datapath("./lda_abstract" )
 
 lda = ldamodel.LdaModel.load(temp_file)
 
-for t in range(64):
-    kws = lda.show_topic(t, topn=20)
+for t in range(12):
+    print("topic==>{}".format(t))
+    kws = lda.show_topic(t, topn=32)
     for ii in kws:
         if ii[0].lower() in sw:
             continue
         else:
             print(ii)
     print()
+
+
+
+
+cc_news = datasets.load_dataset('cc_news', split="train")
 
 
 
