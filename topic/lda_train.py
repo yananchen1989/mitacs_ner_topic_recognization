@@ -15,12 +15,15 @@ import datasets
 cc_news = datasets.load_dataset('cc_news', split="train")
 
 df = df.sample(100000)
-df = pd.DataFrame(random.sample(cc_news['text'], 50000), columns=['abstract'])
+df = pd.DataFrame(random.sample(cc_news['text'], 100000), columns=['abstract'])
 
 
+from utils import * 
 
+df['abstract_clean'] = df['abstract'].map(lambda x: clean_title(x))
 
-df['abstract'] = df['content'].map(lambda x: x.lower())
+df = df.loc[df['abstract_clean']!=""]
+
 common_dictionary = Dictionary([i.split() for i in df['abstract'].tolist()  ], prune_at=10000)
 
 print (len(common_dictionary.token2id) )

@@ -1,4 +1,4 @@
-import string
+import string,re
 
 def remove_latex(sent):
     tokens = sent.replace('\n',' ').strip().split()
