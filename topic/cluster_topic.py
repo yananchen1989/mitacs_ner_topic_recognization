@@ -1,17 +1,6 @@
 
 import pandas as pd 
 
-
-
-
-
-
-
-
-
-
-
-
 dfs = df.sample(2048)
 embeddings = model.encode(dfs['abstract'].tolist(), show_progress_bar=True, batch_size=512)
 

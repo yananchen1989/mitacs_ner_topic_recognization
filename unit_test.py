@@ -1,6 +1,3 @@
-
-
-
 #############  arxiv ##########
 import pandas as pd 
 import json
@@ -8,18 +5,33 @@ import json
 # import matplotlib.pyplot as plt
 target_categories = ['cond-mat.supr-con', 'math.QA', 'quant-ph', 'stat.CO']
 
-def clean_text(sent):
+def remove_latex(sent):
     tokens = sent.replace('\n',' ').strip().split()
     tokens_clean = [ii for ii in tokens if  "$" not in ii and ii and '\\' not in ii]
     return ' '.join(tokens_clean)
 
-def make_df():
+from nltk.stem.porter import PorterStemmer
+def clean_title(title):
+    title = title.lower()
+    title = re.sub(r'[^\w\s]',' ',title)
+    title = title.replace('\n',' ')
+    title = title.replace('_line_', ' ')
+    # PorterStemmer().stem()
+    tokens = [ w.strip() \
+               for w in title.split(' ') if w not in sw and w and not w.isdigit() \
+             and w not in string.punctuation and w not in string.ascii_lowercase and len(w) >=2 and len(w)<=15]
+    if not tokens:
+        return ""
+    else:
+        return " ".join(tokens)
+
+def make_df(file_path):
     infos = []
     # include your local path
-    with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f: # /Users/yanan/Downloads/
+    with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f: 
         for line in f:
             js = json.loads(line)
-            if js['categories'] == 'quant-ph' :
+            if js['categories'] == 'quant-ph': # ion trap // 
                 js['abstract'] = clean_text(js['abstract'])
                 infos.append(js)
 
@@ -31,6 +43,12 @@ def make_df():
 
 df = make_df()
 print(df.sample(1)["abstract"].tolist()[0])
+
+
+
+
+
+####################################################################################################################
 
 
 
@@ -70,15 +88,37 @@ df['author_len'] = df['authors_parsed'].map(lambda x: len(x))
 
 
 
+import transformers
+
+import tensorflow as tf 
+
+MAX_LEN = 16
+ids = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
+att = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
+tok = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
+
+model = transformers.TFRobertaModel.from_pretrained('roberta-base')
+
+
+
+model = tf.keras.models.Model(inputs=[ids, att, tok], outputs=[x1,x2])
+optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+
+
+last_hidden_states = outputs.last_hidden_state
 
 
 
 
+from transformers import RobertaTokenizer, TFRobertaForSequenceClassification
+tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+model = TFRobertaForSequenceClassification.from_pretrained("roberta-base")
+
+x = model(input_ids=ids, attention_mask=att)
 
 
-
-
-
+model = transformers.TFRobertaForTokenClassification.from_pretrained("roberta-base")
 
 
 
