@@ -1,4 +1,3 @@
-
 import pandas as pd
 import datetime,random,hashlib,traceback,json,os,logging,time,pickle,gc,requests,operator,argparse
 import numpy as np
@@ -7,20 +6,17 @@ from gensim.corpora.dictionary import Dictionary
 from gensim.test.utils import datapath
 from gensim.models import ldamodel
 
-import re, string
-from nltk.corpus import stopwords
-sw = set(stopwords.words("english"))
+
 # from nltk.stem.porter import PorterStemmer
 import datasets
 cc_news = datasets.load_dataset('cc_news', split="train")
 
-df = df.sample(100000)
+#df = df.sample(100000)
 df = pd.DataFrame(random.sample(cc_news['text'], 100000), columns=['abstract'])
 
+from utils.process_func import * 
 
-from utils import * 
-
-df['abstract_clean'] = df['abstract'].map(lambda x: clean_title(x))
+df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x)).map(lambda x: clean_title(x))
 
 df = df.loc[df['abstract_clean']!=""]
 

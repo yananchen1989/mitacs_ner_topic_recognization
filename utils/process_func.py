@@ -1,4 +1,6 @@
 import string,re
+from nltk.corpus import stopwords
+sw = set(stopwords.words("english"))
 
 def remove_latex(sent):
     tokens = sent.replace('\n',' ').strip().split()
