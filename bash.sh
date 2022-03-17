@@ -1,5 +1,7 @@
 
 
+CUDA_VISIBLE_DEVICES=3 ipython
+
 CUDA_VISIBLE_DEVICES=0  python -u run_mlm_no_trainer.py \
     --num_train_epochs 7 \
     --train_file '/home/w/wluyliu/yananc/nlp4quantumpapers/finetune/df_arxiv.train.txt' \

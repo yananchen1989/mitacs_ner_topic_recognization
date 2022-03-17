@@ -5,43 +5,11 @@ import json
 # import matplotlib.pyplot as plt
 target_categories = ['cond-mat.supr-con', 'math.QA', 'quant-ph', 'stat.CO']
 
-def remove_latex(sent):
-    tokens = sent.replace('\n',' ').strip().split()
-    tokens_clean = [ii for ii in tokens if  "$" not in ii and ii and '\\' not in ii]
-    return ' '.join(tokens_clean)
 
-from nltk.stem.porter import PorterStemmer
-def clean_title(title):
-    title = title.lower()
-    title = re.sub(r'[^\w\s]',' ',title)
-    title = title.replace('\n',' ')
-    title = title.replace('_line_', ' ')
-    # PorterStemmer().stem()
-    tokens = [ w.strip() \
-               for w in title.split(' ') if w not in sw and w and not w.isdigit() \
-             and w not in string.punctuation and w not in string.ascii_lowercase and len(w) >=2 and len(w)<=15]
-    if not tokens:
-        return ""
-    else:
-        return " ".join(tokens)
 
-def make_df(file_path):
-    infos = []
-    # include your local path
-    with open('arxiv-metadata-oai-snapshot_2.json', 'r') as f: 
-        for line in f:
-            js = json.loads(line)
-            if js['categories'] == 'quant-ph': # ion trap // 
-                js['abstract'] = clean_text(js['abstract'])
-                infos.append(js)
 
-    df = pd.DataFrame(infos) # 78160
-    #df['abstract'] = df['abstract'].map(lambda x: x.lower())
-    df.drop_duplicates(['abstract'], inplace=True)
-    df['yymm'] = pd.to_datetime(df['update_date'].map(lambda x: '-'.join(x.split('-')[:2] )))
-    return df 
 
-df = make_df()
+
 print(df.sample(1)["abstract"].tolist()[0])
 
 
