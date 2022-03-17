@@ -26,8 +26,8 @@ def clean_title(title):
     title = re.sub(r'[^\w\s]',' ',title)
     title = title.replace('\n',' ')
     title = title.replace('_line_', ' ')
-    # PorterStemmer().stem()
-    tokens = [ w.strip() \
+    # 
+    tokens = [ PorterStemmer().stem(w.strip()) \
                for w in title.split(' ') if w not in sw and w and not w.isdigit() \
              and w not in string.punctuation and w not in string.ascii_lowercase and len(w) >=2 and len(w)<=15]
     if not tokens:
