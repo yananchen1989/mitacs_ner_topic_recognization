@@ -18,7 +18,7 @@ if args.dsn == 'cc':
     cc_news = datasets.load_dataset('cc_news', split="train", cache_dir='/scratch/w/wluyliu/yananc/cache')
     df = pd.DataFrame(random.sample(cc_news['text'], 100000), columns=['abstract'])
 elif args.dsn == 'arxiv':
-    df = make_df('arxiv-metadata-oai-snapshot_2.json', ['quant-ph'])
+    df = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot_2.json', ['quant-ph'])
 
 
 df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x)).map(lambda x: clean_title(x))
