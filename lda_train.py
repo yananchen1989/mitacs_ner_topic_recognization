@@ -23,6 +23,8 @@ elif args.dsn == 'arxiv':
 
 df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x)).map(lambda x: clean_title(x))
 
+print("df===>", df.shape[0])
+
 common_dictionary = Dictionary([i.split() for i in df['abstract_clean'].tolist()  ], prune_at=10000)
 
 print (len(common_dictionary.token2id) )
