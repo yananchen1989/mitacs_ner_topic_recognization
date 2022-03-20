@@ -6,21 +6,18 @@ df = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapsh
 
 with open('arxiv_abstract', 'w') as f:
     for ix, row in df.iterrows():
-        f.write(row['abstract_stem']+'\n')
+        f.write(row['abstract_clean']+'\n')
 
 
 import fasttext
 
 for m in ['skipgram', 'cbow']
     for ngram in [1, 3]:
-        model = fasttext.train_unsupervised(input='./arxiv_abstract.csv', 
-            lr=0.03, epoch=5, wordNgrams=ngram, thread=64, dim=128, minn=0, \
+        model = fasttext.train_unsupervised(input='/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv_abstract', 
+            lr=0.1, epoch=12, wordNgrams=ngram, thread=48, dim=128, minn=0, \
             maxn=0, loss='softmax', minCount=3, model=m )
-        model.save_model("./arxiv_abstract_embed_{}_{}.bin".format(m, ngram))
+        model.save_model("/scratch/w/wluyliu/yananc/arxiv_abstract_embed_{}_{}.bin".format(m, ngram))
 
-model = fasttext.train_unsupervised(input='./arxiv_abstract', 
-            lr=0.1, epoch=5, wordNgrams=1, thread=64, dim=128, minn=0, \
-            maxn=0, loss='softmax', minCount=3, model='cbow' )
 
 
 
@@ -46,7 +43,8 @@ def get_cate(cate):
         return cate
 
 df['cate'] = df['categories'].map(lambda x: get_cate(x).lower().replace('.','-'))
-df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x))
+
+
 
 from sklearn.model_selection import train_test_split
 df_train, df_test = train_test_split(df, test_size=0.05)

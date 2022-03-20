@@ -8,7 +8,10 @@ def make_df(json_path, target_cates):
     with open(json_path, 'r') as f: 
         for line in f:
             js = json.loads(line)
-            if js['categories'] in target_cates: # ion trap // 
+            if target_cates:
+                if js['categories'] in target_cates: # ion trap // 
+                    infos.append(js)
+            else:
                 infos.append(js)
     df = pd.DataFrame(infos) # 78160
     df.drop_duplicates(['abstract'], inplace=True)
