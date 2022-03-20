@@ -9,14 +9,6 @@ with open('arxiv_abstract', 'w') as f:
         f.write(row['abstract_clean']+'\n')
 
 
-import fasttext
-
-for m in ['skipgram', 'cbow']
-    for ngram in [1, 3]:
-        model = fasttext.train_unsupervised(input='/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv_abstract', 
-            lr=0.1, epoch=12, wordNgrams=ngram, thread=48, dim=128, minn=0, \
-            maxn=0, loss='softmax', minCount=3, model=m )
-        model.save_model("/scratch/w/wluyliu/yananc/arxiv_abstract_embed_{}_{}.bin".format(m, ngram))
 
 
 
@@ -33,6 +25,16 @@ def get_cate(cate):
     else:
         return cate
 
+infos = []
+with open('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot.json', 'r') as f: 
+    for line in f:
+        js = json.loads(line)
+        infos.append(js)
+df = pd.DataFrame(infos) # 78160
+df.drop_duplicates(['abstract'], inplace=True)
+df['yymm'] = pd.to_datetime(df['update_date'].map(lambda x: '-'.join(x.split('-')[:2] )))
+df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x))
+
 df['cate'] = df['categories'].map(lambda x: get_cate(x).lower().replace('.','-'))
 
 
@@ -40,22 +42,14 @@ df['cate'] = df['categories'].map(lambda x: get_cate(x).lower().replace('.','-')
 from sklearn.model_selection import train_test_split
 df_train, df_test = train_test_split(df, test_size=0.05)
 
-with open('abstract_train_cate', 'w') as f:
+with open('abstract_cate.train', 'w') as f:
     for ix, row in df_train.iterrows():
         f.write('__label__{} {}\n'.format(row['cate'], row['abstract_clean']))
 
-with open('abstract_test_cate', 'w') as f:
+with open('abstract_cate.test', 'w') as f:
     for ix, row in df_test.iterrows():
         f.write('__label__{} {}\n'.format(row['cate'], row['abstract_clean']))
 
-
-for ep in [7, 12, 25, 30, 50, 70, 100]:
-    model = fasttext.train_supervised(input="./abstract_train_cate", dim=128,\
-             loss='softmax', thread=56,  minn=1, maxn=5, wordNgrams=4, epoch=ep)
-    
-    result = model.test("abstract_test_cate")
-    print("epoch:{}".format(ep), result)
-    model.save_model("./abstract_cate_ep{}.bin".format(ep))
 
 
 
