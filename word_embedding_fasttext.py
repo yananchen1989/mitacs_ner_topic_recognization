@@ -25,15 +25,6 @@ for m in ['skipgram', 'cbow']
 
 
 ########################### classification
-import json
-import pandas as pd 
-infos = []
-with open('./arxiv-metadata-oai-snapshot.json', 'r') as f: 
-    for line in f:
-        js = json.loads(line)
-        infos.append(js)
-df = pd.DataFrame(infos) 
-
 
 def get_cate(cate):
     if ' ' in cate:
