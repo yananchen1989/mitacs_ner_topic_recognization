@@ -13,7 +13,7 @@ target_categories = ['cond-mat.supr-con', 'math.QA', 'quant-ph', 'stat.CO']
 print(df.sample(1)["abstract"].tolist()[0])
 
 
-
+df.sample(1000)['abstract'].map(lambda x: remove_latex(x)).to_csv('label_corpus_1k.csv', index=False)
 
 
 ####################################################################################################################

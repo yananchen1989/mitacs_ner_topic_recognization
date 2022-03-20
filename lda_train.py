@@ -55,18 +55,15 @@ lda.save(temp_file)
 
 
 
-# temp_file = datapath("/gpfs/fs0/scratch/w/wluyliu/yananc/lda_cc_64" )
-# lda = ldamodel.LdaModel.load(temp_file)
+temp_file = datapath("/gpfs/fs0/scratch/w/wluyliu/yananc/lda_arxiv_128" )
+lda = ldamodel.LdaModel.load(temp_file)
 
-# for t in range(64):
-#     print("topic==>{}".format(t))
-#     kws = lda.show_topic(t, topn=10)
-#     for ii in kws:
-#         #if ii[0].lower() in sw:
-#         #    continue
-#         #else:
-#         print([for i in ])
-#     print()
+for t in range(42):
+    print("topic==>{}".format(t))
+    kws = lda.show_topic(t, topn=10)
+    for ii in kws:
+        print(ii[0], round(ii[1],4) )
+    print()
 
 
 

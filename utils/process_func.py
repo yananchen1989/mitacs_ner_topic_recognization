@@ -13,6 +13,8 @@ def make_df(json_path, target_cates):
     df = pd.DataFrame(infos) # 78160
     df.drop_duplicates(['abstract'], inplace=True)
     df['yymm'] = pd.to_datetime(df['update_date'].map(lambda x: '-'.join(x.split('-')[:2] )))
+    df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x))
+    df['abstract_stem'] = df['abstract_clean'].map(lambda x: clean_title(x))
     return df 
     
 def remove_latex(sent):
