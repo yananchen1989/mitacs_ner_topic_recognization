@@ -58,3 +58,9 @@ cd $SCRATCH
 
 squeue --me
 
+scancel -i JOBID #cancels a specific job.
+sacct #gives information about your recent jobs.
+sinfo -p #compute gives a list of available nodes.
+qsum #gives a summary of the queue by user.
+
+

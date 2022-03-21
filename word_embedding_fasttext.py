@@ -10,12 +10,6 @@ with open('arxiv_abstract', 'w') as f:
 
 
 
-
-
-
-
-
-
 ########################### classification
 
 def get_cate(cate):
@@ -54,36 +48,31 @@ with open('abstract_cate.test', 'w') as f:
 
 
 
+import fasttext
 
-model = fasttext.load_model("./abstract_cate.bin")
+seed_words = ['Neutral atoms', 'Quantum Annealing', 'Blockchain', 'Microwave', \
+                'Casimir-type device', 'superconducting','Trapped Ion', 'Silicon']
 
-vocab = model.words
-model.get_word_vector("the")
-model.get_nearest_neighbors('asparagus')
+models['skipgram']  = {}
+models['cbow']  = {}
 
+for m in models.keys():
+    for ngram in [1,3]:
+        models[m][ngram] = fasttext.load_model("./arxiv_abstract_embed_{}_{}.bin".format(m, ngram))
 
+vocab = models['cbow'][1].words
+print(len(vocab))
 
-'''
-show unitar allow clone two point ray implic clone geometr phase inform quantum state particular quantum histori encod geometr phase cyclic evolut quantum system cannot copi also prove gener geometr phase inform cannot copi unitari oper argu result also hold consist histori formul quantum mechan
+model_cls = fasttext.load_model('abstract_cate_ep30.bin')
+vocab = model_cls.words
+print(len(vocab))
 
-appli quantum control techniqu control larg spin chain act two qubit one end therebi implement univers quantum comput combin quantum gate latter swap oper across chain shown control sequenc comput implement effici discuss applic idea physic system superconduct qubit full control long chain challeng
+for m in models.keys():
+    for ngram in [1,3]:
+        print(m, ngram)
+        for word in seed_words:
+            print(word.lower(), '===>')
+            print(models[m][ngram].get_nearest_neighbors(word.lower()))
+    print()
 
-propos reliabl scheme simul tunabl ultrastrong mix first order quadrat optomechan coupl coexist optomechan interact coupl two mode boson system two mode coupl cross kerr interact one two mode driven singl two excit process show mix optomechan interact enter singl photon strong coupl even ultrastrong coupl regim strength first order quadrat optomechan coupl control demand henc first order quadrat mix optomechan model realiz particular thermal nois driven mode suppress total introduc proper squeez vacuum bath also studi gener superposit coher squeez state vacuum state base simul interact quantum coher effect gener state character calcul wigner function close open system case work pave way observ applic ultrastrong optomechan effect quantum simul
-
-quantum error correct necessari perform larg scale quantum comput presenc nois decoher result sever aspect quantum error correct alreadi explor primarili studi quantum memori import first step toward quantum comput object increas lifetim encod quantum inform addit sever work explor implement logic gate work studi next step fault tolerantli implement quantum circuit choos bacon shor subsystem code particularli simpl error detect circuit numer site count argument comput pseudo threshold pauli error rate depolar nois model encod circuit outperform unencod circuit pseudo threshold valu shown high short circuit circuit moder depth addit see multipl round stabil measur give improv perform singl round end provid concret suggest small scale fault toler demonstr quantum algorithm could access exist hardwar
-
-zx calculu mathemat tool repres analys quantum oper manipul diagram effect repres tensor network two famili node network one commut either rotat rotat usual call green node red node respect origin formul zx calculu motiv part properti algebra form green red node notabl form bialgebra scalar factor consequ diagram transform notat certain unitari oper involv scalar gadget denot contribut normalis factor present renormalis gener zx calculu form bialgebra precis result scalar gadget requir repres common unitari transform correspond diagram transform gener simpler also present similar renormalis version zh calculu obtain result analysi condit variou idealis rewrit sound leverag exist present zx zh calculi
-
-formul wave atom optic theori collect atom recoil laser atom center mass motion treat quantum mechan compar predict theori ray atom optic theori treat center mass motion classic show case far reson pump laser ray optic model fail predict linear respons carl temperatur order recoil temperatur less due fact thei temperatur regim one longer ignor effect matter wave diffract atom center mass motion
-
-
-__label__sauce __label__cheese How much does potato starch affect a cheese sauce recipe?
-__label__food-safety __label__acidity Dangerous pathogens capable of growing in acidic environments
-__label__cast-iron __label__stove How do I cover up the white spots on my cast iron stove?
-__label__restaurant Michelin Three Star Restaurant; but if the chef is not there
-__label__knife-skills __label__dicing Without knife skills, how can I quickly and accurately dice vegetables?
-__label__storage-method __label__equipment __label__bread What's the purpose of a bread box?
-__label__baking __label__food-safety __label__substitutions __label__peanuts how to seperate peanut oil from roasted peanuts at home?
-__label__chocolate American equivalent for British chocolate terms
-__label__baking __label__oven __label__convection Fan bake vs bake
-'''
+model_cls.get_word_vector("Quantum Annealing")

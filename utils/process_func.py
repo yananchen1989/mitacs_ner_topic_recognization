@@ -21,7 +21,7 @@ def make_df(json_path, target_cates):
     return df 
     
 def remove_latex(sent):
-    tokens = sent.replace('\n',' ').strip().split()
+    tokens = sent.replace('\n',' ').replace('</s>', '').strip().split()
     tokens_clean = [ii for ii in tokens if  "$" not in ii and ii and '\\' not in ii]
     return ' '.join(tokens_clean)
 
