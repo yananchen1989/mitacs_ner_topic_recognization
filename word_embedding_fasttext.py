@@ -3,10 +3,10 @@ from utils.process_func import *
 
 df = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot.json', ['quant-ph'])
 
-
-with open('arxiv_abstract', 'w') as f:
+print("writing")
+with open('arxiv_abstract_stem', 'w') as f:
     for ix, row in df.iterrows():
-        f.write(row['abstract_clean']+'\n')
+        f.write(row['abstract_stem'].lower()+'\n')
 
 
 
@@ -63,9 +63,6 @@ for m in models.keys():
 vocab = models['cbow'][1].words
 print(len(vocab))
 
-model_cls = fasttext.load_model('abstract_cate_ep30.bin')
-vocab = model_cls.words
-print(len(vocab))
 
 for m in models.keys():
     for ngram in [1,3]:
@@ -73,6 +70,23 @@ for m in models.keys():
         for word in seed_words:
             print(word.lower(), '===>')
             print(models[m][ngram].get_nearest_neighbors(word.lower()))
-    print()
+        print()
 
-model_cls.get_word_vector("Quantum Annealing")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
