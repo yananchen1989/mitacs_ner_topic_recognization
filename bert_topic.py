@@ -22,7 +22,7 @@ embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cuda', cache_
 
 #for min_topic_size in [16, 32, 64, 128, 256]:
 
-topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=args.min_topic_size)
+topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=args.min_topic_size, nr_topics=10)
 topics, probs = topic_model.fit_transform(dfi['abstract_stem'].tolist())
 print("min_topic_size:{}".format(args.min_topic_size) )
 print("number of topics:{}".format(len(topic_model.get_topic_info())))
