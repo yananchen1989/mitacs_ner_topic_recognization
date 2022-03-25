@@ -5,6 +5,7 @@ from utils.process_func import *
 parser = argparse.ArgumentParser()
 parser.add_argument("--dsn", type=str)
 parser.add_argument("--min_topic_size", type=int)
+parser.add_argument("--num_topics", type=int)
 args = parser.parse_args()
 
 dfi = load_dsn(args.dsn)
@@ -18,7 +19,7 @@ embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cuda', cache_
 
 #for min_topic_size in [16, 32, 64, 128, 256]:
 
-topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=args.min_topic_size, nr_topics=10)
+topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=args.min_topic_size, nr_topics=args.num_topics)
 topics, probs = topic_model.fit_transform(dfi['abstract_stem'].tolist())
 print("min_topic_size:{}".format(args.min_topic_size) )
 print("number of topics:{}".format(len(topic_model.get_topic_info())))
