@@ -71,12 +71,12 @@ while True:
     other_corpus2 = [common_dictionary.doc2bow(sent2.split(' '))]
     pred_topic2 = lda.inference(other_corpus2)[0][0].argmax()
 
-    if (ls1 == ls2 and pred_topic1==pred_topic2) or (ls1!=ls2 and pred_topic1!=pred_topic2):
+    if (ls1 == ls2 and pred_topic1==pred_topic2) : # or (ls1!=ls2 and pred_topic1!=pred_topic2)
         accs.append(1)
     else:
         accs.append(0)
 
-    if len(accs) % 100 == 0:
+    if len(accs) % 1000 == 0:
         print(sum(accs) / len(accs))
 
 

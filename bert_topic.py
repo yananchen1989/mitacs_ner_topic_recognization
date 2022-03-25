@@ -2,6 +2,9 @@ import pandas as pd
 import argparse
 from utils.process_func import * 
 
+
+# https://maartengr.github.io/BERTopic/api/bertopic.html
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--dsn", type=str)
 parser.add_argument("--min_topic_size", type=int)
@@ -34,14 +37,14 @@ for i in range(len(topic_model.get_topic_info())):
     print()
 
 
-
+topic_model.save("mpnet_topic_model")
 
 
 
 
 
 '''
-topic_model.save("mpnet_topic_model_sci")
+
 topic_model = BERTopic.load("mpnet_topic_model_sci")
 
 
