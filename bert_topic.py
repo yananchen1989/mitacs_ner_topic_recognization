@@ -1,5 +1,11 @@
 import pandas as pd 
+import argparse
 from utils.process_func import * 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--min_topic_size", type=int)
+args = parser.parse_args()
+
 
 df = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/artificially_labeled_abstracts.csv")
 dfi = df.loc[df['Assigned_group']=='Full stack and quantum computers']
@@ -14,18 +20,21 @@ from sentence_transformers import SentenceTransformer
 embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cuda', cache_folder='./cache_sentbert')
 #embedding_model = SentenceTransformer("/Users/yanan/Downloads/finetune/arxiv_scibert_quantph", device='cpu')
 
-for min_topic_size in [16, 32, 64, 128, 256]:
+#for min_topic_size in [16, 32, 64, 128, 256]:
 
-    topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=min_topic_size)
-    topics, probs = topic_model.fit_transform(dfi['abstract_stem'].tolist())
-    print("min_topic_size:{}".format(min_topic_size) )
-    print("number of topics:{}".format(len(topic_model.get_topic_info())))
+topic_model = BERTopic(embedding_model=embedding_model, verbose=True, min_topic_size=args.min_topic_size)
+topics, probs = topic_model.fit_transform(dfi['abstract_stem'].tolist())
+print("min_topic_size:{}".format(args.min_topic_size) )
+print("number of topics:{}".format(len(topic_model.get_topic_info())))
 
-    for i in range(len(topic_model.get_topic_info())):
-        print("topic==>{}".format(i)) 
-        for ii in topic_model.get_topic(i):
+for i in range(len(topic_model.get_topic_info())):
+    print("topic==>{}".format(i)) 
+    for ii in topic_model.get_topic(i):
+        try:
             print(ii[0], round(ii[1],4) )    
-        print()
+        except:
+            continue
+    print()
 
 
 
