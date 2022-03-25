@@ -24,8 +24,8 @@ print("min_topic_size:{}".format(args.min_topic_size) )
 print("number of topics:{}".format(len(topic_model.get_topic_info())))
 
 for i in range(len(topic_model.get_topic_info())):
-    print("topic==>{}".format(i)) 
-    for ii in topic_model.get_topic(i):
+    print("topic==>{}".format(i-1)) 
+    for ii in topic_model.get_topic(i-1):
         try:
             print(ii[0], round(ii[1],4) )    
         except:

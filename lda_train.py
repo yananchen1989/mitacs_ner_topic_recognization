@@ -36,7 +36,7 @@ perplexity_logger = PerplexityMetric(corpus=dfi['corpus'].tolist(), logger='shel
 
 
 lda = ldamodel.LdaModel(dfi['corpus'].tolist(), id2word=common_dictionary, \
-          num_topics=10, iterations=100 , passes=10,  eval_every=10, callbacks=[perplexity_logger])
+          num_topics=args.num_topics, iterations=100 , passes=10,  eval_every=10, callbacks=[perplexity_logger])
 
 #temp_file = datapath("/scratch/w/wluyliu/yananc/lda_{}_{}".format(args.dsn, args.num_topics))
 #lda.save(temp_file)
@@ -45,10 +45,7 @@ lda = ldamodel.LdaModel(dfi['corpus'].tolist(), id2word=common_dictionary, \
 #temp_file = datapath("/gpfs/fs0/scratch/w/wluyliu/yananc/lda_arxiv_128" )
 #lda = ldamodel.LdaModel.load(temp_file)
 
-
-
-
-for t in range(10):
+for t in range(args.num_topics):
     print("topic==>{}".format(t))
     kws = lda.show_topic(t, topn=10)
     for ii in kws:
@@ -56,10 +53,31 @@ for t in range(10):
     print()
 
 
+accs = []
 
+while True:
+    ls1 = random.sample(list(dfi['label'].unique()), 1)[0]
+    ls2 = random.sample(list(dfi['label'].unique()), 1)[0]
 
+    sent1 = dfi.loc[dfi['label']==ls1].sample(1)['abstract_stem'].tolist()[0]
+    sent2 = dfi.loc[dfi['label']==ls2].sample(1)['abstract_stem'].tolist()[0]
 
+    if sent1 == sent2:
+        continue
 
+    other_corpus1 = [common_dictionary.doc2bow(sent1.split(' '))]
+    pred_topic1 = lda.inference(other_corpus1)[0][0].argmax()
+
+    other_corpus2 = [common_dictionary.doc2bow(sent2.split(' '))]
+    pred_topic2 = lda.inference(other_corpus2)[0][0].argmax()
+
+    if (ls1 == ls2 and pred_topic1==pred_topic2) or (ls1!=ls2 and pred_topic1!=pred_topic2):
+        accs.append(1)
+    else:
+        accs.append(0)
+
+    if len(accs) % 100 == 0:
+        print(sum(accs) / len(accs))
 
 
 
@@ -69,18 +87,12 @@ for t in range(10):
 #lda.update(other_corpus)
 '''
 
-other_corpus = [common_dictionary.doc2bow(sent.split(' '))]
+
 
 preds = lda.inference(df.sample(10)['abstract'].tolist())
 
-lda.inference(other_corpus)
 
 
-dfs['topic'] = preds[0].argmax(axis=1) 
-
-
-
-dfs.loc[dfs['topic']==604]['content']
 
 
 
