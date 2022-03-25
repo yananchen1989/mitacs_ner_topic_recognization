@@ -8,6 +8,7 @@ from gensim.models import ldamodel
 # from nltk.stem.porter import PorterStemmer
 import datasets,argparse
 from utils.process_func import * 
+
 from gensim.models.callbacks import PerplexityMetric
 from gensim.models.callbacks import CallbackAny2Vec
 
@@ -23,55 +24,48 @@ if args.dsn == 'cc':
 elif args.dsn == 'arxiv':
     df = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot_2.json', ['quant-ph'])
 
-
-print("df===>", df.shape[0])
-
-
-# cate sub
-df = pd.read_csv("./artificially_labeled_abstracts.csv")
-df['abstract_clean'] = df['abstract'].map(lambda x: remove_latex(x))
-df['abstract_stem'] = df['abstract_clean'].map(lambda x: clean_title(x))
+elif args.dsn == 'subgroup':
+    # cate sub
+    df = pd.read_csv("./artificially_labeled_abstracts.csv")
+    dfi = df.loc[df['Assigned_group']=='Full stack and quantum computers']
+    dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
+    dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
 
 
 
-for keyword in ['neutral atoms', 'superconducting', 'chip design', 'trapped ion']:
-    dfi = df.loc[df['Assigned_cat_first']==keyword]
+common_dictionary = Dictionary([i.split() for i in dfi['abstract_stem'].tolist()  ], prune_at=10000)
 
-    print(keyword, dfi.shape[0])
+print (len(common_dictionary.token2id) )
+#common_dictionary.filter_extremes(no_below=5, no_above=0.95, keep_n=10000)
+#common_dictionary.save("common_dictionary")
+#common_dictionary = Dictionary.load("common_dictionary")
 
-    common_dictionary = Dictionary([i.split() for i in dfi['abstract_stem'].tolist()  ], prune_at=10000)
+dfi['corpus'] = dfi['abstract_stem'].map(lambda x: common_dictionary.doc2bow(x.split(' ')))
 
-    print (len(common_dictionary.token2id) )
-    #common_dictionary.filter_extremes(no_below=5, no_above=0.95, keep_n=10000)
-    #common_dictionary.save("common_dictionary")
-    #common_dictionary = Dictionary.load("common_dictionary")
+#common_dictionary.token2id['computer']
 
-    dfi['corpus'] = dfi['abstract_stem'].map(lambda x: common_dictionary.doc2bow(x.split(' ')))
-
-    #common_dictionary.token2id['computer']
-
-    perplexity_logger = PerplexityMetric(corpus=dfi['corpus'].tolist(), logger='shell')
+perplexity_logger = PerplexityMetric(corpus=dfi['corpus'].tolist(), logger='shell')
 
 
-    lda = ldamodel.LdaModel(dfi['corpus'].tolist(), id2word=common_dictionary, \
-              num_topics=10, iterations=100 , passes=10,  eval_every=10, callbacks=[perplexity_logger])
+lda = ldamodel.LdaModel(dfi['corpus'].tolist(), id2word=common_dictionary, \
+          num_topics=10, iterations=100 , passes=10,  eval_every=10, callbacks=[perplexity_logger])
 
-    #temp_file = datapath("/scratch/w/wluyliu/yananc/lda_{}_{}".format(args.dsn, args.num_topics))
-    #lda.save(temp_file)
+#temp_file = datapath("/scratch/w/wluyliu/yananc/lda_{}_{}".format(args.dsn, args.num_topics))
+#lda.save(temp_file)
 
 
-    #temp_file = datapath("/gpfs/fs0/scratch/w/wluyliu/yananc/lda_arxiv_128" )
-    #lda = ldamodel.LdaModel.load(temp_file)
+#temp_file = datapath("/gpfs/fs0/scratch/w/wluyliu/yananc/lda_arxiv_128" )
+#lda = ldamodel.LdaModel.load(temp_file)
 
 
 
 
-    for t in range(10):
-        print("topic==>{}".format(t))
-        kws = lda.show_topic(t, topn=10)
-        for ii in kws:
-            print(ii[0], round(ii[1],4) )
-        print()
+for t in range(10):
+    print("topic==>{}".format(t))
+    kws = lda.show_topic(t, topn=10)
+    for ii in kws:
+        print(ii[0], round(ii[1],4) )
+    print()
 
 
 
