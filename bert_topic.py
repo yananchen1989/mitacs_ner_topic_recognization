@@ -1,5 +1,5 @@
 import pandas as pd 
-import argparse
+import argparse,random
 from utils.process_func import * 
 
 
@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--dsn", type=str)
 parser.add_argument("--min_topic_size", type=int)
 parser.add_argument("--num_topics", type=int)
+parser.add_argument("--embedm", type=str)
 args = parser.parse_args()
 
 dfi = load_dsn(args.dsn)
@@ -17,8 +18,11 @@ from bertopic import BERTopic
 
 ######## load model 
 from sentence_transformers import SentenceTransformer
-embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cuda', cache_folder='./cache_sentbert')
-#embedding_model = SentenceTransformer("/Users/yanan/Downloads/finetune/arxiv_scibert_quantph", device='cpu')
+
+if args.embedm == 'mpnet':
+    embedding_model = SentenceTransformer("all-mpnet-base-v2", device='cuda', cache_folder='./cache_sentbert')
+elif args.embedm == 'scibert':
+    embedding_model = SentenceTransformer("allenai/scibert_scivocab_uncased", device='cuda', cache_folder='./cache_sentbert')
 
 #for min_topic_size in [16, 32, 64, 128, 256]:
 
@@ -37,18 +41,51 @@ for i in range(len(topic_model.get_topic_info())):
     print()
 
 
-topic_model.save("mpnet_topic_model")
+#topic_model.save("mpnet_topic_model")
+
+#topic_model = BERTopic.load("mpnet_topic_model")
+
+
+
+
+accs = []
+
+for _ in range(100000):
+    ls1 = random.sample(list(dfi['label'].unique()), 1)[0]
+    ls2 = random.sample(list(dfi['label'].unique()), 1)[0]
+
+    sent1 = dfi.loc[dfi['label']==ls1].sample(1)['abstract_stem'].tolist()[0]
+    sent2 = dfi.loc[dfi['label']==ls2].sample(1)['abstract_stem'].tolist()[0]
+
+    if sent1 == sent2:
+        continue
+
+    topics1, similarity1 = topic_model.find_topics(sent1, top_n=5)
+    pred_topic1 = topics1[0]
+
+
+    topics2, similarity2 = topic_model.find_topics(sent2, top_n=5)
+    pred_topic2 = topics2[0]
+
+    if (ls1 == ls2 and pred_topic1==pred_topic2) : # or (ls1!=ls2 and pred_topic1!=pred_topic2)
+        accs.append(1)
+    else:
+        accs.append(0)
+
+    if len(accs) % 1000 == 0:
+        print(sum(accs) / len(accs))
+
+
+
+
+
+
 
 
 
 
 
 '''
-
-topic_model = BERTopic.load("mpnet_topic_model_sci")
-
-
-
 
 
 # topic-words
