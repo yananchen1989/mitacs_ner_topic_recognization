@@ -18,20 +18,8 @@ parser.add_argument("--dsn", type=str)
 parser.add_argument("--num_topics", type=int)
 args = parser.parse_args()
 
-if args.dsn == 'cc':
-    cc_news = datasets.load_dataset('cc_news', split="train", cache_dir='/scratch/w/wluyliu/yananc/cache')
-    df = pd.DataFrame(random.sample(cc_news['text'], 100000), columns=['abstract'])
-elif args.dsn == 'arxiv':
-    df = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot_2.json', ['quant-ph'])
 
-elif args.dsn == 'subgroup':
-    # cate sub
-    df = pd.read_csv("./artificially_labeled_abstracts.csv")
-    dfi = df.loc[df['Assigned_group']=='Full stack and quantum computers']
-    dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
-    dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
-
-
+dfi = load_dsn(args.dsn)
 
 common_dictionary = Dictionary([i.split() for i in dfi['abstract_stem'].tolist()  ], prune_at=10000)
 

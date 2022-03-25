@@ -39,3 +39,33 @@ def clean_title(title):
         return ""
     else:
         return " ".join(tokens)
+
+import datasets
+
+
+def load_dsn(dsn):
+    if dsn == 'cc':
+        cc_news = datasets.load_dataset('cc_news', split="train", cache_dir='/scratch/w/wluyliu/yananc/cache')
+        dfi = pd.DataFrame(random.sample(cc_news['text'], 100000), columns=['abstract'])
+    
+    elif dsn == 'arxiv':
+        dfi = make_df('/home/w/wluyliu/yananc/nlp4quantumpapers/arxiv-metadata-oai-snapshot_2.json', ['quant-ph'])
+
+    elif dsn == 'subgroup':
+        # cate sub
+        df = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/artificially_labeled_abstracts.csv")
+        dfi = df.loc[df['Assigned_group']=='Full stack and quantum computers']
+        dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
+        dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
+
+    elif dsn == '20news':
+        from sklearn.datasets import fetch_20newsgroups
+        newsgroups_train = fetch_20newsgroups(subset='train')
+        newsgroups_test = fetch_20newsgroups(subset='test')
+        df_train = pd.DataFrame(zip(newsgroups_train['data'], list(newsgroups_train['target'])), columns=['abstract','label'])
+        df_test = pd.DataFrame(zip(newsgroups_test['data'], list(newsgroups_test['target'])), columns=['abstract','label'])
+
+        dfi = pd.concat([df_train, df_test])
+        dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
+        dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
+    return dfi

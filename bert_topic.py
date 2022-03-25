@@ -3,15 +3,11 @@ import argparse
 from utils.process_func import * 
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--dsn", type=str)
 parser.add_argument("--min_topic_size", type=int)
 args = parser.parse_args()
 
-
-df = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/artificially_labeled_abstracts.csv")
-dfi = df.loc[df['Assigned_group']=='Full stack and quantum computers']
-dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
-dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
-
+dfi = load_dsn(args.dsn)
 
 from bertopic import BERTopic
 
@@ -35,6 +31,10 @@ for i in range(len(topic_model.get_topic_info())):
         except:
             continue
     print()
+
+
+
+
 
 
 
