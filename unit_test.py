@@ -3,8 +3,8 @@ import pandas as pd
 import json
 
 
-df_1 = pd.read_csv("./utils/Quantum_computing_companies.csv", header=None)
-df_2 = pd.read_csv("./utils/Investors_in_quantum_computing.csv", header=None)
+df_1 = pd.read_csv("./datasets/Quantum_computing_companies.csv", header=None)
+df_2 = pd.read_csv("./datasets/Investors_in_quantum_computing.csv", header=None)
 
 companies = list(set(df_1[0].tolist() + df_2[0].tolist()))
 
