@@ -1,54 +1,42 @@
 #############  arxiv ##########
 import pandas as pd 
 import json
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-target_categories = ['cond-mat.supr-con', 'math.QA', 'quant-ph', 'stat.CO']
+
+
+df_1 = pd.read_csv("./utils/Quantum_computing_companies.csv", header=None)
+df_2 = pd.read_csv("./utils/Investors_in_quantum_computing.csv", header=None)
+
+companies = list(set(df_1[0].tolist() + df_2[0].tolist()))
+
+
+def check_entity(content):
+    fallin = []
+    for e in companies:
+        if e.lower() in content.lower():
+            fallin.append(e.lower())
+    return fallin
+
+
+with open('./articles_full.json', 'r') as f:
+    jxml = json.load(f)
 
 
 
+fallins = []
+for js in jxml:
+    content = js['post_content'] 
+    fallin = check_entity(content)
+    break 
+
+
+sum([1 if f == 0 else 0 for f in fallins ]) / len(fallins)
 
 
 
-print(df.sample(1)["abstract"].tolist()[0])
-
-
-df.sample(1000)['abstract'].map(lambda x: remove_latex(x)).to_csv('label_corpus_1k.csv', index=False)
 
 
 ####################################################################################################################
 
-
-
-
-authos_infos = []
-anthors_set = set()
-for ix, row in df.iterrows():
-    i = row['authors_parsed']
-
-    anthors = []
-    for j in i:
-        author = ' '.join(j).strip()
-        if '\n' in author:
-            author = author.split('\n')[0]
-        if '  ' in author:
-            author = author.split('  ')[0]
-        anthors.append(author)
-        authos_infos.append((author, row['title']))
-
-    anthors_set.update(anthors)
-
-    #print(anthors)
-
-print(len(anthors_set))
-
-
-
-df_ab = pd.DataFrame(authos_infos, columns=['author', 'title'])
-
-
-
-df['author_len'] = df['authors_parsed'].map(lambda x: len(x))
 
 
 

@@ -1,17 +1,16 @@
-import time
 from flair.data import Sentence
 from flair.models import SequenceTagger
 
 import torch, flair
 flair.device = torch.device('cpu')
-#flair.device = torch.device('cuda:0')
+flair.device = torch.device('cuda:0')
 #  note that get_ners can only run one single GPU !!! 
-tagger = SequenceTagger.load("flair/ner-english-fast")
+#tagger = SequenceTagger.load("flair/ner-english-fast")
+
+tagger = SequenceTagger.load("flair/ner-english-large")
 
 
-
-
-text = '''
+content = '''
 The distinctive non-classical features of quantum physics were first
 discussed in the seminal paper by A. Einstein, B. Podolsky and N. Rosen (EPR)
 in 1935. In his immediate response E. Schr\"odinger introduced the notion of
@@ -27,12 +26,27 @@ physics and may open a new field of applications in quantum information.
 '''
 
 
-sentence = Sentence(text)
+sentence = Sentence(content)
 tagger.predict(sentence)
-#ners = list(set([ii['text'] for ii in sentence.to_dict(tag_type='ner')['ner']]))
 
-for ii in sentence.to_dict(tag_type='ner')['ner']:
-    print(ii)
+ners = sentence.get_spans('ner')
+
+
+sentence.get_spans('ner')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
