@@ -1,4 +1,4 @@
-#############  arxiv ##########
+#############  ########## CUDA_VISIBLE_DEVICES
 import pandas as pd 
 import json,random
 from flair.data import Sentence
@@ -57,9 +57,9 @@ for js in jxml:
     print('\n')
 
 
+df_cnt = pd.DataFrame(infos, columns=['id','fallin_predefine', 'fallin_model'])
 
-
-
+df_cnt.to_csv("df_cnt_fallin.csv", index=False)
 
 
 '''
