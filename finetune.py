@@ -58,6 +58,25 @@ tf_unsupervise_dataset = tokenized_imdb["unsupervised"].to_tf_dataset(
 
 
 
+from sklearn.model_selection import train_test_split
+df_train, df_test = train_test_split(df, test_size=0.1)
+
+
+
+
+
+with open ("./finetune/df_arxiv.train.quantph.txt", 'w') as f:
+    for ix, row in df_train.iterrows():
+        f.write(row['abstract'] + '\n')
+
+
+with open ("./finetune/df_arxiv.test.quantph.txt", 'w') as f:
+    for ix, row in df_test.iterrows():
+        f.write(row['abstract'] + '\n')
+
+
+
+
 
 
 

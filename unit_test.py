@@ -1,7 +1,16 @@
 #############  arxiv ##########
 import pandas as pd 
-import json
+import json,random
+from flair.data import Sentence
+from flair.models import SequenceTagger
 
+import torch, flair
+#flair.device = torch.device('cpu')
+flair.device = torch.device('cuda:0')
+#  note that get_ners can only run one single GPU !!! 
+#tagger = SequenceTagger.load("flair/ner-english-fast")
+# https://github.com/flairNLP/flair/blob/master/flair/data.py
+tagger = SequenceTagger.load("flair/ner-english-large")
 
 df_1 = pd.read_csv("./datasets/Quantum_computing_companies.csv", header=None)
 df_2 = pd.read_csv("./datasets/Investors_in_quantum_computing.csv", header=None)
@@ -9,39 +18,51 @@ df_2 = pd.read_csv("./datasets/Investors_in_quantum_computing.csv", header=None)
 companies = list(set(df_1[0].tolist() + df_2[0].tolist()))
 
 
-def check_entity(content):
+def check_entity_predefine(content):
     fallin = []
     for e in companies:
         if e.lower() in content.lower():
-            fallin.append(e.lower())
+            fallin.append(e)
     return fallin
+
+def check_entity_model(content):
+    sentence = Sentence(content)
+    tagger.predict(sentence)
+
+    ners = sentence.get_spans('ner')
+    fallin = set()
+    for ii in sentence.get_spans('ner'):
+        if ii.tag == 'ORG':
+            fallin.add(ii.text)
+    return list(fallin)
+
+# for ii in sentence.get_spans('ner'):
+#     print(ii.text, ii.tag, ii.start_position, ii.end_position)
+
 
 
 with open('./articles_full.json', 'r') as f:
     jxml = json.load(f)
 
+random.shuffle(jxml)
 
-
-fallins = []
+infos = []
 for js in jxml:
-    content = js['post_content'] 
-    fallin = check_entity(content)
-    break 
-
-
-sum([1 if f == 0 else 0 for f in fallins ]) / len(fallins)
-
-
-
-
-
-####################################################################################################################
+    content = js['post_content'].strip()
+    fallin_predefine = check_entity_predefine(content)
+    fallin_model = check_entity_model(content)
+    infos.append((js['article_ID'], len(fallin_predefine), len(fallin_model)) )
+    print("predefine==>\n", ', '.join(fallin_predefine))
+    print("model==>\n", ', '.join(fallin_model))
+    print('\n')
 
 
 
 
 
 
+
+'''
 
 
 import transformers
@@ -77,6 +98,7 @@ x = model(input_ids=ids, attention_mask=att)
 model = transformers.TFRobertaForTokenClassification.from_pretrained("roberta-base")
 
 
+'''
 
 
 
@@ -89,91 +111,16 @@ model = transformers.TFRobertaForTokenClassification.from_pretrained("roberta-ba
 
 
 
-from sklearn.model_selection import train_test_split
-df_train, df_test = train_test_split(df, test_size=0.1)
 
 
 
 
 
-with open ("./finetune/df_arxiv.train.quantph.txt", 'w') as f:
-    for ix, row in df_train.iterrows():
-        f.write(row['abstract'] + '\n')
 
 
-with open ("./finetune/df_arxiv.test.quantph.txt", 'w') as f:
-    for ix, row in df_test.iterrows():
-        f.write(row['abstract'] + '\n')
 
 
 
 
 
-import random
-import datasets
-#raw_datasets = datasets.load_dataset('davanstrien/crowdsourced-keywords')
-
-ds_wiki = datasets.load_dataset('wikipedia', '20200501.en')
-
-
-from sentence_transformers import SentenceTransformer
-#
-from sklearn.metrics.pairwise import cosine_distances,cosine_similarity
-
-
-model = SentenceTransformer('./finetune/arxiv_scibert', device='cuda:0')
-
-model = SentenceTransformer('all-mpnet-base-v2', device='cuda:1', cache_folder='./cache_sentbert')
-
-model = SentenceTransformer('allenai/scibert_scivocab_uncased', device='cuda:1', cache_folder='./cache_sentbert' )
-
-
-terms = random.sample(ds_wiki['train']['title'], 1024*256)
-embed_wiki = model.encode( terms, show_progress_bar=True, batch_size=1024)
-
-terms_set = set(ds_wiki['train']['title'])
-
-
-'Quantum Annealing'
-
-embed_tag = model.encode(['Bell\'s inequalities'], show_progress_bar=True, batch_size=8)
-
-
-cosine_similarity(embed_tag, embed_tag1)
-
-
-embeds_score = cosine_similarity(embed_tag, embed_wiki)
-
-
-dft = pd.DataFrame(zip(terms, list(embeds_score[0])), columns=['term', 'score'])
-
-
-dft.sort_values(by=['score'], ascending=False, inplace=True)
-
-for ix, row in dft.head(16).iterrows():
-    print(row['term'], row['score'])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from transformers import AutoTokenizer, AutoModel
-tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased", cache_dir='./cache')
-model = AutoModel.from_pretrained("allenai/scibert_scivocab_uncased", cache_dir='./cache')
-
-sent = df.sample(1)["abstract"].tolist()[0]
-tokenizer(sent)
 
