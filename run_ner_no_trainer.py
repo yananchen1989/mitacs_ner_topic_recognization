@@ -340,10 +340,10 @@ def main():
     local_files_only = False
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name, num_labels=num_labels, \
-            cache_dir="/home/w/wluyliu/yananc/nlp4quantumpapers/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
     elif args.model_name_or_path:
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-            cache_dir="/home/w/wluyliu/yananc/nlp4quantumpapers/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
     else:
         config = CONFIG_MAPPING[args.model_type]()
         logger.warning("You are instantiating a new config instance from scratch.")
@@ -357,17 +357,17 @@ def main():
 
     if config.model_type in {"gpt2", "roberta"}:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, add_prefix_space=True, \
-            cache_dir="/home/w/wluyliu/yananc/nlp4quantumpapers/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
     else:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, \
-            cache_dir="/home/w/wluyliu/yananc/nlp4quantumpapers/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
 
     if args.model_name_or_path:
         model = AutoModelForTokenClassification.from_pretrained(
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
             config=config, \
-            cache_dir="/home/w/wluyliu/yananc/nlp4quantumpapers/cache", local_files_only=local_files_only
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only
         )
     else:
         logger.info("Training new model from scratch")
