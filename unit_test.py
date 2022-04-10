@@ -1,16 +1,8 @@
 #############  ########## CUDA_VISIBLE_DEVICES
 import pandas as pd 
 import json,random
-from flair.data import Sentence
-from flair.models import SequenceTagger
 
-import torch, flair
-#flair.device = torch.device('cpu')
-flair.device = torch.device('cuda:0')
-#  note that get_ners can only run one single GPU !!! 
-#tagger = SequenceTagger.load("flair/ner-english-fast")
-# https://github.com/flairNLP/flair/blob/master/flair/data.py
-tagger = SequenceTagger.load("flair/ner-english-large")
+
 
 df_1 = pd.read_csv("./datasets/Quantum_computing_companies.csv", header=None)
 df_2 = pd.read_csv("./datasets/Investors_in_quantum_computing.csv", header=None)
@@ -25,41 +17,29 @@ def check_entity_predefine(content):
             fallin.append(e)
     return fallin
 
-def check_entity_model(content):
-    sentence = Sentence(content)
-    tagger.predict(sentence)
-
-    ners = sentence.get_spans('ner')
-    fallin = set()
-    for ii in sentence.get_spans('ner'):
-        if ii.tag == 'ORG':
-            fallin.add(ii.text)
-    return list(fallin)
-
-# for ii in sentence.get_spans('ner'):
-#     print(ii.text, ii.tag, ii.start_position, ii.end_position)
 
 
 
-with open('./articles_full.json', 'r') as f:
-    jxml = json.load(f)
 
-random.shuffle(jxml)
-
-infos = []
-for js in jxml:
-    content = js['post_content'].strip()
-    fallin_predefine = check_entity_predefine(content)
-    fallin_model = check_entity_model(content)
-    infos.append((js['article_ID'], len(fallin_predefine), len(fallin_model)) )
-    print("predefine==>\n", ', '.join(fallin_predefine))
-    print("model==>\n", ', '.join(fallin_model))
-    print('\n')
+import datasets
+ds = datasets.load_dataset('dfki-nlp/few-nerd', "supervised", cache_dir='/scratch/w/wluyliu/yananc/cache')
+ds = datasets.load_dataset('conll2012_ontonotesv5', "english_v12", cache_dir='/scratch/w/wluyliu/yananc/cache')
+ds = datasets.load_dataset('conll2003', cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
-df_cnt = pd.DataFrame(infos, columns=['id','fallin_predefine', 'fallin_model'])
 
-df_cnt.to_csv("df_cnt_fallin.csv", index=False)
+
+
+'''
+{
+    'id': '1', 
+    'tokens': ['It', 'starred', 'Hicks', "'s", 'wife', ',', 'Ellaline', 'Terriss', 'and', 'Edmund', 'Payne', '.'], 
+    'ner_tags': [0, 0, 7, 0, 0, 0, 7, 7, 0, 7, 7, 0], 
+    'fine_ner_tags': [0, 0, 51, 0, 0, 0, 50, 50, 0, 50, 50, 0]
+}
+'''
+
+
 
 
 '''
