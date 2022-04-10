@@ -139,6 +139,10 @@ def parse_args():
         help="Batch size (per device) for the evaluation dataloader.",
     )
     parser.add_argument(
+        "--local_files_only",
+        action="store_true",
+    )
+    parser.add_argument(
         "--learning_rate",
         type=float,
         default=5e-5,
@@ -337,13 +341,13 @@ def main():
     #
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    local_files_only = False
+
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name, num_labels=num_labels, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     elif args.model_name_or_path:
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     else:
         config = CONFIG_MAPPING[args.model_type]()
         logger.warning("You are instantiating a new config instance from scratch.")
@@ -357,17 +361,17 @@ def main():
 
     if config.model_type in {"gpt2", "roberta"}:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, add_prefix_space=True, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     else:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only)
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
 
     if args.model_name_or_path:
         model = AutoModelForTokenClassification.from_pretrained(
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
             config=config, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=local_files_only
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
         )
     else:
         logger.info("Training new model from scratch")

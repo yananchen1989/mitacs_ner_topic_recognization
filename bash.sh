@@ -19,20 +19,39 @@ CUDA_VISIBLE_DEVICES=0  python -u run_mlm_no_trainer.py \
 
 
 
-
-CUDA_VISIBLE_DEVICES=3  python run_mlm_no_trainer.py   \
-              --num_train_epochs 3   \
-              --train_file './finetune/df_arxiv.train.quantph.txt'    \
-               --validation_file './finetune/df_arxiv.test.quantph.txt'   \
-                 --model_name_or_path "allenai/scibert_scivocab_uncased"   \
-                   --per_device_train_batch_size 32    \
-                    --per_device_eval_batch_size 32    \
-             --output_dir './finetune/arxiv_scibert_quantph'    \
-         --preprocessing_num_workers 128 --overwrite_cache True   \
-           --mlm_probability 0.15     --max_seq_length 256     --use_slow_tokenizer
-
-
+CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+  --model_name_or_path roberta-large \
+  --dataset_name dfki-nlp/few-nerd \
+  --dataset_config_name "supervised" \
+  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse \
+  --text_column_name "tokens" \
+  --label_column_name "ner_tags" \
+  --num_train_epochs 12 --local_files_only
   
+
+
+CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+  --model_name_or_path roberta-large \
+  --dataset_name dfki-nlp/few-nerd \
+  --dataset_config_name "supervised" \
+  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
+  --text_column_name "tokens" \
+  --label_column_name "fine_ner_tags" \
+  --num_train_epochs 12 --local_files_only
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################  
 
 conda create -n env python=3.8
 
