@@ -290,7 +290,7 @@ def main():
     # Trim a number of training examples
     if args.debug:
         for split in raw_datasets.keys():
-            raw_datasets[split] = raw_datasets[split].select(range(100))
+            raw_datasets[split] = raw_datasets[split].select(range(4000))
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 

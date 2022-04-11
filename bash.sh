@@ -41,7 +41,7 @@ CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
 
 
 
-269898 269897
+270086 270087 
 
 
 
