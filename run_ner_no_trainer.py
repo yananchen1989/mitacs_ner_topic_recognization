@@ -103,6 +103,13 @@ def parse_args():
             " sequences shorter will be padded if `--pad_to_max_length` is passed."
         ),
     )
+
+    parser.add_argument(
+        "--debug_cnt",
+        type=int,
+        default=5000,
+    )
+
     parser.add_argument(
         "--pad_to_max_length",
         action="store_true",
@@ -290,7 +297,7 @@ def main():
     # Trim a number of training examples
     if args.debug:
         for split in raw_datasets.keys():
-            raw_datasets[split] = raw_datasets[split].select(range(4000))
+            raw_datasets[split] = raw_datasets[split].select(range(args.debug_cnt))
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
