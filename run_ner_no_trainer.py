@@ -611,6 +611,10 @@ def main():
                 outputs = model(**batch)
             predictions = outputs.logits.argmax(dim=-1)
             labels = batch["labels"]
+            print("++++++++++++{}++++++++++".format(step))
+            print(predictions)
+            print(labels)
+
             if not args.pad_to_max_length:  # necessary to pad predictions and labels for being gathered
                 predictions = accelerator.pad_across_processes(predictions, dim=1, pad_index=-100)
                 labels = accelerator.pad_across_processes(labels, dim=1, pad_index=-100)
@@ -622,7 +626,10 @@ def main():
                 predictions=preds,
                 references=refs,
             )  # predictions and preferences are expected to be a nested list of labels, not label_ids
-
+            print("+++++++++++++++++++")
+            print(preds)
+            print(refs)
+            print('\n')
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         accelerator.print(f"epoch {epoch}:", eval_metric)
