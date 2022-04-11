@@ -525,7 +525,7 @@ def main():
     )
 
     # Metrics
-    metric = load_metric("seqeval")
+    metric = datasets.load_metric("seqeval", cache_dir='/scratch/w/wluyliu/yananc/cache')
 
     def get_labels(predictions, references):
         # Transform predictions and references tensos to numpy arrays
