@@ -1,4 +1,4 @@
-import json,random
+import json,random,string
 import pandas as pd 
 
 # huggingface transformers
@@ -72,15 +72,6 @@ def check_entity_flair(content, tagger):
 
 
 
-####### nli ###############
-# nli_nlp_bart = pipeline("zero-shot-classification", model="facebook/bart-large-mnli", device=0) #  1.8.1+cu102
-# vicgalle/xlm-roberta-large-xnli-anli joeddav/xlm-roberta-large-xnli 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-model_nli = AutoModelForSequenceClassification.from_pretrained('vicgalle/xlm-roberta-large-xnli-anli', cache_dir='/scratch/w/wluyliu/yananc/cache')
-tokenizer_nli = AutoTokenizer.from_pretrained('vicgalle/xlm-roberta-large-xnli-anli', cache_dir='/scratch/w/wluyliu/yananc/cache')
-nli_nlp_roberta = pipeline("zero-shot-classification", model=model_nli, tokenizer=tokenizer_nli, device=0)
-
-
 ############## main ########################
 
 
@@ -93,6 +84,14 @@ content = random.sample(jxml, 1)[0]['post_content']
 
 
 sents = [i.text for i in nlp_split_sents(content).sents]
+
+
+infos = []
+for sent in sents:
+    ft_ner_results = check_entity_ft(sent)
+    infos.extend(ft_ner_results)
+    print(sent) 
+
 
 infos = []
 for sent in sents:

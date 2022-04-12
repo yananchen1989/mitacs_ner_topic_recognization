@@ -36,13 +36,10 @@ This notebook assumes that you have the following libraries installed:
 
 As we are running this in Google Colab, the only libraries we need to additionally install are transformers and seqeval (GPU version):
 """
-
-!pip install transformers seqeval[gpu]
-
 import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score
-import torch
+import torch, argparse
 from torch.utils.data import Dataset, DataLoader
 from transformers import BertTokenizerFast, BertConfig, BertForTokenClassification
 
@@ -50,29 +47,43 @@ from transformers import BertTokenizerFast, BertConfig, BertForTokenClassificati
 
 We can set the default device to GPU using the following code (if it prints "cuda", it means the GPU has been recognized):
 """
+parser = argparse.ArgumentParser()
+parser.add_argument("--gpu", default="0", type=str)
+args = parser.parse_args()
 
 from torch import cuda
-device = 'cuda' if cuda.is_available() else 'cpu'
+device = 'cuda:{}'.format(args.gpu) if cuda.is_available() else 'cpu'
 print(device)
 
 """#### **Downloading and preprocessing the data**
 Named entity recognition (NER) uses a specific annotation scheme, which is defined (at least for European languages) at the *word* level. An annotation scheme that is widely used is called **[IOB-tagging](https://en.wikipedia.org/wiki/Inside%E2%80%93outside%E2%80%93beginning_(tagging)**, which stands for Inside-Outside-Beginning. Each tag indicates whether the corresponding word is *inside*, *outside* or at the *beginning* of a specific named entity. The reason this is used is because named entities usually comprise more than 1 word. 
 
-Let's have a look at an example. If you have a sentence like "Barack Obama was born in Hawaï", then the corresponding tags would be   [B-PERS, I-PERS, O, O, O, B-GEO]. B-PERS means that the word "Barack" is the beginning of a person, I-PERS means that the word "Obama" is inside a person, "O" means that the word "was" is outside a named entity, and so on. So one typically has as many tags as there are words in a sentence.
+Let's have a look at an example. If you have a sentence like "Barack Obama was born in Hawaï", 
+then the corresponding tags would be   [B-PERS, I-PERS, O, O, O, B-GEO]. 
+B-PERS means that the word "Barack" is the beginning of a person, 
+I-PERS means that the word "Obama" is inside a person, 
+"O" means that the word "was" is outside a named entity, and so on. 
+So one typically has as many tags as there are words in a sentence.
 
-So if you want to train a deep learning model for NER, it requires that you have your data in this IOB format (or similar formats such as [BILOU](https://stackoverflow.com/questions/17116446/what-do-the-bilou-tags-mean-in-named-entity-recognition)). There exist many annotation tools which let you create these kind of annotations automatically (such as Spacy's [Prodigy](https://prodi.gy/), [Tagtog](https://docs.tagtog.net/) or [Doccano](https://github.com/doccano/doccano)). You can also use Spacy's [biluo_tags_from_offsets](https://spacy.io/api/goldparse#biluo_tags_from_offsets) function to convert annotations at the character level to IOB format.
+So if you want to train a deep learning model for NER, 
+it requires that you have your data in this IOB format 
+(or similar formats such as [BILOU](https://stackoverflow.com/questions/17116446/what-do-the-bilou-tags-mean-in-named-entity-recognition)). There exist many annotation tools which let you create these kind of annotations automatically (such as Spacy's [Prodigy](https://prodi.gy/), 
+[Tagtog](https://docs.tagtog.net/) or [Doccano](https://github.com/doccano/doccano)). You can also use Spacy's [biluo_tags_from_offsets](https://spacy.io/api/goldparse#biluo_tags_from_offsets) function to convert annotations at the character level to IOB format.
 
-Here, we will use a NER dataset from [Kaggle](https://www.kaggle.com/namanj27/ner-dataset) that is already in IOB format. One has to go to this web page, download the dataset, unzip it, and upload the csv file to this notebook. Let's print out the first few rows of this csv file:
+Here, we will use a NER dataset from [Kaggle](https://www.kaggle.com/namanj27/ner-dataset) 
+that is already in IOB format. One has to go to this web page, download the dataset, 
+unzip it, and upload the csv file to this notebook. Let's print out the first few rows of this csv file:
 """
 
-data = pd.read_csv("ner_datasetreference.csv", encoding='unicode_escape')
+data = pd.read_csv("/scratch/w/wluyliu/yananc/ner_datasetreference.csv", encoding='unicode_escape')
 data.head()
 
 """Let's check how many sentences and words (and corresponding tags) there are in this dataset:"""
 
 data.count()
 
-"""As we can see, there are approximately 48,000 sentences in the dataset, comprising more than 1 million words and tags (quite huge!). This corresponds to approximately 20 words per sentence. 
+"""As we can see, there are approximately 48,000 sentences in the dataset, 
+comprising more than 1 million words and tags (quite huge!). This corresponds to approximately 20 words per sentence. 
 
 Let's have a look at the different NER tags, and their frequency: 
 """
@@ -81,7 +92,11 @@ print("Number of tags: {}".format(len(data.Tag.unique())))
 frequencies = data.Tag.value_counts()
 frequencies
 
-"""There are 8 category tags, each with a "beginning" and "inside" variant, and the "outside" tag. It is not really clear what these tags mean - "geo" probably stands for geographical entity, "gpe" for geopolitical entity, and so on. They do not seem to correspond with what the publisher says on Kaggle. Some tags seem to be underrepresented. Let's print them by frequency (highest to lowest): """
+"""There are 8 category tags, each with a "beginning" and "inside" variant, and the "outside" tag. 
+It is not really clear what these tags mean - "geo" probably stands for geographical entity, 
+"gpe" for geopolitical entity, and so on.
+ They do not seem to correspond with what the publisher says on Kaggle.
+  Some tags seem to be underrepresented. Let's print them by frequency (highest to lowest): """
 
 tags = {}
 for tag, count in zip(frequencies.index, frequencies):
@@ -94,13 +109,18 @@ for tag, count in zip(frequencies.index, frequencies):
 
 print(sorted(tags.items(), key=lambda x: x[1], reverse=True))
 
-"""Let's remove "art", "eve" and "nat" named entities, as performance on them will probably be not comparable to the other named entities. """
+"""Let's remove "art", "eve" and "nat" named entities, 
+as performance on them will probably be not comparable to the other named entities. """
 
 entities_to_remove = ["B-art", "I-art", "B-eve", "I-eve", "B-nat", "I-nat"]
 data = data[~data.Tag.isin(entities_to_remove)]
 data.head()
 
-"""We create 2 dictionaries: one that maps individual tags to indices, and one that maps indices to their individual tags. This is necessary in order to create the labels (as computers work with numbers = indices, rather than words = tags) - see further in this notebook."""
+"""We create 2 dictionaries: 
+one that maps individual tags to indices, 
+and one that maps indices to their individual tags. 
+This is necessary in order to create the labels 
+(as computers work with numbers = indices, rather than words = tags) - see further in this notebook."""
 
 labels_to_ids = {k: v for v, k in enumerate(data.Tag.unique())}
 ids_to_labels = {v: k for v, k in enumerate(data.Tag.unique())}
@@ -108,7 +128,11 @@ labels_to_ids
 
 """As we can see, there are now only 10 different NER tags.
 
-Now, we have to ask ourself the question: what is a training example in the case of NER, which is provided in a single forward pass? A training example is typically a **sentence**, with corresponding IOB tags. Let's group the words and corresponding tags by sentence:
+Now, we have to ask ourself the question: what is a training example in the case of NER, 
+which is provided in a single forward pass? 
+
+A training example is typically a **sentence**, with corresponding IOB tags.
+ Let's group the words and corresponding tags by sentence:
 """
 
 # pandas has a very handy "forward fill" function to fill missing values based on the last upper non-nan value
@@ -139,28 +163,38 @@ data.iloc[41].word_labels
 Now that our data is preprocessed, we can turn it into PyTorch tensors such that we can provide it to the model. Let's start by defining some key variables that will be used later on in the training/evaluation process:
 """
 
-MAX_LEN = 128
-TRAIN_BATCH_SIZE = 4
-VALID_BATCH_SIZE = 2
-EPOCHS = 1
+MAX_LEN = 64
+TRAIN_BATCH_SIZE = 32
+VALID_BATCH_SIZE = 32
 LEARNING_RATE = 1e-05
 MAX_GRAD_NORM = 10
-tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
+tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased',\
+     cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
 
-"""A tricky part of NER with BERT is that BERT relies on **wordpiece tokenization**, rather than word tokenization. This means that we should also define the labels at the wordpiece-level, rather than the word-level! 
+"""A tricky part of NER with BERT is that BERT relies on **wordpiece tokenization**, rather than word tokenization. 
+This means that we should also define the labels at the wordpiece-level, rather than the word-level! 
 
-For example, if you have word like "Washington" which is labeled as "b-gpe", but it gets tokenized to "Wash", "##ing", "##ton", then one approach could be to handle this by only train the model on the tag labels for the first word piece token of a word (i.e. only label "Wash" with "b-gpe"). This is what was done in the original BERT paper, see Github discussion [here](https://github.com/huggingface/transformers/issues/64#issuecomment-443703063).
+For example, if you have word like "Washington" which is labeled as "b-gpe", 
+but it gets tokenized to "Wash", "##ing", "##ton", 
+then one approach could be to handle this by only train the model on the tag labels for the first word piece token of a word 
+(i.e. only label "Wash" with "b-gpe").
+ This is what was done in the original BERT paper, see Github discussion [here](https://github.com/huggingface/transformers/issues/64#issuecomment-443703063).
 
-Note that this is a **design decision**. You could also decide to propagate the original label of the word to all of its word pieces and let the model train on this. In that case, the model should be able to produce the correct labels for each individual wordpiece. This was done in [this NER tutorial with BERT](https://github.com/chambliss/Multilingual_NER/blob/master/python/utils/main_utils.py#L118). Another design decision could be to give the first wordpiece of each word the original word label, and then use the label “X” for all subsequent subwords of that word. All of them seem to lead to good performance.
+Note that this is a **design decision**. 
+You could also decide to propagate the original label of the word to all of its word pieces 
+and let the model train on this. 
+In that case, the model should be able to produce the correct labels for each individual wordpiece.
+ This was done in [this NER tutorial with BERT](https://github.com/chambliss/Multilingual_NER/blob/master/python/utils/main_utils.py#L118). Another design decision could be to give the first wordpiece of each word the original word label, and then use the label “X” for all subsequent subwords of that word. All of them seem to lead to good performance.
 
-Below, we define a regular PyTorch [dataset class](https://pytorch.org/docs/stable/data.html) (which transforms examples of a dataframe to PyTorch tensors). Here, each sentence gets tokenized, the special tokens that BERT expects are added, the tokens are padded or truncated based on the max length of the model, the attention mask is created and the labels are created based on the dictionary which we defined above. Word pieces that should be ignored have a label of -100 (which is the default `ignore_index` of PyTorch's [CrossEntropyLoss](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)).
+Below, we define a regular PyTorch [dataset class](https://pytorch.org/docs/stable/data.html) 
+(which transforms examples of a dataframe to PyTorch tensors). 
+Here, each sentence gets tokenized, the special tokens that BERT expects are added, 
+the tokens are padded or truncated based on the max length of the model,
+ the attention mask is created and the labels are created based on the dictionary which we defined above.
+  Word pieces that should be ignored have a label of -100
+   (which is the default `ignore_index` of PyTorch's [CrossEntropyLoss](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)).
 
 For more information about BERT's inputs, see [here](https://huggingface.co/transformers/glossary.html). 
-
-
-
-
-
 
 
 """
@@ -174,13 +208,14 @@ class dataset(Dataset):
 
   def __getitem__(self, index):
         # step 1: get the sentence and word labels 
-        sentence = self.data.sentence[index].strip().split()  
-        word_labels = self.data.word_labels[index].split(",") 
+        sentence = self.data['sentence'][index].strip().split()  
+        word_labels = self.data['word_labels'][index].split(",") 
 
         # step 2: use tokenizer to encode sentence (includes padding/truncation up to max length)
         # BertTokenizerFast provides a handy "return_offsets_mapping" functionality for individual tokens
         encoding = self.tokenizer(sentence,
-                             is_pretokenized=True, 
+                             #is_pretokenized=True, 
+                             is_split_into_words=True,
                              return_offsets_mapping=True, 
                              padding='max_length', 
                              truncation=True, 
@@ -209,12 +244,13 @@ class dataset(Dataset):
   def __len__(self):
         return self.len
 
-"""Now, based on the class we defined above, we can create 2 datasets, one for training and one for testing. Let's use a 80/20 split:"""
+"""Now, based on the class we defined above, we can create 2 datasets, 
+one for training and one for testing. Let's use a 80/20 split:"""
+from sklearn.model_selection import train_test_split
 
-train_size = 0.8
-train_dataset = data.sample(frac=train_size,random_state=200)
-test_dataset = data.drop(train_dataset.index).reset_index(drop=True)
+train_dataset, test_dataset = train_test_split(data, test_size=0.1)
 train_dataset = train_dataset.reset_index(drop=True)
+test_dataset = test_dataset.reset_index(drop=True)
 
 print("FULL Dataset: {}".format(data.shape))
 print("TRAIN Dataset: {}".format(train_dataset.shape))
@@ -229,9 +265,11 @@ training_set[0]
 
 """Let's verify that the input ids and corresponding targets are correct:"""
 
-for token, label in zip(tokenizer.convert_ids_to_tokens(training_set[0]["input_ids"]), training_set[0]["labels"]):
-  print('{0:10}  {1}'.format(token, label))
-
+for sample_ix in [1, 11, 23, 45, 100, 342]:
+  print("testcase:", sample_ix)
+  for token, label in zip(tokenizer.convert_ids_to_tokens(training_set[sample_ix]["input_ids"]), training_set[sample_ix]["labels"]):
+    print('{0:10}  {1} '.format(token, label), ids_to_labels.get(label.numpy().reshape(-1)[0], 'NOT_LABEL') )
+  print()
 """Now, let's define the corresponding PyTorch dataloaders:"""
 
 train_params = {'batch_size': TRAIN_BATCH_SIZE,
@@ -249,50 +287,67 @@ testing_loader = DataLoader(testing_set, **test_params)
 
 """#### **Defining the model**
 
-Here we define the model, BertForTokenClassification, and load it with the pretrained weights of "bert-base-uncased". The only thing we need to additionally specify is the number of labels (as this will determine the architecture of the classification head).
+Here we define the model, BertForTokenClassification, and load it with the pretrained weights of "bert-base-uncased". 
+The only thing we need to additionally specify is the number of labels (as this will determine the architecture of the classification head).
 
-Note that only the base layers are initialized with the pretrained weights. The token classification head of top has just randomly initialized weights, which we will train, together with the pretrained weights, using our labelled dataset. This is also printed as a warning when you run the code cell below.
+Note that only the base layers are initialized with the pretrained weights. 
+The token classification head of top has just randomly initialized weights, which we will train, 
+together with the pretrained weights, using our labelled dataset.
+ This is also printed as a warning when you run the code cell below.
 
 Then, we move the model to the GPU.
 """
 
-model = BertForTokenClassification.from_pretrained('bert-base-uncased', num_labels=len(labels_to_ids))
+model = BertForTokenClassification.from_pretrained('bert-base-uncased', num_labels=len(labels_to_ids),\
+       cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
 model.to(device)
 
 """#### **Training the model**
 
-Before training the model, let's perform a sanity check, which I learned thanks to Andrej Karpathy's wonderful [cs231n course](http://cs231n.stanford.edu/) at Stanford (see also his [blog post about debugging neural networks](http://karpathy.github.io/2019/04/25/recipe/)). The initial loss of your model should be close to -ln(1/number of classes) = -ln(1/17) = 2.83. 
+Before training the model, let's perform a sanity check, which I learned thanks to Andrej Karpathy's wonderful 
+[cs231n course](http://cs231n.stanford.edu/) at Stanford (see also his [blog post about debugging neural networks](http://karpathy.github.io/2019/04/25/recipe/)). 
+The initial loss of your model should be close to -ln(1/number of classes) = -ln(1/17) = 2.83. 
 
-Why? Because we are using cross entropy loss. The cross entropy loss is defined as -ln(probability score of the model for the correct class). In the beginning, the weights are random, so the probability distribution for all of the classes for a given token will be uniform, meaning that the probability for the correct class will be near 1/17. The loss for a given token will thus be -ln(1/17). As PyTorch's [CrossEntropyLoss](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) (which is used by `BertForTokenClassification`) uses *mean reduction* by default, it will compute the mean loss for each of the tokens in the sequence for which a label is provided. 
+Why? Because we are using cross entropy loss. 
+The cross entropy loss is defined as -ln(probability score of the model for the correct class). 
+In the beginning, the weights are random, so the probability distribution 
+for all of the classes for a given token will be uniform, 
+meaning that the probability for the correct class will be near 1/17. 
+The loss for a given token will thus be -ln(1/17). 
+As PyTorch's [CrossEntropyLoss](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) 
+(which is used by `BertForTokenClassification`) uses *mean reduction* by default, 
+it will compute the mean loss for each of the tokens in the sequence for which a label is provided. 
 
 Let's verify this:
-
-
 """
 
 inputs = training_set[2]
-input_ids = inputs["input_ids"].unsqueeze(0)
-attention_mask = inputs["attention_mask"].unsqueeze(0)
-labels = inputs["labels"].unsqueeze(0)
+input_ids = inputs["input_ids"].unsqueeze(0).to(device)
+attention_mask = inputs["attention_mask"].unsqueeze(0).to(device)
+labels = inputs["labels"].unsqueeze(0).to(device)
 
-input_ids = input_ids.to(device)
-attention_mask = attention_mask.to(device)
-labels = labels.to(device)
 
 outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
 initial_loss = outputs[0]
 initial_loss
 
-"""This looks good. Let's also verify that the logits of the neural network have a shape of (batch_size, sequence_length, num_labels):"""
+"""This looks good. 
+Let's also verify that the logits of the neural network have a shape of (batch_size, sequence_length, num_labels):"""
 
 tr_logits = outputs[1]
 tr_logits.shape
 
-"""Next, we define the optimizer. Here, we are just going to use Adam with a default learning rate. One can also decide to use more advanced ones such as AdamW (Adam with weight decay fix), which is [included](https://huggingface.co/transformers/main_classes/optimizer_schedules.html) in the Transformers repository, and a learning rate scheduler, but we are not going to do that here."""
+"""Next, we define the optimizer. 
+Here, we are just going to use Adam with a default learning rate. 
+One can also decide to use more advanced ones such as AdamW (Adam with weight decay fix),
+ which is [included](https://huggingface.co/transformers/main_classes/optimizer_schedules.html) 
+ in the Transformers repository, and a learning rate scheduler, 
+ but we are not going to do that here."""
 
 optimizer = torch.optim.Adam(params=model.parameters(), lr=LEARNING_RATE)
 
-"""Now let's define a regular PyTorch training function. It is partly based on [a really good repository about multilingual NER](https://github.com/chambliss/Multilingual_NER/blob/master/python/utils/main_utils.py#L344)."""
+"""Now let's define a regular PyTorch training function. 
+It is partly based on [a really good repository about multilingual NER](https://github.com/chambliss/Multilingual_NER/blob/master/python/utils/main_utils.py#L344)."""
 
 # Defining the training function on the 80% of the dataset for tuning the bert model
 def train(epoch):
@@ -308,13 +363,16 @@ def train(epoch):
         mask = batch['attention_mask'].to(device, dtype = torch.long)
         labels = batch['labels'].to(device, dtype = torch.long)
 
-        loss, tr_logits = model(input_ids=ids, attention_mask=mask, labels=labels)
-        tr_loss += loss.item()
+        output_batch = model(input_ids=ids, attention_mask=mask, labels=labels)
+        loss = output_batch['loss']
+        tr_logits = output_batch['logits']
 
+        tr_loss += loss.item()
+         
         nb_tr_steps += 1
         nb_tr_examples += labels.size(0)
         
-        if idx % 100==0:
+        if idx % 1024 == 0:
             loss_step = tr_loss/nb_tr_steps
             print(f"Training loss per 100 training steps: {loss_step}")
            
@@ -351,15 +409,19 @@ def train(epoch):
     print(f"Training loss epoch: {epoch_loss}")
     print(f"Training accuracy epoch: {tr_accuracy}")
 
+    precision = precision_score(tr_labels, tr_preds, average='micro')
+    recall = recall_score(tr_labels, tr_preds, average='micro')
+    f1 = f1_score(tr_labels, tr_preds, average='micro')
+    print("Training score:", precision, recall, f1)
+    
 """And let's train the model!"""
 
-for epoch in range(EPOCHS):
-    print(f"Training epoch: {epoch + 1}")
-    train(epoch)
+
 
 """#### **Evaluating the model**
 
-Now that we've trained our model, we can evaluate its performance on the held-out test set (which is 20% of the data). Note that here, no gradient updates are performed, the model just outputs its logits.
+Now that we've trained our model, we can evaluate its performance on the held-out test set 
+(which is 20% of the data). Note that here, no gradient updates are performed, the model just outputs its logits.
 """
 
 def valid(model, testing_loader):
@@ -377,17 +439,15 @@ def valid(model, testing_loader):
             mask = batch['attention_mask'].to(device, dtype = torch.long)
             labels = batch['labels'].to(device, dtype = torch.long)
             
-            loss, eval_logits = model(input_ids=ids, attention_mask=mask, labels=labels)
-            
+            output_batch = model(input_ids=ids, attention_mask=mask, labels=labels)
+            loss = output_batch['loss']
+            eval_logits = output_batch['logits']
+
             eval_loss += loss.item()
 
             nb_eval_steps += 1
             nb_eval_examples += labels.size(0)
         
-            if idx % 100==0:
-                loss_step = eval_loss/nb_eval_steps
-                print(f"Validation loss per 100 evaluation steps: {loss_step}")
-              
             # compute evaluation accuracy
             flattened_targets = labels.view(-1) # shape (batch_size * seq_len,)
             active_logits = eval_logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
@@ -412,20 +472,37 @@ def valid(model, testing_loader):
     eval_accuracy = eval_accuracy / nb_eval_steps
     print(f"Validation Loss: {eval_loss}")
     print(f"Validation Accuracy: {eval_accuracy}")
+    precision = precision_score(labels, predictions, average='micro')
+    recall = recall_score(labels, predictions, average='micro')
+    f1 = f1_score(labels, predictions, average='micro')
+    print("Validation score:", precision, recall, f1)
 
-    return labels, predictions
 
 """As we can see below, performance is quite good! Accuracy on the test test is > 93%."""
 
-labels, predictions = valid(model, testing_loader)
+from sklearn.metrics import * 
 
-"""However, the accuracy metric is misleading, as a lot of labels are "outside" (O), even after omitting predictions on the [PAD] tokens. What is important is looking at the precision, recall and f1-score of the individual tags. For this, we use the seqeval Python library: """
+for epoch in range(7):
+    print(f"Training epoch: {epoch + 1}")
+    train(epoch)
+    valid(model, testing_loader)
 
-from seqeval.metrics import classification_report
 
-print(classification_report(labels, predictions))
 
-"""Performance already seems quite good, but note that we've only trained for 1 epoch. An optimal approach would be to perform evaluation on a validation set while training to improve generalization.
+
+
+
+"""However, the accuracy metric is misleading, as a lot of labels are "outside" (O), 
+even after omitting predictions on the [PAD] tokens. 
+What is important is looking at the precision, recall and f1-score of the individual tags. 
+For this, we use the seqeval Python library: """
+
+
+
+  
+
+"""Performance already seems quite good, but note that we've only trained for 1 epoch. 
+An optimal approach would be to perform evaluation on a validation set while training to improve generalization.
 
 #### **Inference**
 
@@ -434,7 +511,7 @@ Here, we use the prediction of the **first word piece of every word** (which is 
 
 *In other words, the code below does not take into account when predictions of different word pieces that belong to the same word do not match.*
 """
-
+'''
 sentence = "@HuggingFace is a company based in New York, but is also has employees working in Paris"
 
 inputs = tokenizer(sentence.split(),
@@ -486,136 +563,10 @@ if not os.path.exists(directory):
 tokenizer.save_vocabulary(directory)
 # save the model weights and its configuration file
 model.save_pretrained(directory)
-print('All files saved')
-print('This tutorial is completed')
+'''
 
-"""## Legacy
 
-The following code blocks were used during the development of this notebook, but are not included anymore.
-"""
 
-def prepare_sentence(sentence, tokenizer, maxlen):    
-      # step 1: tokenize the sentence
-      tokenized_sentence = tokenizer.tokenize(sentence)
-      
-      # step 2: add special tokens 
-      tokenized_sentence = ["[CLS]"] + tokenized_sentence + ["[SEP]"] 
 
-      # step 3: truncating/padding
-      if (len(tokenized_sentence) > maxlen):
-        # truncate
-        tokenized_sentence = tokenized_sentence[:maxlen]
-      else:
-        # pad
-        tokenized_sentence = tokenized_sentence + ['[PAD]'for _ in range(maxlen - len(tokenized_sentence))]
 
-      # step 4: obtain the attention mask
-      attn_mask = [1 if tok != '[PAD]' else 0 for tok in tokenized_sentence]
-      
-      # step 5: convert tokens to input ids
-      ids = tokenizer.convert_tokens_to_ids(tokenized_sentence)
-      
-      return {
-            'ids': torch.tensor(ids, dtype=torch.long),
-            'mask': torch.tensor(attn_mask, dtype=torch.long),
-            #'token_type_ids': torch.tensor(token_ids, dtype=torch.long),
-      }
 
-def tokenize_and_preserve_labels(sentence, text_labels, tokenizer):
-    """
-    Word piece tokenization makes it difficult to match word labels
-    back up with individual word pieces. This function tokenizes each
-    word one at a time so that it is easier to preserve the correct
-    label for each subword. It is, of course, a bit slower in processing
-    time, but it will help our model achieve higher accuracy.
-    """
-
-    tokenized_sentence = []
-    labels = []
-
-    sentence = sentence.strip()
-
-    for word, label in zip(sentence.split(), text_labels.split(",")):
-
-        # Tokenize the word and count # of subwords the word is broken into
-        tokenized_word = tokenizer.tokenize(word)
-        n_subwords = len(tokenized_word)
-
-        # Add the tokenized word to the final tokenized word list
-        tokenized_sentence.extend(tokenized_word)
-
-        # Add the same label to the new list of labels `n_subwords` times
-        labels.extend([label] * n_subwords)
-
-    return tokenized_sentence, labels
-
-class dataset(Dataset):
-    def __init__(self, dataframe, tokenizer, max_len):
-        self.len = len(dataframe)
-        self.data = dataframe
-        self.tokenizer = tokenizer
-        self.max_len = max_len
-        
-    def __getitem__(self, index):
-        # step 1: tokenize (and adapt corresponding labels)
-        sentence = self.data.sentence[index]  
-        word_labels = self.data.word_labels[index]  
-        tokenized_sentence, labels = tokenize_and_preserve_labels(sentence, word_labels, self.tokenizer)
-        
-        # step 2: add special tokens (and corresponding labels)
-        tokenized_sentence = ["[CLS]"] + tokenized_sentence + ["[SEP]"] # add special tokens
-        labels.insert(0, "O") # add outside label for [CLS] token
-        labels.insert(-1, "O") # add outside label for [SEP] token
-
-        # step 3: truncating/padding
-        maxlen = self.max_len
-
-        if (len(tokenized_sentence) > maxlen):
-          # truncate
-          tokenized_sentence = tokenized_sentence[:maxlen]
-          labels = labels[:maxlen]
-        else:
-          # pad
-          tokenized_sentence = tokenized_sentence + ['[PAD]'for _ in range(maxlen - len(tokenized_sentence))]
-          labels = labels + ["O" for _ in range(maxlen - len(labels))]
-
-        # step 4: obtain the attention mask
-        attn_mask = [1 if tok != '[PAD]' else 0 for tok in tokenized_sentence]
-        
-        # step 5: convert tokens to input ids
-        ids = self.tokenizer.convert_tokens_to_ids(tokenized_sentence)
-
-        label_ids = [labels_to_ids[label] for label in labels]
-        # the following line is deprecated
-        #label_ids = [label if label != 0 else -100 for label in label_ids]
-        
-        return {
-              'ids': torch.tensor(ids, dtype=torch.long),
-              'mask': torch.tensor(attn_mask, dtype=torch.long),
-              #'token_type_ids': torch.tensor(token_ids, dtype=torch.long),
-              'targets': torch.tensor(label_ids, dtype=torch.long)
-        } 
-    
-    def __len__(self):
-        return self.len
-
-sentence = "this is a test @huggingface".strip().split()
-
-inputs = tokenizer(sentence, is_pretokenized=True, return_offsets_mapping=True, padding='max_length', truncation=True)
-tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"])
-token_offsets = inputs["offset_mapping"]
-print(tokens)
-print(token_offsets)
-
-word = "@huggingface"
-
-inputs = tokenizer(word, return_offsets_mapping=True, padding='max_length', truncation=True)
-tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"])
-token_offsets = inputs["offset_mapping"]
-print(tokens)
-print(token_offsets)
-
-# now, use mask to determine where we should compare predictions with targets (includes [CLS] and [SEP] token predictions)
-        active_accuracy = mask.view(-1) == 1 # active accuracy is also of shape (batch_size * seq_len,)
-        targets = torch.masked_select(flattened_targets, active_accuracy)
-        predictions = torch.masked_select(flattened_predictions, active_accuracy)
