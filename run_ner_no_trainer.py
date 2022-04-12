@@ -627,14 +627,15 @@ def main():
                 references=refs,
             )  # predictions and preferences are expected to be a nested list of labels, not label_ids
 
-            if step < 10:
-                print("++++++++++++{}++++++++++".format(step))
-                print(predictions)
-                print(labels)                
-                print("+++++++++++++++++++")
-                print(preds)
-                print(refs)
-                print('\n')
+            # if step < 10:
+            #     print("++++++++++++{}++++++++++".format(step))
+            #     print(predictions)
+            #     print(labels)     
+                           
+            #     print("+++++++++++++++++++")
+            #     print(preds)
+            #     print(refs)
+            #     print('\n')
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         accelerator.print(f"epoch {epoch}:", eval_metric)

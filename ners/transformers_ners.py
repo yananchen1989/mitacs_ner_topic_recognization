@@ -17,6 +17,12 @@ model_roberta = AutoModelForTokenClassification.from_pretrained("Jean-Baptiste/r
 nlp_roberta = pipeline("ner", model=model_roberta, tokenizer=tokenizer_roberta, aggregation_strategy="simple")
 
 
+path_local = "/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine" 
+tokenizer_roberta = AutoTokenizer.from_pretrained(path_local)
+model_roberta = AutoModelForTokenClassification.from_pretrained(path_local)
+
+
+
 def check_entity_ft(sent):
     ner_results = nlp_roberta(sent)
     if not ner_results:
@@ -128,27 +134,6 @@ for span in df.loc[df['ner']=='ORG']['span'].tolist():
 
 
 
-
-device0 = torch.device("cuda:{}".format(0) if torch.cuda.is_available() else "cpu")
-
-def nli_check(premise, hypothesis):
-    # run through model pre-trained on MNLI
-    x = tokenizer_nli.encode(premise, hypothesis, return_tensors='pt',
-                         truncation_strategy='only_first').to(device0)
-    logits = model_nli(x)[0]
-
-    # we throw away "neutral" (dim 1) and take the probability of
-    # "entailment" (2) as the probability of the label being true 
-    entail_contradiction_logits = logits[:,[0,2]]
-    probs = entail_contradiction_logits.softmax(dim=1)
-    prob_label_is_true = probs[:,1].cpu().detach().numpy()[0]
-    return prob_label_is_true
-
-premise = content
-hypothesis = 'OMERS Ventures is a investor.'
-
-nli_score = nli_check(premise, hypothesis)
-print(nli_score)
 
 
 

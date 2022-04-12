@@ -30,18 +30,25 @@ CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
   
 
 
-CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+ CUDA_VISIBLE_DEVICES=0  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
   --model_name_or_path roberta-large \
   --dataset_name dfki-nlp/few-nerd \
   --dataset_config_name "supervised" \
   --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
   --text_column_name "tokens" \
   --label_column_name "fine_ner_tags" \
-  --num_train_epochs 12 --local_files_only
+  --num_train_epochs 3 --debug_cnt 2000 --local_files_only --debug  
 
 
 
-270086 270087 
+
+ CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+  --model_name_or_path roberta-large \
+  --dataset_name conll2003 \
+  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_conll_debug_5k \
+  --text_column_name "tokens" \
+  --label_column_name "ner_tags" \
+  --num_train_epochs 7 --local_files_only --debug --debug_cnt 5000
 
 
 
