@@ -388,8 +388,8 @@ def train(epoch):
         labels = torch.masked_select(flattened_targets, active_accuracy)
         predictions = torch.masked_select(flattened_predictions, active_accuracy)
         
-        tr_labels.extend(labels)
-        tr_preds.extend(predictions)
+        tr_labels.extend(labels.detach().cpu())
+        tr_preds.extend(predictions.detach().cpu())
 
         tmp_tr_accuracy = accuracy_score(labels.cpu().numpy(), predictions.cpu().numpy())
         tr_accuracy += tmp_tr_accuracy
