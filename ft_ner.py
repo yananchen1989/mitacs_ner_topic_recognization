@@ -39,7 +39,7 @@ As we are running this in Google Colab, the only libraries we need to additional
 import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score
-import torch, argparse
+import torch, argparse, random
 from torch.utils.data import Dataset, DataLoader
 from transformers import BertTokenizerFast, BertConfig, BertForTokenClassification
 from sklearn.metrics import * 
@@ -271,10 +271,11 @@ training_set[0]
 
 """Let's verify that the input ids and corresponding targets are correct:"""
 
-sample_ix = random.sample(range(len(testing_set)), 1)[0]
-print("testcase:", sample_ix)
-for token, label in zip(tokenizer.convert_ids_to_tokens(testing_set[sample_ix]["input_ids"]), testing_set[sample_ix]["labels"]):
-    print('{0:10}  {1} '.format(token, label), ids_to_labels.get(label.numpy().reshape(-1)[0], 'NOT_LABEL') )
+for _ in range(7):
+    sample_ix = random.sample(range(len(testing_set)), 1)[0]
+    print("testcase:", sample_ix)
+    for token, label in zip(tokenizer.convert_ids_to_tokens(testing_set[sample_ix]["input_ids"]), testing_set[sample_ix]["labels"]):
+        print('{0:10}  {1} '.format(token, label), ids_to_labels.get(label.numpy().reshape(-1)[0], 'NOT_LABEL') )
 
 
 
