@@ -77,9 +77,6 @@ unzip it, and upload the csv file to this notebook. Let's print out the first fe
 
 data = pd.read_csv("/scratch/w/wluyliu/yananc/ner_datasetreference.csv", encoding='unicode_escape')
 data.head()
-
-"""Let's check how many sentences and words (and corresponding tags) there are in this dataset:"""
-
 data.count()
 
 """As we can see, there are approximately 48,000 sentences in the dataset, 
@@ -443,7 +440,6 @@ def valid(model, testing_loader):
     
     with torch.no_grad():
         for idx, batch in enumerate(testing_loader):
-            print(idx)
 
             ids = batch['input_ids'].to(device, dtype = torch.long)
             mask = batch['attention_mask'].to(device, dtype = torch.long)
@@ -492,7 +488,7 @@ def valid(model, testing_loader):
 
 
 
-for epoch in range(7):
+for epoch in range(1):
     print(f"Training epoch: {epoch + 1}")
     train(epoch)
     valid(model, testing_loader)
@@ -519,13 +515,15 @@ An optimal approach would be to perform evaluation on a validation set while tra
 The fun part is when we can quickly test the model on new, unseen sentences. 
 Here, we use the prediction of the **first word piece of every word** (which is how the model was trained). 
 
-*In other words, the code below does not take into account when predictions of different word pieces that belong to the same word do not match.*
+*In other words, the code below does not take into account when predictions of different word pieces 
+that belong to the same word do not match.*
 """
-'''
+
 sentence = "@HuggingFace is a company based in New York, but is also has employees working in Paris"
 
 inputs = tokenizer(sentence.split(),
-                    is_pretokenized=True, 
+                    # is_pretokenized=True, 
+                    is_split_into_words=True, 
                     return_offsets_mapping=True, 
                     padding='max_length', 
                     truncation=True, 
@@ -573,7 +571,7 @@ if not os.path.exists(directory):
 tokenizer.save_vocabulary(directory)
 # save the model weights and its configuration file
 model.save_pretrained(directory)
-'''
+
 
 
 

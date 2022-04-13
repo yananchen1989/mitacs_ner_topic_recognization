@@ -1,39 +1,6 @@
 
 
-
-
-
-
-CUDA_VISIBLE_DEVICES=0  python -u run_mlm_no_trainer.py \
-    --num_train_epochs 7 \
-    --train_file '/home/w/wluyliu/yananc/nlp4quantumpapers/finetune/df_arxiv.train.txt' \
-    --validation_file '/home/w/wluyliu/yananc/nlp4quantumpapers/finetune/df_arxiv.test.txt' \
-    --model_name_or_path "allenai/scibert_scivocab_uncased" \
-    --per_device_train_batch_size 32 \
-    --per_device_eval_batch_size 32 \
-    --output_dir '/scratch/w/wluyliu/yananc/finetune/arxiv_scibert' \
-    --preprocessing_num_workers 128 --overwrite_cache True \
-    --mlm_probability 0.15 \
-    --max_seq_length 256 \
-    --use_slow_tokenizer > /scratch/w/wluyliu/yananc/arxiv_scibert.log 
-
-
-
-
- CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
-  --model_name_or_path roberta-large \
-  --dataset_name dfki-nlp/few-nerd \
-  --dataset_config_name "supervised" \
-  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
-  --text_column_name "tokens" \
-  --label_column_name "fine_ner_tags" \
-  --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
-  --num_train_epochs 7  --local_files_only --debug  --debug_cnt 50000
-
-
-
-
-python -u custom_named_entity_recognition_with_bert.py --gpu 3
+python -u ft_ner.py --gpu 3
 
 
 
