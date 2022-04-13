@@ -42,13 +42,13 @@ from sklearn.metrics import accuracy_score
 import torch, argparse
 from torch.utils.data import Dataset, DataLoader
 from transformers import BertTokenizerFast, BertConfig, BertForTokenClassification
-
+from sklearn.metrics import * 
 """As deep learning can be accellerated a lot using a GPU instead of a CPU, make sure you can run this notebook in a GPU runtime (which Google Colab provides for free! - check "Runtime" - "Change runtime type" - and set the hardware accelerator to "GPU").
 
 We can set the default device to GPU using the following code (if it prints "cuda", it means the GPU has been recognized):
 """
 parser = argparse.ArgumentParser()
-parser.add_argument("--gpu", default="0", type=str)
+parser.add_argument("--gpu", default="3", type=str)
 args = parser.parse_args()
 
 from torch import cuda
@@ -232,7 +232,10 @@ class dataset(Dataset):
         for idx, mapping in enumerate(encoding["offset_mapping"]):
           if mapping[0] == 0 and mapping[1] != 0:
             # overwrite label
-            encoded_labels[idx] = labels[i]
+            if i >= len(labels):
+                encoded_labels[idx] = 0
+            else: 
+                encoded_labels[idx] = labels[i]
             i += 1
 
         # step 4: turn everything into PyTorch tensors
@@ -252,6 +255,9 @@ train_dataset, test_dataset = train_test_split(data, test_size=0.1)
 train_dataset = train_dataset.reset_index(drop=True)
 test_dataset = test_dataset.reset_index(drop=True)
 
+test_dataset['sentence'] = test_dataset['sentence'].map(lambda x: x.replace('\xa0', ' '))
+
+
 print("FULL Dataset: {}".format(data.shape))
 print("TRAIN Dataset: {}".format(train_dataset.shape))
 print("TEST Dataset: {}".format(test_dataset.shape))
@@ -265,11 +271,13 @@ training_set[0]
 
 """Let's verify that the input ids and corresponding targets are correct:"""
 
-for sample_ix in [1, 11, 23, 45, 100, 342]:
-  print("testcase:", sample_ix)
-  for token, label in zip(tokenizer.convert_ids_to_tokens(training_set[sample_ix]["input_ids"]), training_set[sample_ix]["labels"]):
+sample_ix = random.sample(range(len(testing_set)), 1)[0]
+print("testcase:", sample_ix)
+for token, label in zip(tokenizer.convert_ids_to_tokens(testing_set[sample_ix]["input_ids"]), testing_set[sample_ix]["labels"]):
     print('{0:10}  {1} '.format(token, label), ids_to_labels.get(label.numpy().reshape(-1)[0], 'NOT_LABEL') )
-  print()
+
+
+
 """Now, let's define the corresponding PyTorch dataloaders:"""
 
 train_params = {'batch_size': TRAIN_BATCH_SIZE,
@@ -358,7 +366,7 @@ def train(epoch):
     model.train()
     
     for idx, batch in enumerate(training_loader):
-        
+
         ids = batch['input_ids'].to(device, dtype = torch.long)
         mask = batch['attention_mask'].to(device, dtype = torch.long)
         labels = batch['labels'].to(device, dtype = torch.long)
@@ -372,7 +380,7 @@ def train(epoch):
         nb_tr_steps += 1
         nb_tr_examples += labels.size(0)
         
-        if idx % 1024 == 0:
+        if idx % 128 == 0:
             loss_step = tr_loss/nb_tr_steps
             print(f"Training loss per 100 training steps: {loss_step}")
            
@@ -434,7 +442,8 @@ def valid(model, testing_loader):
     
     with torch.no_grad():
         for idx, batch in enumerate(testing_loader):
-            
+            print(idx)
+
             ids = batch['input_ids'].to(device, dtype = torch.long)
             mask = batch['attention_mask'].to(device, dtype = torch.long)
             labels = batch['labels'].to(device, dtype = torch.long)
@@ -480,7 +489,7 @@ def valid(model, testing_loader):
 
 """As we can see below, performance is quite good! Accuracy on the test test is > 93%."""
 
-from sklearn.metrics import * 
+
 
 for epoch in range(7):
     print(f"Training epoch: {epoch + 1}")

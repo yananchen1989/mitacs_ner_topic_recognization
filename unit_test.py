@@ -41,7 +41,16 @@ ds_nerd['train']['ner_tags'][35]
 }
 '''
 
+sentence = data['sentence'][index].strip().split() 
 
+max_len = 64
+encoding = tokenizer(sentence,
+                             #is_pretokenized=True, 
+                             is_split_into_words=True,
+                             return_offsets_mapping=True, 
+                             padding='max_length', 
+                             truncation=True, 
+                             max_length=max_len)
 
 
 '''
