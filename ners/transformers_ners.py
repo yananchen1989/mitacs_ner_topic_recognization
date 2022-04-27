@@ -6,24 +6,24 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
 
-gpu = 0
+gpu = 1
 # conll2003
 # tokenizer_bert = AutoTokenizer.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # model_bert = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-# conll2003
+# load off-the-shelf model : roberta-large fine-tuned on conll2003
 tokenizer_roberta = AutoTokenizer.from_pretrained("Jean-Baptiste/roberta-large-ner-english", cache_dir='/scratch/w/wluyliu/yananc/cache')
 model_roberta = AutoModelForTokenClassification.from_pretrained("Jean-Baptiste/roberta-large-ner-english", cache_dir='/scratch/w/wluyliu/yananc/cache')
 nlp_roberta = pipeline("ner", model=model_roberta, tokenizer=tokenizer_roberta, \
                     aggregation_strategy="simple", device=gpu)
 
-
+# load off-the-shelf model : roberta-large fine-tuned on nerd-fine-grained
 tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
 model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
 nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
                      aggregation_strategy="simple", device=gpu)
 
-
+# load off-the-shelf model : roberta-large fine-tuned on nerd-coarse-grained
 tokenizer_roberta_nerd_coarse = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
 model_roberta_nerd_coarse = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
 nlp_roberta_nerd_coarse = pipeline("ner", model=model_roberta_nerd_coarse, tokenizer=tokenizer_roberta_nerd_coarse,\
@@ -112,14 +112,14 @@ def ner_tag(content):
         ft_ner_nerd_fine = check_entity_ft(sent, nlp_roberta_nerd_fine, 'nerd_fine') 
         infos.extend(ft_ner_nerd_fine)
 
-        print(sent) 
+        # print(sent) 
 
     
     df = pd.DataFrame(infos, columns=['ner','span', 'fmark'])
     df['ner'] = df['ner'].map(lambda x: x.upper())
     df['ner'] = df['ner'].map(lambda x: tag_map[x] if x in tag_map else x )
 
-    df = df.loc[df['ner'].str()]
+    # df = df.loc[df['ner'].str()]
     df.drop_duplicates(['ner','span', 'fmark'], inplace=True)
 
     df_pretrain = df.loc[df['fmark'].isin(['flair_onto', 'flair_conll', 'ft_ori'])]
@@ -128,23 +128,49 @@ def ner_tag(content):
 
     df_pretrain.drop_duplicates(['ner','span'], inplace=True)
     df_nerd.drop_duplicates(['ner','span'], inplace=True)
-    
 
     df_pretrain.sort_values(by=['ner'], ascending=True, inplace=True)
     df_nerd.sort_values(by=['ner'], ascending=True, inplace=True)
     return df_pretrain, df_nerd
 
-content = random.sample(jxml, 1)[0]['post_content']
+
+
+content = random.sample(jxml, 1)[0]['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
 df_pretrain, df_nerd = ner_tag(content)
 
+df_org = pd.concat([df_pretrain.loc[df_pretrain['ner']=='ORG'], df_nerd.loc[df_nerd['ner'].isin(pick_from_nerd)]] )
 
-for ix, row in df_pretrain.iterrows():
-    print(row['ner'], '\t', row['span'])
+org_entities = [ii for ii in df_org['span'].unique() if len(ii) > 1 and ii in content]
+
+print(org_entities)
 
 
-print()
-for ix, row in df_nerd.iterrows():
-    print(row['ner'], '\t', row['span'])
+import spacy,re
+from spacy import displacy
+
+def find_index_of_entities(span, raw_text):
+    indexs = []
+    for match in re.finditer(span, raw_text):
+        indexs.append((match.start(), match.end()))
+    return indexs
+
+
+nlp = spacy.load("en_core_web_lg", disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+doc = nlp(content)
+
+
+for ent in doc.ents:
+    if ent.label_ == 'ORG' and ent.text in content:
+        print(ent.text, ent.start_char, ent.end_char)
+
+
+
+html = displacy.render(doc, style="ent", page=True)
+
+with open("ner_spacy_test.html", "w") as ff:
+    ff.write(html+'------------\n') 
+
+
 
 
 
@@ -156,8 +182,29 @@ labels_candidates = ['company', 'investor', 'university','Venture Capital Invest
 
 
 
+nlp = spacy.blank('en')
+content = "The Indian Space Research Organisation or is the national space agency of India, headquartered in Bengaluru. It operates under Department of Space which is directly overseen by the Prime Minister of India while Chairman of ISRO acts as executive of DOS as well."
+doc = nlp.make_doc(content)
+
+ner_results = [('The Indian Space Research Organisation', 'ORG'), 
+        ('Bengaluru','ORG'), ('Prime Minister of India', 'PER'), ('ISRO', 'ORG')]
+
+ents = []
+for span, ner in ner_results:
+    indexs = find_index_of_entities(span, content)
+    for span_start, span_end in indexs:
+        ent = doc.char_span(span_start, span_end, label=ner)
+        if ent is None:
+            continue
+        ents.append(ent)
 
 
+
+
+doc.ents = ents
+html = displacy.render(doc, style="ent", page=True)
+with open("ner_spacy_test_local.html", "w") as ff:
+    ff.write(html+'------------\n') 
 
 
 

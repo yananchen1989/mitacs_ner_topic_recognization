@@ -2,25 +2,6 @@
 import pandas as pd 
 import json,random
 
-
-
-df_1 = pd.read_csv("./datasets/Quantum_computing_companies.csv", header=None)
-df_2 = pd.read_csv("./datasets/Investors_in_quantum_computing.csv", header=None)
-
-companies = list(set(df_1[0].tolist() + df_2[0].tolist()))
-
-
-def check_entity_predefine(content):
-    fallin = []
-    for e in companies:
-        if e.lower() in content.lower():
-            fallin.append(e)
-    return fallin
-
-
-
-
-
 import datasets
 ds_nerd = datasets.load_dataset('dfki-nlp/few-nerd', "supervised", cache_dir='/scratch/w/wluyliu/yananc/cache')
 ds_notes = datasets.load_dataset('conll2012_ontonotesv5', "english_v12", cache_dir='/scratch/w/wluyliu/yananc/cache')
@@ -32,64 +13,41 @@ ds_nerd['train']['ner_tags'][35]
 
 
 
-'''
-{
-    'id': '1', 
-    'tokens': ['It', 'starred', 'Hicks', "'s", 'wife', ',', 'Ellaline', 'Terriss', 'and', 'Edmund', 'Payne', '.'], 
-    'ner_tags': [0, 0, 7, 0, 0, 0, 7, 7, 0, 7, 7, 0], 
-    'fine_ner_tags': [0, 0, 51, 0, 0, 0, 50, 50, 0, 50, 50, 0]
-}
-'''
-
-sentence = data['sentence'][index].strip().split() 
-
-max_len = 64
-encoding = tokenizer(sentence,
-                             #is_pretokenized=True, 
-                             is_split_into_words=True,
-                             return_offsets_mapping=True, 
-                             padding='max_length', 
-                             truncation=True, 
-                             max_length=max_len)
 
 
+
+import spacy
+ner_spacy_model = spacy.load('en_core_web_lg', disable=["tok2vec", "tagger", "attribute_ruler", "lemmatizer"])
+
+
+import requests
+import re
+from collections import Counter
+
+content = '''
+The West lost self-confidence — and both Russian and Chinese leaders rubbed it in, putting out the word that these chaotic democratic systems were a spent force.
+And then a totally unexpected thing happened: Russia and China each overreached.
+Vladimir Putin invaded Ukraine and, to his surprise, invited an indirect war with NATO and the West. China insisted that it was smart enough to have its own local solution to a pandemic, leaving millions of Chinese underprotected or unprotected and, in effect,
 '''
 
+article = ner_spacy_model(content)
+labels = [x.label_ for x in article.ents]
+Counter(labels)
 
-import transformers
 
-import tensorflow as tf 
-
-MAX_LEN = 16
-ids = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
-att = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
-tok = tf.keras.layers.Input((MAX_LEN,), dtype=tf.int32)
-
-model = transformers.TFRobertaModel.from_pretrained('roberta-base')
+sentences = [x for x in article.sents]
 
 
 
-model = tf.keras.models.Model(inputs=[ids, att, tok], outputs=[x1,x2])
-optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
-model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+texts = [
+    "Net income was $9.4 million compared to the prior year of $2.7 million.",
+    "Revenue exceeded twelve billion dollars, with a loss of $1b.",
+]
 
-
-last_hidden_states = outputs.last_hidden_state
-
-
-
-
-from transformers import RobertaTokenizer, TFRobertaForSequenceClassification
-tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
-model = TFRobertaForSequenceClassification.from_pretrained("roberta-base")
-
-x = model(input_ids=ids, attention_mask=att)
-
-
-model = transformers.TFRobertaForTokenClassification.from_pretrained("roberta-base")
-
-
-'''
+nlp = spacy.load("en_core_web_sm")
+for doc in nlp.pipe(texts, disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"]):
+    # Do something with the doc here
+    print([(ent.text, ent.label_) for ent in doc.ents])
 
 
 
@@ -98,11 +56,20 @@ model = transformers.TFRobertaForTokenClassification.from_pretrained("roberta-ba
 
 
 
+from spacy import displacy
+displacy.render(ner_spacy_model(content.strip()), jupyter=True, style='ent')
+
+from spacy import displacy
+
+text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
+
+nlp = spacy.load("en_core_web_sm")
+doc = nlp(text)
+html = displacy.render(doc, style="ent", page=True)
 
 
-
-
-
+with open("ner_spacy_test.html", "w") as ff:
+    ff.write(html+'------------\n') 
 
 
 
