@@ -30,16 +30,14 @@ nlp_roberta_nerd_coarse = pipeline("ner", model=model_roberta_nerd_coarse, token
                     aggregation_strategy="simple", device=gpu)
 
 
-def check_entity_ft(sent, nlp_roberta, fmark):
-    ner_results = nlp_roberta(sent)
-    if not ner_results:
-        return []
+def check_entity_ft(content, nlp_roberta, fmark):
+    ner_results = nlp_roberta(content)
+
     infos = []
     for ii in ner_results:
-        if ii['word'].strip() in string.punctuation:
-            continue
-        infos.append((ii['entity_group'], ii['word'].strip(), fmark))
+        infos.append((ii['entity_group'], ii['word'].strip(), ii['start'], ii['end'], fmark))
     return infos
+
 
 
 # spacy
@@ -47,8 +45,16 @@ def check_entity_ft(sent, nlp_roberta, fmark):
 # python -m spacy download en_core_web_lg
 # python -m spacy download en_core_web_trf
 import spacy
-#ner_spacy_model = spacy.load('en_core_web_lg', disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+en_core_web_lg = spacy.load('en_core_web_lg', disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
 nlp_split_sents = spacy.load('en_core_web_sm')
+
+def check_entity_spacy(content, en_core_web_lg, fmark ):
+    doc = en_core_web_lg(content)
+    infos = []
+    for ent in doc.ents:
+        infos.append((ent.label_, ent.text, ent.start_char, ent.end_char, fmark))
+
+    return infos
 
 
 # flair 
@@ -67,84 +73,19 @@ tagger_ontonotes = SequenceTagger.load("flair/ner-english-ontonotes-large")
 def check_entity_flair(content, tagger, fmark):
     sentence = Sentence(content)
     tagger.predict(sentence)
-    # ii.start_position, ii.end_position
-    ners = sentence.get_spans('ner')
+
     infos = []
     for ii in sentence.get_spans('ner'):
-        if (ii.tag, ii.text) in infos:
-            continue
-        if ii.text.strip() in string.punctuation:
-            continue
-        infos.append((ii.tag, ii.text.strip(), fmark))
+        infos.append((ii.tag, ii.text.strip(), ii.start_position, ii.end_position, fmark))
+ 
     return infos
 
 
 
 
+
+
 ############## main ########################
-
-
-with open('/home/w/wluyliu/yananc/nlp4quantumpapers/articles_full.json', 'r') as f:
-    jxml = json.load(f)
-
-tag_map = {'PERSON':'PER', 'ORGANIZATION':'PER', 'LOCATION':'LOC', 'GPE':'LOC'}
-pick_from_nerd = ['EDUCATION','COMPANY','SOFTWARE','Government'.upper() ]
-
-def ner_tag(content):
-    sents = [i.text.replace('\n','').strip() for i in nlp_split_sents(content).sents]
-
-    infos = []
-    for sent in sents:
-        if not sent:
-            continue
-        flair_ontonotes_ner_results = check_entity_flair(sent, tagger_ontonotes, 'flair_onto')
-        infos.extend(flair_ontonotes_ner_results)
-
-        flair_conll_ner_results = check_entity_flair(sent, tagger_conll, 'flair_conll')
-        infos.extend(flair_conll_ner_results)
-
-        ft_ner_ori = check_entity_ft(sent, nlp_roberta, 'ft_ori')
-        infos.extend(ft_ner_ori)
-
-        ft_ner_nerd_coarse = check_entity_ft(sent, nlp_roberta_nerd_coarse, 'nerd_coarse') 
-        infos.extend(ft_ner_nerd_coarse)
-
-        ft_ner_nerd_fine = check_entity_ft(sent, nlp_roberta_nerd_fine, 'nerd_fine') 
-        infos.extend(ft_ner_nerd_fine)
-
-        # print(sent) 
-
-    
-    df = pd.DataFrame(infos, columns=['ner','span', 'fmark'])
-    df['ner'] = df['ner'].map(lambda x: x.upper())
-    df['ner'] = df['ner'].map(lambda x: tag_map[x] if x in tag_map else x )
-
-    # df = df.loc[df['ner'].str()]
-    df.drop_duplicates(['ner','span', 'fmark'], inplace=True)
-
-    df_pretrain = df.loc[df['fmark'].isin(['flair_onto', 'flair_conll', 'ft_ori'])]
-    df_nerd = df.loc[df['fmark'].isin(['nerd_coarse', 'nerd_fine'])]
-    df_nerd = df_nerd.loc[df_nerd['ner'].isin(pick_from_nerd)]
-
-    df_pretrain.drop_duplicates(['ner','span'], inplace=True)
-    df_nerd.drop_duplicates(['ner','span'], inplace=True)
-
-    df_pretrain.sort_values(by=['ner'], ascending=True, inplace=True)
-    df_nerd.sort_values(by=['ner'], ascending=True, inplace=True)
-    return df_pretrain, df_nerd
-
-
-
-content = random.sample(jxml, 1)[0]['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
-df_pretrain, df_nerd = ner_tag(content)
-
-df_org = pd.concat([df_pretrain.loc[df_pretrain['ner']=='ORG'], df_nerd.loc[df_nerd['ner'].isin(pick_from_nerd)]] )
-
-org_entities = [ii for ii in df_org['span'].unique() if len(ii) > 1 and ii in content]
-
-print(org_entities)
-
-
 import spacy,re
 from spacy import displacy
 
@@ -155,20 +96,115 @@ def find_index_of_entities(span, raw_text):
     return indexs
 
 
-nlp = spacy.load("en_core_web_lg", disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
-doc = nlp(content)
+
+nlp = spacy.blank('en')
+
+def check_overlap(index_exist, sel_index):
+    if not index_exist:
+        return 0 
+
+    for ii in index_exist:
+        if (sel_index[0]>=ii[0] and sel_index[0]<=ii[1]) or (sel_index[1]>=ii[0] and sel_index[1]<=ii[1]):
+            return 1 
+    return 0
 
 
-for ent in doc.ents:
-    if ent.label_ == 'ORG' and ent.text in content:
-        print(ent.text, ent.start_char, ent.end_char)
+
+
+with open('/home/w/wluyliu/yananc/nlp4quantumpapers/articles_full.json', 'r') as f:
+    jxml = json.load(f)
+
+tag_map = {'PERSON':'PER', 'ORGANIZATION':'ORG', 'LOCATION':'LOC', 'GPE':'LOC'}
+pick_from_nerd = ['EDUCATION','COMPANY','SOFTWARE','Government'.upper() ]
+
+
+# sents = [i.text.replace('\n','').strip() for i in nlp_split_sents(content).sents]
+
+def ner_combine(content):
+    infos = []
+
+    flair_ontonotes_ner_results = check_entity_flair(content, tagger_ontonotes,'flaironto')
+    infos.extend(flair_ontonotes_ner_results)
+
+    flair_conll_ner_results = check_entity_flair(content, tagger_conll,'flairconll')
+    infos.extend(flair_conll_ner_results)
+
+    ft_ner_ori = check_entity_ft(content, nlp_roberta, 'ftori')
+    infos.extend(ft_ner_ori)
+
+
+    # spacy_ner_results = check_entity_spacy(content, en_core_web_lg, 'spacy')
+    # infos.extend(spacy_ner_results)
+
+    # ft_ner_nerd_coarse = check_entity_ft(sent, nlp_roberta_nerd_coarse) 
+    # infos.extend(ft_ner_nerd_coarse)
+
+    # ft_ner_nerd_fine = check_entity_ft(sent, nlp_roberta_nerd_fine) 
+    # infos.extend(ft_ner_nerd_fine)
+
+        # print(sent) 
+
+    df = pd.DataFrame(infos, columns=['ner','span', 'start', 'end', 'fmark'])
+    df['ner'] = df['ner'].map(lambda x: x.upper())
+    df['ner'] = df['ner'].map(lambda x: tag_map[x] if x in tag_map else x )
+
+    df = df.loc[~df['span'].isin([i for i in string.punctuation])]
+    df.drop_duplicates(inplace=True)
+
+
+    df_org = df.loc[df['ner']=='ORG']
+    return df_org
+# df_pretrain = df.loc[df['fmark'].isin(['flair_onto', 'flair_conll', 'ft_ori'])]
+# df_nerd = df.loc[df['fmark'].isin(['nerd_coarse', 'nerd_fine'])]
+# df_nerd = df_nerd.loc[df_nerd['ner'].isin(pick_from_nerd)]
+
+# df_pretrain.drop_duplicates(['ner','span'], inplace=True)
+# df_nerd.drop_duplicates(['ner','span'], inplace=True)
+
+# df_pretrain.sort_values(by=['ner'], ascending=True, inplace=True)
+# df_nerd.sort_values(by=['ner'], ascending=True, inplace=True)
+# return df_pretrain, df_nerd
+
+samples = random.sample(jxml, 100)
+
+df_ll = []
+for sample in jxml:
+    content = sample['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
+    df_org = ner_combine(content)
+    df_org['article_ID'] = sample['article_ID']
 
 
 
-html = displacy.render(doc, style="ent", page=True)
+    doc = nlp.make_doc(content)
+    ents = []
+    index_exist = []
 
-with open("ner_spacy_test.html", "w") as ff:
-    ff.write(html+'------------\n') 
+    for ix, row in df_org.iterrows():
+        if len(row['span'])<=1:
+            continue
+        overlap = check_overlap(index_exist, (row['start'], row['end']))
+
+        if overlap:
+            continue
+
+        ent = doc.char_span(row['start'], row['end'], label=row['ner'])
+        print(row['span'], '==>', row['start'], row['end'])
+        if ent is None:
+            continue
+        ents.append(ent)
+        index_exist.append((row['start'], row['end']))
+
+    doc.ents = ents
+    html = displacy.render(doc, style="ent", page=True)
+
+    with open("ner_spacy_test.html", "a") as ff:
+        ff.write('article_ID:{}'.format(sample['article_ID'])+'\n'+ html+'------------\n\n') 
+
+
+
+
+
+
 
 
 
@@ -176,43 +212,5 @@ with open("ner_spacy_test.html", "w") as ff:
 
 labels_candidates = ['company', 'investor', 'university','Venture Capital Investor', 'academic organization', 
                         'goverment organization']
-
-
-
-
-
-
-nlp = spacy.blank('en')
-content = "The Indian Space Research Organisation or is the national space agency of India, headquartered in Bengaluru. It operates under Department of Space which is directly overseen by the Prime Minister of India while Chairman of ISRO acts as executive of DOS as well."
-doc = nlp.make_doc(content)
-
-ner_results = [('The Indian Space Research Organisation', 'ORG'), 
-        ('Bengaluru','ORG'), ('Prime Minister of India', 'PER'), ('ISRO', 'ORG')]
-
-ents = []
-for span, ner in ner_results:
-    indexs = find_index_of_entities(span, content)
-    for span_start, span_end in indexs:
-        ent = doc.char_span(span_start, span_end, label=ner)
-        if ent is None:
-            continue
-        ents.append(ent)
-
-
-
-
-doc.ents = ents
-html = displacy.render(doc, style="ent", page=True)
-with open("ner_spacy_test_local.html", "w") as ff:
-    ff.write(html+'------------\n') 
-
-
-
-
-
-
-
-
-
 
 
