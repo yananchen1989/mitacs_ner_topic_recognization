@@ -7,13 +7,13 @@ Air Force Research Laboratory Quantum Group,group_centre
 Alarcos Research Group - Quality in Quantum Computing,group_centre
 Alliance For Quantum Technologies,group_centre
 ARC Centre Of Excellence For Engineered Quantum Systems,group_centre
-"Atomic, Mesoscopic And Optical Physics",group_centre
+Atomic, Mesoscopic And Optical Physics,group_centre
 Baidu Quantum Computing Institute,group_centre
 QUANTIC,group_centre
 Cretan Matter Waves,group_centre
 Beijing Academy Of Quantum Information Sciences,group_centre
 Bruss Group,group_centre
-"Calculi, Algorithms, Programs And Proofs",group_centre
+Calculi, Algorithms, Programs And Proofs,group_centre
 Cambridge Research Laboratory,group_centre
 Cavity Quantum Optics Group,group_centre
 Center For Macroscopic Quantum States,group_centre
@@ -81,7 +81,7 @@ Laboratory For Research On Material Sciences,group_centre
 Laboratory For Ultracold Quantum Gases,group_centre
 Laboratory Of Coherent Manipulation Of Atoms And Light,group_centre
 Gupta Laboratory Of Natural Information Processing,group_centre
-"Laboratory Of Quantum Information Theory, Moscow Institute Of Physics And Technology",group_centre
+Laboratory Of Quantum Information Theory, Moscow Institute Of Physics And Technology,group_centre
 Light-Matter Interactions For Quantum Technologies Group,group_centre
 Lincoln Laboratory,group_centre
 USC-Lockheed Martin Quantum Computation Center,group_centre
@@ -113,7 +113,7 @@ Nuclear Theory Group,group_centre
 Oak Ridge National Laboratory Quantum Computing Institute,group_centre
 Optics Division Strathclyde,group_centre
 Optimization With Noisy Intermediate-Scale Quantum Devices Program,group_centre
-"Oregon Center For Optical, Molecular And Quantum Science",group_centre
+Oregon Center For Optical, Molecular And Quantum Science,group_centre
 Oxford Ion Trap Quantum Computing Group,group_centre
 Paris Center For Quantum Computing,group_centre
 Paris Observatory,group_centre
@@ -144,7 +144,7 @@ Quantum Engineering Technology Labs,group_centre
 Quantum Optics Laboratory,group_centre
 Quantum Foundations And Information - Buenos Aires,group_centre
 Quantum Foundations And Quantum Information Theory,group_centre
-"Quantum Fundamentals, Architecture And Machines Initiative",group_centre
+Quantum Fundamentals, Architecture And Machines Initiative,group_centre
 QuantumFuture Research Group ,group_centre
 Quantum Information & Computation Group Innsbruck,group_centre
 Quantum Information (UFABC),group_centre
@@ -155,7 +155,7 @@ Quantum Information And Emergent Phenomena,group_centre
 Quantum Information And Foundations Group,group_centre
 Quantum Information And Nonlinear Optics Group,group_centre
 Quantum Information And Quantum Matter (Iip-Ufrn),group_centre
-"Quantum Information And Quantum Optics With Single Trapped Atoms, ICFO",group_centre
+Quantum Information And Quantum Optics With Single Trapped Atoms, ICFO,group_centre
 Quantum Information And Technologies In Madrid,group_centre
 Quantum Information Center (UT Austin),group_centre
 Quantum Information Group (LU),group_centre
@@ -205,13 +205,13 @@ Statistical Physics Group,group_centre
 The Budapest Quantum Optics Group,group_centre
 The Center For Quantum Devices,group_centre
 The center for Theoretical Physics,group_centre
-"The Faculty Of Mathematics , Astronomy , Physics And Computing",group_centre
+The Faculty Of Mathematics , Astronomy , Physics And Computing,group_centre
 The Faculty Of Physics Warsaw,group_centre
 The Quantum Dynamics Group,group_centre
 The Quantum Information And Computing Lab,group_centre
 The Quantum Information Physics Research Team,group_centre
 The Quantum Science Center,group_centre
-"The Quantum Systems Group Is Part Of The Georgia Tech Research Institute'S Cybersecurity, Information Protection, And Hardware Evaluation Research Lab",group_centre
+The Quantum Systems Group Is Part Of The Georgia Tech Research Institute'S Cybersecurity, Information Protection, And Hardware Evaluation Research Lab,group_centre
 Theoretical Atomic Physics And Synthetic Quantum Systems,group_centre
 Theoretical Nanooptics (Kit),group_centre
 Theoretical Physics Laboratory,group_centre
@@ -226,7 +226,7 @@ Vienna Center For Quantum Science And Technology,group_centre
 Vtt Technical Research Centre Of Finland,group_centre
 Wallenberg Centre For Quantum Technology,group_centre
 Young Independent Researcher Group,group_centre
-"Aberystwyth Quantum Structures, Information And Control Group",group_centre
+Aberystwyth Quantum Structures, Information And Control Group,group_centre
 Munich Quantum Valley,group_centre
 Academia Sinica,university
 Air Force Institute of Technology,university
@@ -254,7 +254,7 @@ Griffith University,university
 Hanyang University,university
 HHU,university
 Heriot-Watt University,university
-"Indian Institute Science Education and Research, Pune",university
+Indian Institute Science Education and Research, Pune,university
 Jagiellonian University,university
 JKU - Johannes Kepler Universität Linz,university
 Karlsruhe Institute of Technology,university
@@ -390,7 +390,7 @@ University of Arizona,university
 UCLA,university
 UC Santa Barbara,university
 University of Illinois at Urbana-Champaign,university
-"University of Nevada, Reno",university
+University of Nevada, Reno,university
 University of Oklahoma,university
 University of Rochester,university
 University of Wisconsin-Madison,university
@@ -719,8 +719,7 @@ Nikon,investor
 Northgate Capital,investor
 Northland Wealth Management,investor
 Norwegian Research Council,investor
-"Notion Capital
-",investor
+Notion Capital,investor
 NTT Docomo,investor
 Nvidia Inception,investor
 Octopus Ventures,investor
@@ -1307,7 +1306,7 @@ Dotphoton AG,Quantum_comp
 HighQ,Quantum_comp
 Aquark Technologies,Quantum_comp
 Tabor Electronics,Quantum_comp
-"Cosmic Microwave Technology, Inc.",Quantum_comp
+Cosmic Microwave Technology, Inc,Quantum_comp
 Cryomech,Quantum_comp
 Great Lakes Crystal Technologies,Quantum_comp
 Key Management Solutions LLC.,Quantum_comp
