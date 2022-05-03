@@ -14,8 +14,8 @@ from gensim.models.callbacks import CallbackAny2Vec
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dsn", type=str)
-parser.add_argument("--num_topics", type=int)
+parser.add_argument("--dsn", type=str, choices=['arxiv','cc'])
+parser.add_argument("--num_topics", type=int, choices=[8,16,32,64,128,256,512])
 args = parser.parse_args()
 
 
@@ -53,31 +53,9 @@ for t in range(args.num_topics):
     print()
 
 
-accs = []
 
-while True:
-    ls1 = random.sample(list(dfi['label'].unique()), 1)[0]
-    ls2 = random.sample(list(dfi['label'].unique()), 1)[0]
-
-    sent1 = dfi.loc[dfi['label']==ls1].sample(1)['abstract_stem'].tolist()[0]
-    sent2 = dfi.loc[dfi['label']==ls2].sample(1)['abstract_stem'].tolist()[0]
-
-    if sent1 == sent2:
-        continue
-
-    other_corpus1 = [common_dictionary.doc2bow(sent1.split(' '))]
-    pred_topic1 = lda.inference(other_corpus1)[0][0].argmax()
-
-    other_corpus2 = [common_dictionary.doc2bow(sent2.split(' '))]
-    pred_topic2 = lda.inference(other_corpus2)[0][0].argmax()
-
-    if (ls1 == ls2 and pred_topic1==pred_topic2) : # or (ls1!=ls2 and pred_topic1!=pred_topic2)
-        accs.append(1)
-    else:
-        accs.append(0)
-
-    if len(accs) % 1000 == 0:
-        print(sum(accs) / len(accs))
+# make predictions based on trained lda model, randomly select 10 samples
+preds = lda.inference(dfi.sample(10)['corpus'].tolist())
 
 
 
@@ -89,7 +67,6 @@ while True:
 
 
 
-preds = lda.inference(df.sample(10)['abstract'].tolist())
 
 
 

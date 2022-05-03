@@ -51,15 +51,8 @@ for doc in nlp.pipe(texts, disable=["tok2vec", "tagger", "parser", "attribute_ru
 
 
 
-
-
-
-
-
 from spacy import displacy
 displacy.render(ner_spacy_model(content.strip()), jupyter=True, style='ent')
-
-from spacy import displacy
 
 text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
 

@@ -5,8 +5,19 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
+import tensorflow as tf 
+gpus = tf.config.experimental.list_physical_devices('GPU')
+print('======>',gpus,'<=======')
+if gpus:
+  try:
+    for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+      # tf.config.experimental.set_virtual_device_configuration(gpu, \
+      #      [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+  except RuntimeError as e:
+    print(e)
 
-gpu = 1
+gpu = 0
 # conll2003
 # tokenizer_bert = AutoTokenizer.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # model_bert = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
@@ -17,17 +28,17 @@ model_roberta = AutoModelForTokenClassification.from_pretrained("Jean-Baptiste/r
 nlp_roberta = pipeline("ner", model=model_roberta, tokenizer=tokenizer_roberta, \
                     aggregation_strategy="simple", device=gpu)
 
-# load off-the-shelf model : roberta-large fine-tuned on nerd-fine-grained
-tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
-model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
-nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
-                     aggregation_strategy="simple", device=gpu)
+# # load off-the-shelf model : roberta-large fine-tuned on nerd-fine-grained
+# tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
+# model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
+# nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
+#                      aggregation_strategy="simple", device=gpu)
 
-# load off-the-shelf model : roberta-large fine-tuned on nerd-coarse-grained
-tokenizer_roberta_nerd_coarse = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
-model_roberta_nerd_coarse = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
-nlp_roberta_nerd_coarse = pipeline("ner", model=model_roberta_nerd_coarse, tokenizer=tokenizer_roberta_nerd_coarse,\
-                    aggregation_strategy="simple", device=gpu)
+# # load off-the-shelf model : roberta-large fine-tuned on nerd-coarse-grained
+# tokenizer_roberta_nerd_coarse = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
+# model_roberta_nerd_coarse = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
+# nlp_roberta_nerd_coarse = pipeline("ner", model=model_roberta_nerd_coarse, tokenizer=tokenizer_roberta_nerd_coarse,\
+#                     aggregation_strategy="simple", device=gpu)
 
 
 def check_entity_ft(content, nlp_roberta, fmark):
@@ -151,7 +162,6 @@ def ner_combine(content):
     df = df.loc[~df['span'].isin([i for i in string.punctuation])]
     df.drop_duplicates(inplace=True)
 
-
     df_org = df.loc[df['ner']=='ORG']
     return df_org
 # df_pretrain = df.loc[df['fmark'].isin(['flair_onto', 'flair_conll', 'ft_ori'])]
@@ -165,52 +175,124 @@ def ner_combine(content):
 # df_nerd.sort_values(by=['ner'], ascending=True, inplace=True)
 # return df_pretrain, df_nerd
 
-samples = random.sample(jxml, 100)
+samples = random.sample(jxml, 10)
 
-df_ll = []
-for sample in jxml:
-    content = sample['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
-    df_org = ner_combine(content)
-    df_org['article_ID'] = sample['article_ID']
+import tensorflow_hub as hub
+import tensorflow_text as text
+model = tf.keras.models.load_model("/scratch/w/wluyliu/yananc/cls_dict")
+df_tags = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/datasets/QI-NERs.csv")
+
+ixl = {i:j for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+ixl_rev = {j:i for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+
+DEFAULT_LABEL_COLORS = {
+    "ORG": "#7aecec",
+    "PRODUCT": "#bfeeb7",
+    "GPE": "#feca74",
+    "LOC": "#ff9561",
+    "PERSON": "#aa9cfc",
+    "NORP": "#c887fb",
+    "FAC": "#9cc9cc",
+    "EVENT": "#ffeb80",
+    "LAW": "#ff8197",
+    "LANGUAGE": "#ff8197",
+    "WORK_OF_ART": "#f0d0ff",
+    "DATE": "#bfe1d9",
+    "TIME": "#bfe1d9",
+    "MONEY": "#e4e7d2",
+    "QUANTITY": "#e4e7d2",
+    "ORDINAL": "#e4e7d2",
+    "CARDINAL": "#e4e7d2",
+    "PERCENT": "#e4e7d2",
+}
 
 
 
-    doc = nlp.make_doc(content)
-    ents = []
-    index_exist = []
+# colours = list(DEFAULT_LABEL_COLORS.values())
+colours = [DEFAULT_LABEL_COLORS['GPE'], DEFAULT_LABEL_COLORS['ORG'], DEFAULT_LABEL_COLORS['PERSON'],
+           DEFAULT_LABEL_COLORS['CARDINAL'], DEFAULT_LABEL_COLORS['DATE'], DEFAULT_LABEL_COLORS['WORK_OF_ART']]
 
-    for ix, row in df_org.iterrows():
-        if len(row['span'])<=1:
+
+random.shuffle(jxml)
+# df_ll = []
+with open('ner_cls_samples.jsonl', 'w') as f:
+    for sample in jxml:
+        content = sample['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
+        
+        df_org = ner_combine(content)
+
+        if df_org.shape[0] <=3:
+            print("unnormal df_org==>", df_org.shape[0])
             continue
-        overlap = check_overlap(index_exist, (row['start'], row['end']))
 
-        if overlap:
-            continue
+        preds = model.predict(df_org['span'].values.reshape(-1,1))
+        preds_labels = preds.argmax(axis=1)
 
-        ent = doc.char_span(row['start'], row['end'], label=row['ner'])
-        print(row['span'], '==>', row['start'], row['end'])
-        if ent is None:
-            continue
-        ents.append(ent)
-        index_exist.append((row['start'], row['end']))
+        preds_scores = preds.max(axis=1)
+
+        df_org['pred_tag'] = [ixl[i] for i in preds_labels]
+        df_org['pred_score'] = preds_scores
+        # df_ll.append(df_org)
+
+         
+        json_tmp = {'text':content}
+        spans = []
+        # visualization
+        doc = nlp.make_doc(content)
+        ents = []
+        index_exist = []
+
+        for ix, row in df_org.iterrows():
+            if len(row['span'])<=1:
+                continue
+            overlap = check_overlap(index_exist, (row['start'], row['end']))
+
+            if overlap:
+                continue
+
+            ent = doc.char_span(row['start'], row['end'], label=row['pred_tag'])
+            # print(row['span'], '==>', row['start'], row['end'])
+            if ent is None:
+                continue
+            ents.append(ent)
+            index_exist.append((row['start'], row['end']))
+            spans.append({'start':row['start'], 'end':row['end'], 'label':row['pred_tag']})
+
+        json_tmp['spans'] = spans
+
+
+        json.dump(json_tmp, f)
+        f.write('\n')
+
+
+
+
+
+
+
 
     doc.ents = ents
-    html = displacy.render(doc, style="ent", page=True)
+    options = { "ents":df_tags['tag'].drop_duplicates().tolist(),
+            "colors": {ii[0]:ii[1] for ii in zip(df_tags['tag'].unique().tolist(), colours[:df_tags['tag'].unique().shape[0]])}
+        }
+    html = displacy.render(doc, style="ent", page=True, options=options)
 
-    with open("ner_spacy_test.html", "a") as ff:
+    with open("ner_spacy_test100.html", "a") as ff:
         ff.write('article_ID:{}'.format(sample['article_ID'])+'\n'+ html+'------------\n\n') 
 
+    print(sample['article_ID'])
 
 
 
 
 
 
+annotations = []
+with open("5_samples_annotations.jsonl", "r") as file:
+    for line in file:
+        annotations.append(json.loads(line))
 
 
 
-
-labels_candidates = ['company', 'investor', 'university','Venture Capital Investor', 'academic organization', 
-                        'goverment organization']
 
 
