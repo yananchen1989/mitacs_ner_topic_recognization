@@ -1,0 +1,67 @@
+art-broadcastprogram	art-broadcast program
+art-film	art-film
+art-music	art-music
+art-other	art-other
+art-painting	art-painting
+art-writtenart	art-written art
+building-airport	building-airport
+building-hospital	building-hospital
+building-hotel	building-hotel
+building-library	building-library
+building-other	building-other
+building-restaurant	building-restaurant
+building-sportsfacility	building-sports facility
+building-theater	building-theater
+event-attack/battle/war/militaryconflict	event-attack/battle/war/military conflict
+event-disaster	event-disaster
+event-election	event-election
+event-other	event-other
+event-protest	event-protest
+event-sportsevent	event-sports event
+location-bodiesofwater	location-bodies of water
+location-GPE	location-location
+location-island	location-island
+location-mountain	location-mountain
+location-other	location-other
+location-park	location-park
+location-road/railway/highway/transit	location-road/railway/highway/transit
+O	O
+organization-company	organization-company
+organization-education	organization-education
+organization-government/governmentagency	organization-government/government agency
+organization-media/newspaper	organization-media/newspaper
+organization-other	organization-other
+organization-politicalparty	organization-political party
+organization-religion	organization-religion
+organization-showorganization	organization-show organization
+organization-sportsleague	organization-sports league
+organization-sportsteam	organization-sports team
+other-astronomything	other-astronomy
+other-award	other-award
+other-biologything	other-biology
+other-chemicalthing	other-chemical
+other-currency	other-currency
+other-disease	other-disease
+other-educationaldegree	other-educational degree
+other-god	other-god
+other-language	other-language
+other-law	other-law
+other-livingthing	other-living thing
+other-medical	other-medical
+person-actor	person-actor
+person-artist/author	person-artist/author
+person-athlete	person-athlete
+person-director	person-director
+person-other	person-other
+person-politician	person-politician
+person-scholar	person-scholar
+person-soldier	person-soldier
+product-airplane	product-airplane
+product-car	product-car
+product-food	product-food
+product-game	product-game
+product-other	product-other
+product-ship	product-ship
+product-software	product-software
+product-train	product-train
+product-weapon	product-weapon

@@ -7,10 +7,63 @@ ds_nerd = datasets.load_dataset('dfki-nlp/few-nerd', "supervised", cache_dir='/s
 ds_notes = datasets.load_dataset('conll2012_ontonotesv5', "english_v12", cache_dir='/scratch/w/wluyliu/yananc/cache')
 ds_conll = datasets.load_dataset('conll2003', cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-raw_datasets = ds_nerd
 
 ds_nerd['train']['ner_tags'][35]
 
+
+
+
+path = "/scratch/w/wluyliu/yananc/few_nerd_supervised"
+
+
+
+
+
+buffer = []
+with open("{}/dev.txt".format(path), 'r') as f:
+    for line in f:
+        if line =='\n':
+            
+            tokens = []
+            tags = []
+            ents = {}
+
+            for j in buffer:
+                token = j.split('\t')[0]
+                tag = j.split('\t')[1]
+                tokens.append(token)
+                tags.append(tag)
+        
+
+            sent = ' '.join(tokens)
+
+            buffer = []
+            df_tmp = pd.DataFrame(zip(tokens, tags), columns=['tokens','tags'])
+
+            if df_tmp['tags'].unique().shape[0] >= 3:
+                break
+
+        else:
+            buffer.append(line.strip())
+
+
+
+for tag in df_tmp['tags'].unique():
+    if tag == 'O':
+        continue 
+
+    df_tmp_f = df_tmp.loc[df_tmp['tags']==tag]
+    
+
+
+list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
+
+sl = random.sample(ds_nerd['validation'], 1)[0]
+
+
+
+for i in (ds_nerd['validation']):
+    print(' '.join(i['tokens']), '\n')
 
 
 

@@ -218,7 +218,7 @@ random.shuffle(jxml)
 with open('ner_cls_samples.jsonl', 'w') as f:
     for sample in jxml:
         content = sample['post_content'].encode("ascii", "ignore").decode("utf-8").strip()
-        
+
         df_org = ner_combine(content)
 
         if df_org.shape[0] <=3:
