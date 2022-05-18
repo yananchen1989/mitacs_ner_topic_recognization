@@ -533,7 +533,7 @@ def main():
 
     # Metrics
     metric = datasets.load_metric("seqeval", cache_dir='/scratch/w/wluyliu/yananc/cache')
-
+    # https://github.com/huggingface/datasets/blob/master/metrics/seqeval/seqeval.py
     def get_labels(predictions, references):
         # Transform predictions and references tensos to numpy arrays
         if device.type == "cpu":
