@@ -302,7 +302,7 @@ def main():
         raw_datasets = raw_datasets_.map(map_func, 
                 batched=False,
                 num_proc=args.preprocessing_num_workers,
-                load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
+                load_from_cache_file= False, remove_columns=['tags'],
                 desc = "Running ix mapping ==>")
         # ['id', 'tokens', 'tags_coarse', 'tags_fine', 'tag_fine_ix', 'tag_coarse_ix']
     else:
