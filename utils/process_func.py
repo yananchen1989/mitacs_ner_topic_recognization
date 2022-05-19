@@ -2,7 +2,7 @@ import string,re,json
 import pandas as pd
 from nltk.corpus import stopwords
 sw = set(stopwords.words("english"))
-
+import datasets
 def make_df(json_path, target_cates):
     infos = []
     with open(json_path, 'r') as f: 
@@ -40,7 +40,7 @@ def clean_title(title):
     else:
         return " ".join(tokens)
 
-import datasets
+
 
 
 def load_dsn(dsn):
@@ -69,3 +69,61 @@ def load_dsn(dsn):
         dfi['abstract_clean'] = dfi['abstract'].map(lambda x: remove_latex(x))
         dfi['abstract_stem'] = dfi['abstract_clean'].map(lambda x: clean_title(x))
     return dfi
+
+
+
+#################### NER ###################
+tag_corarse = ['O']
+tag_fine = ['O']
+with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
+    for line in f:
+        if line.strip() == 'O':
+            continue
+
+        if line.strip().split('-')[0] not in tag_corarse:
+            tag_corarse.append(line.strip().split('-')[0])
+        
+        tag_fine.append(line.strip())
+
+
+tag_map_fine = {e:ix for ix, e in enumerate(tag_fine)}
+tag_map_coarse = {e:ix for ix, e in enumerate(tag_corarse)}
+
+
+def map_func(example):
+    tag_fine_ix = []
+    tag_coarse_ix = []
+    tags_coarse = []
+    for tag in example['tags']:
+        tag_fine_ix.append(tag_map_fine[tag])
+        if tag != 'O':
+            tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
+            tags_coarse.append(tag.split('-')[0])
+        else:
+            tag_coarse_ix.append(tag_map_coarse[tag])
+            tags_coarse.append(tag)
+    example['tags_coarse'] = tags_coarse
+    example['tags_fine'] = example['tags']
+    example['tag_fine_ix'] = tag_fine_ix 
+    example['tag_coarse_ix'] = tag_coarse_ix
+
+    for ii, jj in example.items():
+        if ii == 'id':
+            continue
+        assert len(jj) == len(example['tokens']) 
+
+    return example
+
+
+def sep_trunk(df_tmp):
+    results = []
+    for tag in df_tmp['tags'].unique():
+        if tag == 'O':
+            continue 
+
+        df_tmp_f = df_tmp.loc[df_tmp['tags']==tag]
+
+        list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
+        mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
+        results.append((' ; '.join(mentions), tag))
+    return results

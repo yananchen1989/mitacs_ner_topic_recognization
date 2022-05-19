@@ -49,6 +49,7 @@ from transformers import (
 )
 from transformers.file_utils import is_offline_mode
 from transformers.utils.versions import require_version
+from utils.process_func import * 
 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/summarization/requirements.txt")
@@ -82,24 +83,6 @@ summarization_name_mapping = {
     "xsum": ("document", "summary"),
     "wiki_summary": ("article", "highlights"),
 }
-
-
-tag_corarse = ['O']
-tag_fine = ['O']
-with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
-    for line in f:
-        if line.strip() == 'O':
-            continue
-
-        if line.strip().split('-')[0] not in tag_corarse:
-            tag_corarse.append(line.strip().split('-')[0])
-        
-        tag_fine.append(line.strip())
-
-
-tag_map_fine = {e:ix for ix, e in enumerate(tag_fine)}
-tag_map_coarse = {e:ix for ix, e in enumerate(tag_corarse)}
-
 
 
 def parse_args():
@@ -445,43 +428,6 @@ def main():
     max_target_length = args.max_target_length
     padding = "max_length" if args.pad_to_max_length else False
 
-    def map_func(example):
-        tag_fine_ix = []
-        tag_coarse_ix = []
-        tags_coarse = []
-        for tag in example['tags']:
-            tag_fine_ix.append(tag_map_fine[tag])
-            if tag != 'O':
-                tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
-                tags_coarse.append(tag.split('-')[0])
-            else:
-                tag_coarse_ix.append(tag_map_coarse[tag])
-                tags_coarse.append(tag)
-        example['tags_coarse'] = tags_coarse
-        example['tags_fine'] = example['tags']
-        example['tag_fine_ix'] = tag_fine_ix 
-        example['tag_coarse_ix'] = tag_coarse_ix
-
-        for ii, jj in example.items():
-            if ii == 'id':
-                continue
-            assert len(jj) == len(example['tokens']) 
-
-        return example
-
-
-    def sep_trunk(df_tmp):
-        results = []
-        for tag in df_tmp['tags'].unique():
-            if tag == 'O':
-                continue 
-
-            df_tmp_f = df_tmp.loc[df_tmp['tags']==tag]
-
-            list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
-            mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
-            results.append((' ; '.join(mentions), tag))
-        return results
 
     def t5_format(example):
         source_ll = []

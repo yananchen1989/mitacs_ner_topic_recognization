@@ -50,7 +50,7 @@ from transformers import (
 )
 from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
-
+from utils.process_func import * 
 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/token-classification/requirements.txt")
@@ -286,6 +286,18 @@ def main():
         # Downloading and loading a dataset from the hub.
         raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name, \
             cache_dir='/scratch/w/wluyliu/yananc/cache')
+
+    elif args.dataset_name == 'few_nerd_local':
+        file_list = {}
+        for dsn in ['dev','test','train']:
+            file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
+        raw_datasets_ = datasets.load_dataset('json', data_files=file_list)
+        raw_datasets = raw_datasets_.map(map_func, 
+                batched=False,
+                num_proc=args.preprocessing_num_workers,
+                load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
+                desc = "Running ix mapping ==>")
+        
     else:
         data_files = {}
         if args.train_file is not None:
