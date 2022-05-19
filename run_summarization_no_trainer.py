@@ -491,9 +491,9 @@ def main():
     def t5_format(example):
         source_ll = []
         target_ll = []
-        for i in range( min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )):
-            source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
-            target_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tags_fine'][i] )
+        for i in range( min(len(example['tokens']), len(tokenizer.additional_special_tokens) )):
+            source_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
+            target_ll.append(tokenizer.additional_special_tokens[i] + example['tags_fine'][i] )
 
         example['text1'] = ' '.join(source_ll)
         example['text2'] = ' '.join(target_ll)
