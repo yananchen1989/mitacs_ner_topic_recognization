@@ -210,6 +210,12 @@ def parse_args():
         action="store_true",
         help="Activate debug mode and run training only with a subset of data.",
     )
+    parser.add_argument(
+        "--preprocessing_num_workers",
+        type=int,
+        default=128,
+        help="The number of processes to use for the preprocessing.",
+    )
     parser.add_argument("--push_to_hub", action="store_true", help="Whether or not to push the model to the Hub.")
     parser.add_argument(
         "--hub_model_id", type=str, help="The name of the repository to keep in sync with the local `output_dir`."
