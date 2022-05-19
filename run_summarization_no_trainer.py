@@ -22,7 +22,7 @@ import argparse
 import logging
 import math
 import os
-import random
+import random,multiprocessing
 
 import datasets
 import nltk
@@ -124,12 +124,7 @@ def parse_args():
         default=None,
         help="A prefix to add before every source text " "(useful for T5 models).",
     )
-    parser.add_argument(
-        "--preprocessing_num_workers",
-        type=int,
-        default=128,
-        help="The number of processes to use for the preprocessing.",
-    )
+
     parser.add_argument(
         "--overwrite_cache", type=bool, default=True, help="Overwrite the cached training and evaluation sets"
     )
@@ -475,13 +470,13 @@ def main():
 
     dataset_ix = raw_datasets.map(map_func, 
                     batched=False,
-                    num_proc=args.preprocessing_num_workers,
+                    num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
                     desc = "Running ix mapping ==>")
 
     processed_datasets_t5 = dataset_ix.map(t5_format, 
                     batched=False,
-                    num_proc=args.preprocessing_num_workers,
+                    num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
 
@@ -490,7 +485,7 @@ def main():
     processed_datasets = processed_datasets_t5.map(
         preprocess_function,
         batched=True,
-        num_proc=args.preprocessing_num_workers,
+        num_proc= multiprocessing.cpu_count() ,
         remove_columns=processed_datasets_t5["train"].column_names,
         load_from_cache_file=not args.overwrite_cache,
         desc="Running tokenizer ===>",

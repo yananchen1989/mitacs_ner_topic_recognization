@@ -7,7 +7,7 @@ CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --max_target_length 128 \
             --max_source_length 128 \
             --val_max_target_length 128 \
-            --preprocessing_num_workers 128 --overwrite_cache True \
+             --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
             --debug_cnt -1 \
@@ -17,14 +17,15 @@ CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
 
 
 CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
-  --model_name_or_path roberta-large \
-  --dataset_config_name "supervised" \
-  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
-  --text_column_name "tokens" \
-  --label_column_name "tags_fine" \
-  --num_train_epochs 7 \
-  --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
-   --local_files_only
+          --dataset_name "few_nerd_local" \
+          --model_name_or_path roberta-large \
+          --dataset_config_name "supervised" \
+          --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
+          --text_column_name "tokens" \
+          --label_column_name "tags_fine" \
+          --num_train_epochs 7 \
+          --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
+           --local_files_only
 
 
 
