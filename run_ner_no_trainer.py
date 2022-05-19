@@ -152,7 +152,7 @@ def parse_args():
     parser.add_argument(
         "--learning_rate",
         type=float,
-        default=5e-5,
+        default=1e-5,
         help="Initial learning rate (after the potential warmup period) to use.",
     )
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
@@ -282,7 +282,7 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    if args.dataset_name is not None:
+    if args.dataset_name is not None and args.dataset_name != 'few_nerd_local':
         # Downloading and loading a dataset from the hub.
         raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name, \
             cache_dir='/scratch/w/wluyliu/yananc/cache')
@@ -292,18 +292,19 @@ def main():
         for dsn in ['dev','test','train']:
             file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
         raw_datasets_ = datasets.load_dataset('json', data_files=file_list)
+
         raw_datasets = raw_datasets_.map(map_func, 
                 batched=False,
                 num_proc=args.preprocessing_num_workers,
                 load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
                 desc = "Running ix mapping ==>")
-        
+        # ['id', 'tokens', 'tags_coarse', 'tags_fine', 'tag_fine_ix', 'tag_coarse_ix']
     else:
         data_files = {}
         if args.train_file is not None:
             data_files["train"] = args.train_file
         if args.validation_file is not None:
-            data_files["validation"] = args.validation_file
+            data_files["dev"] = args.validation_file
         extension = args.train_file.split(".")[-1]
         raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
@@ -313,26 +314,10 @@ def main():
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
-    if raw_datasets["train"] is not None:
-        column_names = raw_datasets["train"].column_names
-        features = raw_datasets["train"].features
-    else:
-        column_names = raw_datasets["validation"].column_names
-        features = raw_datasets["validation"].features
 
-    if args.text_column_name is not None:
-        text_column_name = args.text_column_name
-    elif "tokens" in column_names:
-        text_column_name = "tokens"
-    else:
-        text_column_name = column_names[0]
+    column_names = raw_datasets["train"].column_names
+    features = raw_datasets["train"].features
 
-    if args.label_column_name is not None:
-        label_column_name = args.label_column_name
-    elif f"{args.task_name}_tags" in column_names:
-        label_column_name = f"{args.task_name}_tags"
-    else:
-        label_column_name = column_names[1]
 
     # In the event the labels are not a `Sequence[ClassLabel]`, we will need to go through the dataset to get the
     # unique labels.
@@ -346,12 +331,12 @@ def main():
 
     # If the labels are of type ClassLabel, they are already integers and we have the map stored somewhere.
     # Otherwise, we have to get the list of labels manually.
-    labels_are_int = isinstance(features[label_column_name].feature, ClassLabel)
+    labels_are_int = isinstance(features[args.label_column_name].feature, ClassLabel)
     if labels_are_int:
-        label_list = features[label_column_name].feature.names
+        label_list = features[args.label_column_name].feature.names
         label_to_id = {i: i for i in range(len(label_list))}
     else:
-        label_list = get_label_list(raw_datasets["train"][label_column_name])
+        label_list = get_label_list(raw_datasets["train"][args.label_column_name])
         label_to_id = {l: i for i, l in enumerate(label_list)}
 
     num_labels = len(label_list)
@@ -435,7 +420,7 @@ def main():
 
     def tokenize_and_align_labels(examples):
         tokenized_inputs = tokenizer(
-            examples[text_column_name],
+            examples[args.text_column_name],
             max_length=args.max_length,
             padding=padding,
             truncation=True,
@@ -444,7 +429,7 @@ def main():
         )
 
         labels = []
-        for i, label in enumerate(examples[label_column_name]):
+        for i, label in enumerate(examples[args.label_column_name]):
             word_ids = tokenized_inputs.word_ids(batch_index=i)
             previous_word_idx = None
             label_ids = []
@@ -477,8 +462,8 @@ def main():
             desc="Running tokenizer on dataset",
         )
 
-    train_dataset = processed_raw_datasets["train"]
-    eval_dataset = processed_raw_datasets["validation"]
+    train_dataset = datasets.concatenate_datasets([processed_raw_datasets["train"], processed_raw_datasets["dev"]])
+    test_dataset = processed_raw_datasets["test"]
 
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
@@ -500,7 +485,7 @@ def main():
     train_dataloader = DataLoader(
         train_dataset, shuffle=True, collate_fn=data_collator, batch_size=args.per_device_train_batch_size
     )
-    eval_dataloader = DataLoader(eval_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size)
+    eval_dataloader = DataLoader(test_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size)
 
     # Optimizer
     # Split weights in two groups, one with weight decay and the other not.

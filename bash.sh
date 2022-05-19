@@ -1,30 +1,33 @@
-
-curl https://api-inference.huggingface.co/models/xlm-roberta-large-finetuned-conll03-english \
-    -X POST \
-    -d '{"inputs": "Conventional computer “bits” have a value of either 0 or 1, but quantum bits"}' \
-    -H "Authorization: Bearer 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"
-
-
-
-
-
-
-CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/topic_classification_augmentation/run_summarization_no_trainer.py \
+CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
             --num_train_epochs 7 \
-            --train_file "/scratch/w/wluyliu/yananc/df_nerd_train.csv" \
-            --validation_file  "/scratch/w/wluyliu/yananc/df_nerd_test.csv" \
-            --model_name_or_path  t5-base \
-            --per_device_train_batch_size 32 \
-            --per_device_eval_batch_size 32 \
+            --model_name_or_path  t5-large \
+            --per_device_train_batch_size 8 \
+            --per_device_eval_batch_size 8 \
             --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd' \
-            --max_target_length 16 \
-            --max_source_length 64 \
-            --val_max_target_length 16 \
-            --preprocessing_num_workers 32 --overwrite_cache True \
+            --max_target_length 128 \
+            --max_source_length 128 \
+            --val_max_target_length 128 \
+            --preprocessing_num_workers 128 --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
-            --max_length 64 \
-            --model_type t5  --local_files_only
+            --debug_cnt -1 \
+            --model_type t5  --local_files_only --tags_column "tags_fine"
+
+
+
+
+CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+  --model_name_or_path roberta-large \
+  --dataset_config_name "supervised" \
+  --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine \
+  --text_column_name "tokens" \
+  --label_column_name "tags_fine" \
+  --num_train_epochs 7 \
+  --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
+   --local_files_only
+
+
+
 
 # fine: 'precision': 0.676235202035026, 'recall': 0.7096595342724548, 'f1': 0.6925443122952216
 # coarse: 

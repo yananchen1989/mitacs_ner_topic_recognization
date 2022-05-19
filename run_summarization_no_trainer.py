@@ -207,6 +207,15 @@ def parse_args():
         default="text2",
         help="The name of the column in the datasets containing the summaries (for summarization).",
     )
+
+    parser.add_argument(
+        "--tags_column",
+        type=str,
+        choices=['tags_coarse', 'tags_fine'],
+        help="The name of the column in the datasets containing the summaries (for summarization).",
+    )
+    
+
     parser.add_argument(
         "--use_slow_tokenizer",
         action="store_true",
@@ -434,7 +443,7 @@ def main():
         target_ll = []
         for i in range( min(len(example['tokens']), len(tokenizer.additional_special_tokens) )):
             source_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
-            target_ll.append(tokenizer.additional_special_tokens[i] + example['tags_fine'][i] )
+            target_ll.append(tokenizer.additional_special_tokens[i] + example[args.tags_column][i] )
 
         example['text1'] = ' '.join(source_ll)
         example['text2'] = ' '.join(target_ll)
