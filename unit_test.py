@@ -20,108 +20,79 @@ import datasets
 
 
 
+# file_list = {}
+# for dsn in ['dev','test','train']:
+#     with open("/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.txt".format(dsn), 'r') as f:
+#         file = f.readlines()
+
+#     split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
+
+#     with open('./few_nerd_supervised/{}.json'.format(dsn), 'w') as f:
+#         ix = 0
+#         for i, j in zip(split_ix[0:-1], split_ix[1:]):
+#             # print(ix)
+#             tokens = file[i:j]
+#             dic = {}
+#             dic['id'] = ix
+#             dic['tokens'] = [ii.strip().split('\t')[0] for ii in tokens if ii!='\n']
+#             dic['tags'] = [ii.strip().split('\t')[1] for ii in tokens if ii!='\n']
+#             json_string = json.dumps(dic)
+
+#             f.write(json_string+'\n')
+#     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
+
 file_list = {}
-for dsn in ['dev','test','train']
-    with open("/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.txt".format(dsn), 'r') as f:
-        file = f.readlines()
-
-    split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
-
-    with open('./few_nerd_supervised/{}.json'.format(dsn), 'w') as f:
-        ix = 0
-        for i, j in zip(split_ix[0:-1], split_ix[1:]):
-            # print(ix)
-            tokens = file[i:j]
-            dic = {}
-            dic['id'] = ix
-            dic['tokens'] = [ii.strip().split('\t')[0] for ii in tokens if ii!='\n']
-            dic['tags'] = [ii.strip().split('\t')[1] for ii in tokens if ii!='\n']
-            # dic['ner_tags_coarse'] = [ii.split('-')[0] if '-' in ii else 'O' for ii in dic['tags']  ]
-            # dic['ner_tags_fine'] = [ii.split() for ii in dic['tags']  ]
-            # dic['ner_tags_coarse_ix'] = [tag_ix_coarse[ii] for ii in dic['ner_tags_coarse'] ]
-            # dic['ner_tags_fine_ix'] = [tag_ix_map[ii] for ii in dic['tags']  ]
-            
-            json_string = json.dumps(dic)
-
-            f.write(json_string+'\n')
+for dsn in ['dev','test','train']:
     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
-
-
-dataset = load_dataset('json', data_files=file_list)
-
+raw_datasets = datasets.load_dataset('json', data_files=file_list)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-tag_map = {}
+tag_corarse = ['O']
+tag_fine = ['O']
 with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
     for line in f:
-        tokens = line.strip().split('\t')
-        tag = tokens[0]
-        tag_tokens = tokens[1].split('-')
-        if tag_tokens == ['O']:
+        if line.strip() == 'O':
             continue
-        if tag_tokens[1] == 'other':
-            tags_ = tag_tokens[0]
+
+        if line.strip().split('-')[0] not in tag_corarse:
+            tag_corarse.append(line.strip().split('-')[0])
+        
+        tag_fine.append(line.strip())
+
+
+tag_map_fine = {e:ix for ix, e in enumerate(tag_fine)}
+tag_map_coarse = {e:ix for ix, e in enumerate(tag_corarse)}
+
+def map_func(example):
+    tag_fine_ix = []
+    tag_coarse_ix = []
+    tags_coarse = []
+    for tag in example['tags']:
+        tag_fine_ix.append(tag_map_fine[tag])
+        if tag != 'O':
+            tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
+            tags_coarse.append(tag.split('-')[0])
         else:
-            tags_ = tag_tokens[1]
-        tag_map[tag] = tags_
+            tag_coarse_ix.append(tag_map_coarse[tag])
+            tags_coarse.append(tag)
+    example['tags_coarse'] = tags_coarse
+    example['tags_fine'] = example['tags']
+    example['tag_fine_ix'] = tag_fine_ix 
+    example['tag_coarse_ix'] = tag_coarse_ix
 
+    for ii, jj in example.items():
+        if ii == 'id':
+            continue
+        assert len(jj) == len(example['tokens']) 
 
-ix = 0
-ix_tag_map = {}
-with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
-    for line in f:
-        tokens = line.strip().split('\t')
-        ix_tag_map[ix] = tokens[0]
-        ix += 1
+    return example
 
-tag_ix_map = {v:k for k, v in ix_tag_map.items()}
-
-
-# tag_ix_fine = {'O':0}
-# tag_ix_coarse = {'O':0}
-
-# ix = 1
-# for k, w in ix_tag_map.items():
-#     if '-' in w:
-#         tag_fine = w.split('-')[1]
-#         if tag not in tag_ix_fine:
-#             tag_ix_fine[tag] = ix
-#             ix += 1
-#         else:
-#             continue
-
-# ix = 1
-# for k, w in ix_tag_map.items():
-#     if '-' in w:
-#         tag = w.split('-')[0]
-#         if tag not in tag_ix_coarse:
-#             tag_ix_coarse[tag] = ix
-#             ix += 1
-#         else:
-#             continue
-
-
-
-
-
+dataset_ix = raw_datasets.map(map_func, 
+                batched=False,
+                num_proc=128,
+                load_from_cache_file=False, remove_columns=['tags'],
+                desc = "running mapping ==>")
 
 def sep_trunk(df_tmp):
     results = []
@@ -133,48 +104,56 @@ def sep_trunk(df_tmp):
 
         list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
         mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
-        results.append((' ; '.join(mentions), tag_map[tag]))
+        results.append((' ; '.join(mentions), tag))
     return results
 
+def t5_format(example):
+    source_ll = []
+    target_ll = []
+    for i in range( min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )):
+        source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
+        target_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tags_fine'][i] )
+
+    example['text1'] = ' '.join(source_ll)
+    example['text2'] = ' '.join(target_ll)
+
+    return example
+    
+
+dataset_t5 = dataset_ix.map(t5_format, 
+                batched=False,
+                num_proc=128,
+                load_from_cache_file=False, 
+                desc = "running t5 mapping ==>")
 
 
-def get_ft(dsn):
-    path = "/scratch/w/wluyliu/yananc/few_nerd_supervised"
-    infos = []
-    buffer = []
-    with open("{}/{}.txt".format(path, dsn), 'r') as f:
-        for line in f:
-            if line =='\n':
-                
-                tokens = []
-                tags = []
-                ents = {}
 
-                for j in buffer:
-                    token = j.split('\t')[0]
-                    tag = j.split('\t')[1]
-                    tokens.append(token)
-                    tags.append(tag)
-            
-                sent = ' '.join(tokens)
 
-                buffer = []
-                # print('----------------------------------')
-                df_tmp = pd.DataFrame(zip(tokens, tags), columns=['tokens','tags'])
 
-                ner_tag = sep_trunk(df_tmp)
-                for ii in ner_tag:
-                    infos.append((sent , ii[1], ii[0]))
-                
-            else:
-                buffer.append(line.strip())
-    df_ft = pd.DataFrame(infos, columns=['sent', 'tag', 'span'])
-    df_ft.drop_duplicates(inplace=True)
-    return df_ft
 
-df_ft_train = get_ft('train')
-df_ft_dev = get_ft('dev')
-df_ft_test = get_ft('test')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
