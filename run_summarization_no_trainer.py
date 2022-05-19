@@ -198,7 +198,7 @@ def parse_args():
         default='t5-large',
         type=str,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
-        required=True,
+        # required=True,
     )
     parser.add_argument(
         "--config_name",
@@ -518,8 +518,6 @@ def main():
         return model_inputs
 
 
-
-
     dataset_ix = raw_datasets.map(map_func, 
                     batched=False,
                     num_proc=args.preprocessing_num_workers,
@@ -532,17 +530,21 @@ def main():
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
 
+
+
     processed_datasets = processed_datasets_t5.map(
         preprocess_function,
         batched=True,
         num_proc=args.preprocessing_num_workers,
-        remove_columns=raw_datasets["train"].column_names,
+        remove_columns=processed_datasets_t5["train"].column_names,
         load_from_cache_file=not args.overwrite_cache,
         desc="Running tokenizer ===>",
     )
 
-    train_dataset = processed_datasets["train"]
-    eval_dataset = processed_datasets["dev"]
+    # train_dataset = processed_datasets["train"]
+    # eval_dataset = processed_datasets["dev"]
+    train_dataset = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+    test_dataset = processed_datasets["test"]
     
 
     # Log a few random samples from the training set:
@@ -571,7 +573,7 @@ def main():
     train_dataloader = DataLoader(
         train_dataset, shuffle=True, collate_fn=data_collator, batch_size=args.per_device_train_batch_size
     )
-    eval_dataloader = DataLoader(eval_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size)
+    eval_dataloader = DataLoader(test_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size)
 
     # Optimizer
     # Split weights in two groups, one with weight decay and the other not.
