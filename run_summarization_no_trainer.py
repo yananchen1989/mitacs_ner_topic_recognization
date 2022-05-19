@@ -144,16 +144,16 @@ def parse_args():
     parser.add_argument(
         "--preprocessing_num_workers",
         type=int,
-        default=None,
+        default=128,
         help="The number of processes to use for the preprocessing.",
     )
     parser.add_argument(
-        "--overwrite_cache", type=bool, default=None, help="Overwrite the cached training and evaluation sets"
+        "--overwrite_cache", type=bool, default=True, help="Overwrite the cached training and evaluation sets"
     )
     parser.add_argument(
         "--max_target_length",
         type=int,
-        default=128,
+        default=256,
         help="The maximum total sequence length for target text after "
         "tokenization. Sequences longer than this will be truncated, sequences shorter will be padded."
         "during ``evaluate`` and ``predict``.",
@@ -161,7 +161,7 @@ def parse_args():
     parser.add_argument(
         "--val_max_target_length",
         type=int,
-        default=None,
+        default=256,
         help="The maximum total sequence length for validation "
         "target text after tokenization.Sequences longer than this will be truncated, sequences shorter will be "
         "padded. Will default to `max_target_length`.This argument is also used to override the ``max_length`` "
@@ -195,6 +195,7 @@ def parse_args():
     )
     parser.add_argument(
         "--model_name_or_path",
+        default='t5-large',
         type=str,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
         required=True,
@@ -214,13 +215,13 @@ def parse_args():
     parser.add_argument(
         "--text_column",
         type=str,
-        default=None,
+        default="text1",
         help="The name of the column in the datasets containing the full texts (for summarization).",
     )
     parser.add_argument(
         "--summary_column",
         type=str,
-        default=None,
+        default="text2",
         help="The name of the column in the datasets containing the summaries (for summarization).",
     )
     parser.add_argument(
@@ -229,12 +230,6 @@ def parse_args():
         help="If passed, will use a slow tokenizer (not backed by the 🤗 Tokenizers library).",
     )
 
-    parser.add_argument(
-        "--para",
-        type=str,
-        default=None,
-        choices=['tc','ss','pp']
-    )
 
     parser.add_argument(
         "--local_files_only",
@@ -244,13 +239,13 @@ def parse_args():
     parser.add_argument(
         "--per_device_train_batch_size",
         type=int,
-        default=8,
+        default=16,
         help="Batch size (per device) for the training dataloader.",
     )
     parser.add_argument(
         "--per_device_eval_batch_size",
         type=int,
-        default=8,
+        default=16,
         help="Batch size (per device) for the evaluation dataloader.",
     )
     parser.add_argument(
@@ -260,7 +255,7 @@ def parse_args():
         help="Initial learning rate (after the potential warmup period) to use.",
     )
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
-    parser.add_argument("--num_train_epochs", type=int, default=3, help="Total number of training epochs to perform.")
+    parser.add_argument("--num_train_epochs", type=int, default=7, help="Total number of training epochs to perform.")
     parser.add_argument(
         "--max_train_steps",
         type=int,
@@ -288,7 +283,7 @@ def parse_args():
     parser.add_argument(
         "--model_type",
         type=str,
-        default=None,
+        default='t5',
         help="Model type to use if training from scratch.",
         choices=MODEL_TYPES,
     )
