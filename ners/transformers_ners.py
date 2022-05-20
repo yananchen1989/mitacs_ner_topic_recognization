@@ -29,16 +29,47 @@ nlp_roberta = pipeline("ner", model=model_roberta, tokenizer=tokenizer_roberta, 
                     aggregation_strategy="simple", device=gpu)
 
 # # load off-the-shelf model : roberta-large fine-tuned on nerd-fine-grained
-# tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
-# model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
-# nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
-#                      aggregation_strategy="simple", device=gpu)
+tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
+model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
+nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
+                     aggregation_strategy="none", device=3)
 
 # # load off-the-shelf model : roberta-large fine-tuned on nerd-coarse-grained
 # tokenizer_roberta_nerd_coarse = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
 # model_roberta_nerd_coarse = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_coarse")
 # nlp_roberta_nerd_coarse = pipeline("ner", model=model_roberta_nerd_coarse, tokenizer=tokenizer_roberta_nerd_coarse,\
 #                     aggregation_strategy="simple", device=gpu)
+
+ix = random.sample(range(len(raw_datasets_['test'])), 1)[0]
+content = ' '.join(raw_datasets_['test'][ix]['tokens'])
+
+for token, tag in zip(raw_datasets_['test'][ix]['tokens'], raw_datasets_['test'][ix]['tags']):
+    if tag != 'O':
+        print(tag, '===>', token )
+print()
+
+
+ner_results = nlp_roberta_nerd_fine(content)
+
+if len(ner_results) > 0:
+
+def decode_result(ner_results):
+    df_tmp = pd.DataFrame(ner_results)
+    for tag in df_tmp['entity'].unique():
+        df_tmp_f = df_tmp.loc[df_tmp['entity']==tag]
+        list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
+
+        for df_tmp_f_ in list_of_df:
+            ner = tokenizer_roberta_nerd_fine.decode(tokenizer_roberta_nerd_fine.convert_tokens_to_ids(df_tmp_f_['word'].tolist()),\
+                                skip_special_tokens=True, clean_up_tokenization_spaces=True).strip()
+            print(tag, '===>', ner)
+
+
+
+
+
+
+
 
 
 def check_entity_ft(content, nlp_roberta, fmark):
