@@ -95,7 +95,7 @@ def map_func(example):
     # tag_coarse_ix = []
     tags_coarse = []
     for tag in example['tags']:
-        tag_fine_ix.append(tag_map_fine[tag])
+        # tag_fine_ix.append(tag_map_fine[tag])
         if tag != 'O':
             # tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
             tags_coarse.append(tag.split('-')[0])
