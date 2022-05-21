@@ -20,26 +20,26 @@ import datasets
 
 
 
-# file_list = {}
-# for dsn in ['dev','test','train']:
-#     with open("/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.txt".format(dsn), 'r') as f:
-#         file = f.readlines()
+file_list = {}
+for dsn in ['dev','test','train']:
+    with open("/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.txt".format(dsn), 'r') as f:
+        file = f.readlines()
 
-#     split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
+    split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
 
-#     with open('./few_nerd_supervised/{}.json'.format(dsn), 'w') as f:
-#         ix = 0
-#         for i, j in zip(split_ix[0:-1], split_ix[1:]):
-#             # print(ix)
-#             tokens = file[i:j]
-#             dic = {}
-#             dic['id'] = ix
-#             dic['tokens'] = [ii.strip().split('\t')[0] for ii in tokens if ii!='\n']
-#             dic['tags'] = [ii.strip().split('\t')[1] for ii in tokens if ii!='\n']
-#             json_string = json.dumps(dic)
+    with open('./few_nerd_supervised/{}.json'.format(dsn), 'w') as f:
+        ix = 0
+        for i, j in zip(split_ix[0:-1], split_ix[1:]):
+            # print(ix)
+            tokens = file[i:j]
+            dic = {}
+            dic['id'] = ix
+            dic['tokens'] = [ii.strip().split('\t')[0] for ii in tokens if ii!='\n']
+            dic['tags'] = [ii.strip().split('\t')[1] for ii in tokens if ii!='\n']
+            json_string = json.dumps(dic)
 
-#             f.write(json_string+'\n')
-#     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
+            f.write(json_string+'\n')
+    file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
 
 
 
@@ -49,6 +49,7 @@ import datasets
 
 
 from transformers import T5Tokenizer, AutoModelWithLMHead, pipeline
+import datasets
 tokenizer_t5 = T5Tokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 print(tokenizer_t5)
 
@@ -63,8 +64,8 @@ for dsn in ['dev','test','train']:
     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
 raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-
-tags_column = 'tags_fine'
+import multiprocessing
+tags_column = 'tags'
 def t5_format(example):
     source_ll = []
     target_ll = []
@@ -85,6 +86,16 @@ processed_datasets_t5 = raw_datasets.map(t5_format,
 
 
 
+
+
+
+
+
+
+
+
+
+
 import seqeval
 y_true = []
 y_pred = [] 
@@ -100,30 +111,13 @@ for ii in range(len(processed_datasets_t5['test'])):
                                             # repetition_penalty=1.2, num_return_sequences= 8,\
                                             clean_up_tokenization_spaces=True)
 
+
     ref = tokenizer_t5.decode(tokenizer_t5.encode(text2), clean_up_tokenization_spaces=True, skip_special_tokens=True)
     gen = result_t5[0]['generated_text']
 
+    if len(ref.split()) != len(gen.split()):
+        break 
     
-    gen_l = gen.split()
-    ref_l = ref.split()
-
-    if len(ref_l) > len(gen_l):
-        gen_l += ['O'] * (len(ref_l) - len(gen_l))
-    if len(ref_l) < len(gen_l):
-        gen_l = gen_l[:len(ref_l)]
-
-    assert len(gen_l) == len(ref_l)
-
-    y_true.append(ref_l)
-    y_pred.append(gen_l)
-
-
-    if ii % 128 == 0 and ii > 0:
-         
-        f1_score = seqeval.metrics.f1_score(y_true, y_pred)
-        precision = seqeval.metrics.precision_score(y_true, y_pred)
-        recall = seqeval.metrics.recall_score(y_true, y_pred)
-        print(precision, recall, f1_score)
 
 
 
@@ -149,70 +143,6 @@ for ii in range(len(processed_datasets_t5['test'])):
 
 
 
-df_ft_train_dev = pd.concat([df_ft_train, df_ft_dev])
-
-df_ft_train_dev.sample(frac=1).to_csv("/scratch/w/wluyliu/yananc/df_nerd_train.csv", index=False)
-df_ft_test.sample(frac=1).to_csv("/scratch/w/wluyliu/yananc/df_nerd_test.csv", index=False)
-
-
-from sklearn.model_selection import train_test_split
-import random
-
-df = pd.read_csv("/scratch/w/wluyliu/yananc/sentence_level_annotations.csv")
-
-df.drop_duplicates(['sent'], inplace=True)
-
-for ix, row in df.sample(10).iterrows():
-    print(row['sent'])
-    print(row['tag'])
-    print(row['span'])
-    print()
-
-
-tags = [i for i in df['tag'].unique() if i != '###']
-df['tag'] = df['tag'].map(lambda x: random.sample(tags, 1)[0] if x=='###' else x)
-df['text1'] = df['sent'] + ' ' + df['tag'].map(lambda x: "The {} is ".format(x))
-df['text2'] = df['span'].map(lambda x: x.replace(';', ' ; '))
-
-df_train, df_test = train_test_split(df[['text1', 'text2']], test_size=0.1)
-
-
-df_train.to_csv("/scratch/w/wluyliu/yananc/df_tqi_train.csv", index=False)
-df_test.to_csv("/scratch/w/wluyliu/yananc/df_tqi_test.csv", index=False)
-
-
-
-
-from transformers import T5Tokenizer, AutoModelWithLMHead, pipeline
-tokenizer_t5 = T5Tokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
-print(tokenizer_t5)
-
-t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_tqi/epoch_6")
-gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=0)
-
-df_ft_test = pd.read_csv("/scratch/w/wluyliu/yananc/df_nerd_test.csv")
-
-
-
-
-for ix, row in df_test.sample(100).iterrows():
-    result_t5 = gen_nlp(row['text1'], max_length=64, \
-                                            do_sample=False, \
-                                            # top_p=0.9, top_k=0, temperature=1.2,\
-                                            # repetition_penalty=1.2, num_return_sequences= 8,\
-                                            clean_up_tokenization_spaces=True)
-    print(row['text1'])
-    print('REFER ===>', row['text2'])
-    print('GEN ===>', result_t5[0]['generated_text'])
-    print()
-
-
-df = pd.read_csv("sentence_level_annotations.csv")
-for ix, row in df.sample(50).iterrows():
-    print(row['sent'])
-    print(row['tag'], '===>', row['span'])
-    # assert row['span'] in row['sent']
-    print()
 
 
 

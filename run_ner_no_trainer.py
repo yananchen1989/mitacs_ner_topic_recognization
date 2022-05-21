@@ -22,7 +22,7 @@ import argparse
 import logging,multiprocessing
 import math
 import os
-import random
+import random,string
 from pathlib import Path
 
 import datasets
@@ -316,7 +316,7 @@ def main():
         random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
         raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
 
-
+    raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
 
     column_names = raw_datasets["train"].column_names
     features = raw_datasets["train"].features
@@ -466,7 +466,7 @@ def main():
         )
 
     train_dataset = processed_raw_datasets['train']
-    test_dataset = datasets.concatenate_datasets(processed_raw_datasets["test"], processed_raw_datasets['dev'])
+    test_dataset = processed_raw_datasets["test"]
 
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
@@ -532,7 +532,9 @@ def main():
     )
 
     # Metrics
-    metric = datasets.load_metric("seqeval", cache_dir='/scratch/w/wluyliu/yananc/cache')
+    
+
+    metric = datasets.load_metric("seqeval", cache_dir='/scratch/w/wluyliu/yananc/cache', experiment_id=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
     # https://github.com/huggingface/datasets/blob/master/metrics/seqeval/seqeval.py
     def get_labels(predictions, references):
         # Transform predictions and references tensos to numpy arrays
@@ -570,8 +572,8 @@ def main():
             return {
                 "precision": results["overall_precision"],
                 "recall": results["overall_recall"],
-                "f1": results["overall_f1"],
-                "accuracy": results["overall_accuracy"],
+                "f1": results["overall_f1"]
+                # "accuracy": results["overall_accuracy"],
             }
 
     # Train!
@@ -638,7 +640,7 @@ def main():
             #     print('\n')
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
-        accelerator.print(f"epoch {epoch}:", eval_metric)
+        accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
 
         if args.push_to_hub and epoch < args.num_train_epochs - 1:
             accelerator.wait_for_everyone()

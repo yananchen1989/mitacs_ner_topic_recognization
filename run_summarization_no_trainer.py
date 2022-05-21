@@ -589,7 +589,7 @@ def main():
 
     # Metric
     # metric = datasets.load_metric('rouge', cache_dir='/scratch/w/wluyliu/yananc/cache')
-    metric_ner = datasets.load_metric('seqeval', cache_dir='/scratch/w/wluyliu/yananc/cache_gen_ner')
+    metric_ner = datasets.load_metric('seqeval', cache_dir='/scratch/w/wluyliu/yananc/cache_gen_ner', experiment_id=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
     # Train!
     total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 
@@ -689,10 +689,10 @@ def main():
                 "precision": results["overall_precision"],
                 "recall": results["overall_recall"],
                 "f1": results["overall_f1"],
-                "accuracy": results["overall_accuracy"],
+                # "accuracy": results["overall_accuracy"],
             }
         
-        print("ner report ==>", report)
+        print("ner report ==>", args.tags_column, args.debug_cnt, report)
         # accelerator.wait_for_everyone()
         # unwrapped_model = accelerator.unwrap_model(model)
 
