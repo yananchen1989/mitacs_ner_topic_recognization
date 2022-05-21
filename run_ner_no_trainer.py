@@ -465,7 +465,7 @@ def main():
             desc="Running tokenizer on dataset",
         )
 
-    train_dataset = processed_raw_datasets['train_dev']
+    train_dataset = processed_raw_datasets['train']
     test_dataset = processed_raw_datasets["test"]
 
     # Log a few random samples from the training set:

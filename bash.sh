@@ -1,40 +1,11 @@
-CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
-            --num_train_epochs 5 \
-            --model_name_or_path  t5-base \
-            --per_device_train_batch_size 32 \
-            --per_device_eval_batch_size 32 \
-            --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd' \
-            --max_target_length 128 \
-            --max_source_length 128 \
-            --val_max_target_length 128 \
-            --overwrite_cache True \
-            --text_column text1 \
-            --summary_column text2 \
-            --debug_cnt 7068 \
-            --model_type t5  --local_files_only --tags_column "tags_coarse"
-
-CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
-            --num_train_epochs 5 \
-            --model_name_or_path  t5-base \
-            --per_device_train_batch_size 32 \
-            --per_device_eval_batch_size 32 \
-            --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd' \
-            --max_target_length 128 \
-            --max_source_length 128 \
-            --val_max_target_length 128 \
-            --overwrite_cache True \
-            --text_column text1 \
-            --summary_column text2 \
-            --debug_cnt 1024 \
-            --model_type t5  --local_files_only --tags_column "tags_coarse"
 
 
-CUDA_VISIBLE_DEVICES=1 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
+CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
             --num_train_epochs 7 \
             --model_name_or_path  t5-base \
             --per_device_train_batch_size 32 \
             --per_device_eval_batch_size 32 \
-            --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd' \
+            --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd_test' \
             --max_target_length 128 \
             --max_source_length 128 \
             --val_max_target_length 128 \
@@ -43,6 +14,8 @@ CUDA_VISIBLE_DEVICES=1 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --summary_column text2 \
             --debug_cnt 1024 \
             --model_type t5  --local_files_only --tags_column "tags_coarse"
+
+
 
 
 
@@ -50,7 +23,7 @@ CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
           --dataset_name "few_nerd_local" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
-          --output_dir /scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine_fewshot \
+          --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_test' \
           --text_column_name "tokens" \
           --label_column_name "tags_coarse" \
           --num_train_epochs 7 \
@@ -59,10 +32,22 @@ CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
           --local_files_only
 
 
+CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+          --dataset_name "few_nerd_local" \
+          --model_name_or_path roberta-large \
+          --dataset_config_name "supervised" \
+          --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_test' \
+          --text_column_name "tokens" \
+          --label_column_name "tags_coarse" \
+          --num_train_epochs 7 \
+          --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
+          --debug_cnt  2048 \
+          --local_files_only
 
 
-# fine: 'precision': 0.676235202035026, 'recall': 0.7096595342724548, 'f1': 0.6925443122952216
-# coarse: 
+
+
+
 
 
 ############################  
