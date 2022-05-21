@@ -511,6 +511,7 @@ def main():
     )
 
     def postprocess_text(preds, labels):
+
         preds = [pred.strip() for pred in preds]
         labels = [label.strip() for label in labels]
 
@@ -519,6 +520,26 @@ def main():
         labels = ["\n".join(nltk.sent_tokenize(label)) for label in labels]
 
         return preds, labels
+
+    def postprocess_text_ner(decoded_preds, decoded_labels):
+        y_true = []
+        y_pred = [] 
+
+        for decoded_pred, decoded_label in zip(decoded_preds, decoded_labels):
+            pred_tokens = decoded_pred.split()
+            label_tokens = decoded_label.split()
+
+            if len(label_tokens) > len(pred_tokens):
+                pred_tokens += ['O'] * (len(label_tokens) - len(pred_tokens))
+            if len(label_tokens) < len(pred_tokens):
+                pred_tokens = pred_tokens[:len(label_tokens)]
+
+            assert len(pred_tokens) == len(label_tokens)
+            y_true.append(label_tokens)
+            y_pred.append(pred_tokens)
+        return y_pred, y_true
+
+
 
     train_dataloader = DataLoader(
         train_dataset, shuffle=True, collate_fn=data_collator, batch_size=args.per_device_train_batch_size
@@ -632,14 +653,14 @@ def main():
                 decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
                 decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
+
+                decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
+
+                metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
+
                 print("decoded_preds===>", decoded_preds)
                 print("decoded_labels===>", decoded_labels)
                 print('--------------\n')
-                decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
-
-                metric.add_batch(predictions=decoded_preds, references=decoded_labels)
-
-
         # result = metric.compute(use_stemmer=True)
         # # Extract a few results from ROUGE
         # result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
