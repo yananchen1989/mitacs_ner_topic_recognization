@@ -358,7 +358,8 @@ def main():
 
     if args.debug_cnt > 0: 
         for split in raw_datasets.keys():
-            raw_datasets[split] = raw_datasets[split].select(range(args.debug_cnt))
+            random_ixs = random.sample(range(len(raw_datasets[split])), args.debug_cnt)
+            raw_datasets[split] = raw_datasets[split].select(random_ixs)
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -585,8 +586,8 @@ def main():
     )
 
     # Metric
-    metric = datasets.load_metric('rouge', cache_dir='/scratch/w/wluyliu/yananc/cache')
-    metric_ner = datasets.load_metric('seqeval', cache_dir='/scratch/w/wluyliu/yananc/cache')
+    # metric = datasets.load_metric('rouge', cache_dir='/scratch/w/wluyliu/yananc/cache')
+    metric_ner = datasets.load_metric('seqeval', cache_dir='/scratch/w/wluyliu/yananc/cache_gen_ner')
     # Train!
     total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 
