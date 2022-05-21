@@ -474,7 +474,7 @@ def main():
                     load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
                     desc = "Running ix mapping ==>")
 
-    processed_datasets_t5 = raw_datasets.map(t5_format, 
+    processed_datasets_t5 = dataset_ix.map(t5_format, 
                     batched=False,
                     num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, 
@@ -564,7 +564,7 @@ def main():
 
     # Metric
     metric = datasets.load_metric('rouge', cache_dir='/scratch/w/wluyliu/yananc/cache')
-
+    metric_ner = datasets.load_metric('seqeval', cache_dir='/scratch/w/wluyliu/yananc/cache')
     # Train!
     total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 
@@ -632,6 +632,9 @@ def main():
                 decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
                 decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
+                print("decoded_preds===>", decoded_preds)
+                print("decoded_labels===>", decoded_labels)
+                print('--------------\n')
                 decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
 
                 metric.add_batch(predictions=decoded_preds, references=decoded_labels)
