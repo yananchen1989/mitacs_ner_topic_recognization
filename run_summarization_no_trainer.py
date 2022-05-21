@@ -357,8 +357,8 @@ def main():
 
 
     if args.debug_cnt > 0: 
-        for col in ['train', 'dev', 'test']:
-            raw_datasets[col] = raw_datasets[col].select(range(args.debug_cnt))   
+        for split in raw_datasets.keys():
+            raw_datasets[split] = raw_datasets[split].select(range(args.debug_cnt))
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
