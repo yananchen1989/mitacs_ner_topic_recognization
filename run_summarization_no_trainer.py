@@ -468,13 +468,13 @@ def main():
         return model_inputs
 
 
-    dataset_ix = raw_datasets.map(map_func, 
-                    batched=False,
-                    num_proc= multiprocessing.cpu_count() ,
-                    load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
-                    desc = "Running ix mapping ==>")
+    # dataset_ix = raw_datasets.map(map_func, 
+    #                 batched=False,
+    #                 num_proc= multiprocessing.cpu_count() ,
+    #                 load_from_cache_file=not args.overwrite_cache, remove_columns=['tags'],
+    #                 desc = "Running ix mapping ==>")
 
-    processed_datasets_t5 = dataset_ix.map(t5_format, 
+    processed_datasets_t5 = raw_datasets.map(t5_format, 
                     batched=False,
                     num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, 
