@@ -41,97 +41,89 @@ import datasets
 #             f.write(json_string+'\n')
 #     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
 
+
+
+# for each sample, write to each row
+
+
+
+
+from transformers import T5Tokenizer, AutoModelWithLMHead, pipeline
+tokenizer_t5 = T5Tokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
+print(tokenizer_t5)
+
+t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes_ner/t5_nerd/epoch_6")
+gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=0)
+
+
+
+
 file_list = {}
 for dsn in ['dev','test','train']:
     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
-raw_datasets = datasets.load_dataset('json', data_files=file_list)
+raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
-
-tag_corarse = ['O']
-tag_fine = ['O']
-with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
-    for line in f:
-        if line.strip() == 'O':
-            continue
-
-        if line.strip().split('-')[0] not in tag_corarse:
-            tag_corarse.append(line.strip().split('-')[0])
-        
-        tag_fine.append(line.strip())
-
-
-tag_map_fine = {e:ix for ix, e in enumerate(tag_fine)}
-tag_map_coarse = {e:ix for ix, e in enumerate(tag_corarse)}
-
-def map_func(example):
-    tag_fine_ix = []
-    tag_coarse_ix = []
-    tags_coarse = []
-    for tag in example['tags']:
-        tag_fine_ix.append(tag_map_fine[tag])
-        if tag != 'O':
-            tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
-            tags_coarse.append(tag.split('-')[0])
-        else:
-            tag_coarse_ix.append(tag_map_coarse[tag])
-            tags_coarse.append(tag)
-    example['tags_coarse'] = tags_coarse
-    example['tags_fine'] = example['tags']
-    example['tag_fine_ix'] = tag_fine_ix 
-    example['tag_coarse_ix'] = tag_coarse_ix
-
-    for ii, jj in example.items():
-        if ii == 'id':
-            continue
-        assert len(jj) == len(example['tokens']) 
-
-    return example
-
-dataset_ix = raw_datasets.map(map_func, 
-                batched=False,
-                num_proc=128,
-                load_from_cache_file=False, remove_columns=['tags'],
-                desc = "running mapping ==>")
-
-def sep_trunk(df_tmp):
-    results = []
-    for tag in df_tmp['tags'].unique():
-        if tag == 'O':
-            continue 
-
-        df_tmp_f = df_tmp.loc[df_tmp['tags']==tag]
-
-        list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
-        mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
-        results.append((' ; '.join(mentions), tag))
-    return results
-
+tags_column = 'tags_fine'
 def t5_format(example):
     source_ll = []
     target_ll = []
     for i in range( min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )):
         source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
-        target_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tags_fine'][i] )
+        target_ll.append(tokenizer_t5.additional_special_tokens[i] + example[tags_column][i] )
 
     example['text1'] = ' '.join(source_ll)
     example['text2'] = ' '.join(target_ll)
 
     return example
-    
 
-dataset_t5 = dataset_ix.map(t5_format, 
+processed_datasets_t5 = raw_datasets.map(t5_format, 
                 batched=False,
-                num_proc=128,
-                load_from_cache_file=False, 
-                desc = "running t5 mapping ==>")
+                num_proc= multiprocessing.cpu_count() ,
+                load_from_cache_file= False, 
+                desc = "Running t5 mapping ==>")
 
 
 
+import seqeval
+y_true = []
+y_pred = [] 
+for ii in range(len(processed_datasets_t5['test'])):
+
+    text1 = processed_datasets_t5['test'][ii]['text1']
+    text2 = processed_datasets_t5['test'][ii]['text2']
 
 
+    result_t5 = gen_nlp(text1, max_length=512, \
+                                            do_sample=False, \
+                                            # top_p=0.9, top_k=0, temperature=1.2,\
+                                            # repetition_penalty=1.2, num_return_sequences= 8,\
+                                            clean_up_tokenization_spaces=True)
+
+    ref = tokenizer_t5.decode(tokenizer_t5.encode(text2), clean_up_tokenization_spaces=True, skip_special_tokens=True)
+    gen = result_t5[0]['generated_text']
+
+    
+    gen_l = gen.split()
+    ref_l = ref.split()
+
+    if len(ref_l) > len(gen_l):
+        gen_l += ['O'] * (len(ref_l) - len(gen_l))
+    if len(ref_l) < len(gen_l):
+        gen_l = gen_l[:len(ref_l)]
+
+    assert len(gen_l) == len(ref_l)
+
+    y_true.append(ref_l)
+    y_pred.append(gen_l)
 
 
+    if ii % 128 == 0 and ii > 0:
+         
+        f1_score = seqeval.metrics.f1_score(y_true, y_pred)
+        precision = seqeval.metrics.precision_score(y_true, y_pred)
+        recall = seqeval.metrics.recall_score(y_true, y_pred)
+        print(precision, recall, f1_score)
 
 
 

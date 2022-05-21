@@ -50,7 +50,7 @@ from transformers import (
 )
 from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
-# from utils.process_func import * 
+from utils.process_func import * 
 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/token-classification/requirements.txt")
@@ -294,12 +294,12 @@ def main():
             file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
         raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-        # raw_datasets = raw_datasets_.map(map_func, 
-        #         batched=False,
-        #         num_proc= multiprocessing.cpu_count() ,
-        #         load_from_cache_file= False, remove_columns=['tags'],
-        #         desc = "Running ix mapping ==>")
-        # ['id', 'tokens', 'tags_coarse', 'tags_fine', 'tag_fine_ix', 'tag_coarse_ix']
+        raw_datasets = raw_datasets_.map(map_func, 
+                batched=False,
+                num_proc= multiprocessing.cpu_count() ,
+                load_from_cache_file= False, remove_columns=['tags'],
+                desc = "Running ix mapping ==>")
+        ['id', 'tokens', 'tags_coarse', 'tags_fine', 'tag_fine_ix', 'tag_coarse_ix']
     else:
         data_files = {}
         if args.train_file is not None:
