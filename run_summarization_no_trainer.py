@@ -498,7 +498,7 @@ def main():
         processed_datasets['train'] = processed_datasets['train'].select(random_ixs)
     
     train_dataset =  processed_datasets['train']
-    test_dataset = processed_datasets["test"]
+    test_dataset = datasets.concatenate_datasets(processed_datasets["test"], processed_datasets['dev'])
     
 
     # Log a few random samples from the training set:

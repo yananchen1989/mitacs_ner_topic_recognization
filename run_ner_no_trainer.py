@@ -466,7 +466,7 @@ def main():
         )
 
     train_dataset = processed_raw_datasets['train']
-    test_dataset = processed_raw_datasets["test"]
+    test_dataset = datasets.concatenate_datasets(processed_raw_datasets["test"], processed_raw_datasets['dev'])
 
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
