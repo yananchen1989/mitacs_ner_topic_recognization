@@ -660,9 +660,9 @@ def main():
                 metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
 
 
-                print("decoded_preds===>", decoded_preds)
-                print("decoded_labels===>", decoded_labels)
-                print('--------------\n')
+                # print("decoded_preds===>", decoded_preds)
+                # print("decoded_labels===>", decoded_labels)
+                # print('--------------\n')
         # result = metric.compute(use_stemmer=True)
         # # Extract a few results from ROUGE
         # result = {key: value.mid.fmeasure * 100 for key, value in result.items()}

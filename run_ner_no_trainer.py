@@ -309,7 +309,7 @@ def main():
         extension = args.train_file.split(".")[-1]
         raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
-    if args.debug:
+    if args.debug_cnt > 0:
         for split in raw_datasets.keys():
             raw_datasets[split] = raw_datasets[split].select(range(args.debug_cnt))
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
