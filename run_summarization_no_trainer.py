@@ -478,7 +478,11 @@ def main():
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
 
-
+    if args.debug_cnt > 0:     
+        # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+        random_ixs = random.sample(range(len(processed_datasets_t5['train'])), args.debug_cnt)
+        processed_datasets_t5['train'] = processed_datasets_t5['train'].select(random_ixs)
+    processed_datasets_t5['test'] = datasets.concatenate_datasets([processed_datasets_t5["test"], processed_datasets_t5["dev"]])
 
     processed_datasets = processed_datasets_t5.map(
         preprocess_function,
@@ -492,13 +496,9 @@ def main():
     # train_dataset = processed_datasets["train"]
     # eval_dataset = processed_datasets["dev"]
 
-    if args.debug_cnt > 0:     
-        # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
-        random_ixs = random.sample(range(len(processed_datasets['train'])), args.debug_cnt)
-        processed_datasets['train'] = processed_datasets['train'].select(random_ixs)
-    
+
     train_dataset =  processed_datasets['train']
-    test_dataset = datasets.concatenate_datasets(processed_datasets["test"], processed_datasets['dev'])
+    test_dataset =  processed_datasets["test"]
     
 
     # Log a few random samples from the training set:
