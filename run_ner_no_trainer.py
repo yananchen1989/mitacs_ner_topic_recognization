@@ -292,14 +292,14 @@ def main():
         file_list = {}
         for dsn in ['dev','test','train']:
             file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
-        raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+        raw_datasets_ = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
         raw_datasets = raw_datasets_.map(map_func, 
                 batched=False,
                 num_proc= multiprocessing.cpu_count() ,
                 load_from_cache_file= False, remove_columns=['tags'],
                 desc = "Running ix mapping ==>")
-        ['id', 'tokens', 'tags_coarse', 'tags_fine', 'tag_fine_ix', 'tag_coarse_ix']
+        # ['id', 'tokens', 'tags_coarse', 'tags_fine']
     else:
         data_files = {}
         if args.train_file is not None:
