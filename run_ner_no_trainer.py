@@ -205,11 +205,11 @@ def parse_args():
         choices=["ner", "pos", "chunk"],
         help="The name of the task.",
     )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Activate debug mode and run training only with a subset of data.",
-    )
+    # parser.add_argument(
+    #     "--debug",
+    #     action="store_true",
+    #     help="Activate debug mode and run training only with a subset of data.",
+    # )
 
     parser.add_argument("--push_to_hub", action="store_true", help="Whether or not to push the model to the Hub.")
     parser.add_argument(
@@ -309,9 +309,11 @@ def main():
         extension = args.train_file.split(".")[-1]
         raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
+
     if args.debug_cnt > 0:
         for split in raw_datasets.keys():
-            raw_datasets[split] = raw_datasets[split].select(range(args.debug_cnt))
+            random_ixs = random.sample(range(len(raw_datasets[split])), args.debug_cnt)
+            raw_datasets[split] = raw_datasets[split].select(random_ixs)
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
