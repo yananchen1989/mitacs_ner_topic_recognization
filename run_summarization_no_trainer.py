@@ -356,10 +356,6 @@ def main():
     raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
-    if args.debug_cnt > 0: 
-        for split in raw_datasets.keys():
-            random_ixs = random.sample(range(len(raw_datasets[split])), args.debug_cnt)
-            raw_datasets[split] = raw_datasets[split].select(random_ixs)
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -495,7 +491,13 @@ def main():
 
     # train_dataset = processed_datasets["train"]
     # eval_dataset = processed_datasets["dev"]
-    train_dataset = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+
+    if args.debug_cnt > 0:     
+        # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+        random_ixs = random.sample(range(len(processed_datasets['train'])), args.debug_cnt)
+        processed_datasets['train'] = processed_datasets['train'].select(random_ixs)
+    
+    train_dataset =  processed_datasets['train']
     test_dataset = processed_datasets["test"]
     
 

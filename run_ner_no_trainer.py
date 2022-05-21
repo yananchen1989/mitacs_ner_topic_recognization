@@ -310,12 +310,12 @@ def main():
         raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
 
-    if args.debug_cnt > 0:
-        for split in raw_datasets.keys():
-            random_ixs = random.sample(range(len(raw_datasets[split])), args.debug_cnt)
-            raw_datasets[split] = raw_datasets[split].select(random_ixs)
-    # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
-    # https://huggingface.co/docs/datasets/loading_datasets.html.
+    if args.debug_cnt > 0:     
+        # raw_datasets['train_dev'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["dev"]])
+        
+        random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
+        raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
+
 
 
     column_names = raw_datasets["train"].column_names
@@ -465,7 +465,7 @@ def main():
             desc="Running tokenizer on dataset",
         )
 
-    train_dataset = datasets.concatenate_datasets([processed_raw_datasets["train"], processed_raw_datasets["dev"]])
+    train_dataset = processed_raw_datasets['train_dev']
     test_dataset = processed_raw_datasets["test"]
 
     # Log a few random samples from the training set:

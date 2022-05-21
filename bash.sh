@@ -30,7 +30,7 @@ CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
 
 
 CUDA_VISIBLE_DEVICES=1 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
-            --num_train_epochs 5 \
+            --num_train_epochs 7 \
             --model_name_or_path  t5-base \
             --per_device_train_batch_size 32 \
             --per_device_eval_batch_size 32 \
