@@ -357,7 +357,8 @@ def main():
 
 
     if args.debug_cnt > 0: 
-        raw_datasets['train'] = raw_datasets['train'].select(range(args.debug_cnt))   
+        for col in ['train', 'dev', 'test']:
+            raw_datasets[col] = raw_datasets[col].select(range(args.debug_cnt))   
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -658,6 +659,7 @@ def main():
 
                 metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
 
+
                 print("decoded_preds===>", decoded_preds)
                 print("decoded_labels===>", decoded_labels)
                 print('--------------\n')
@@ -667,13 +669,33 @@ def main():
         # result = {k: round(v, 4) for k, v in result.items()}
         # logger.info(result)
 
-    
-        accelerator.wait_for_everyone()
-        unwrapped_model = accelerator.unwrap_model(model)
+        return_entity_level_metrics = False
+        results = metric_ner.compute()
+        # if return_entity_level_metrics:
+        #     # Unpack nested dictionaries
+        #     final_results = {}
+        #     for key, value in results.items():
+        #         if isinstance(value, dict):
+        #             for n, v in value.items():
+        #                 final_results[f"{key}_{n}"] = v
+        #         else:
+        #             final_results[key] = value
+        #     return final_results
+        # else:
+        report = {
+                "precision": results["overall_precision"],
+                "recall": results["overall_recall"],
+                "f1": results["overall_f1"],
+                "accuracy": results["overall_accuracy"],
+            }
+        
+        print("ner report ==>", report)
+        # accelerator.wait_for_everyone()
+        # unwrapped_model = accelerator.unwrap_model(model)
 
-        epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
-        os.makedirs(epoch_output_dir, exist_ok=True)
-        unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
+        # epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
+        # os.makedirs(epoch_output_dir, exist_ok=True)
+        # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
 
 
 
