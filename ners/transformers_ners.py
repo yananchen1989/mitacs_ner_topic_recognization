@@ -1,6 +1,6 @@
 import json,random,string
 import pandas as pd 
-
+import numpy as np
 # huggingface transformers
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
@@ -17,7 +17,6 @@ if gpus:
   except RuntimeError as e:
     print(e)
 
-gpu = 0
 # conll2003
 # tokenizer_bert = AutoTokenizer.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # model_bert = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER", cache_dir='/scratch/w/wluyliu/yananc/cache')
@@ -29,8 +28,8 @@ nlp_roberta = pipeline("ner", model=model_roberta, tokenizer=tokenizer_roberta, 
                     aggregation_strategy="simple", device=gpu)
 
 # # load off-the-shelf model : roberta-large fine-tuned on nerd-fine-grained
-tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
-model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/roberta_nerd_fine")
+tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained("/scratch/w/wluyliu/yananc/finetunes_ner/roberta_nerd_fine")
+model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained("/scratch/w/wluyliu/yananc/finetunes_ner/roberta_nerd_coarse")
 nlp_roberta_nerd_fine = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
                      aggregation_strategy="none", device=3)
 
