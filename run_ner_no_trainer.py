@@ -283,10 +283,29 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    if args.dataset_name is not None and args.dataset_name != 'few_nerd_local':
-        # Downloading and loading a dataset from the hub.
-        raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name, \
-            cache_dir='/scratch/w/wluyliu/yananc/cache')
+    # if args.dataset_name is not None and args.dataset_name != 'few_nerd_local':
+    #     # Downloading and loading a dataset from the hub.
+    #     raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name, \
+    #         cache_dir='/scratch/w/wluyliu/yananc/cache')
+
+
+    if args.dataset_name == 'tqi':
+        file_list={}
+        file_list['train_test'] = "/scratch/w/wluyliu/yananc/sentence_level_tokens.json"
+        raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+
+
+        ids = list(set([ii['id'] for ii in raw_datasets['train_test']]))
+        random.shuffle(ids)
+        split_ix = int(len(ids)*0.8)
+        ids_train = ids[:split_ix]
+        ids_test = ids[split_ix:]
+
+
+        raw_datasets['train'] = raw_datasets.filter(lambda example: example['id'] in ids_train)['train_test']
+        raw_datasets['test'] = raw_datasets.filter(lambda example: example['id'] in ids_test)['train_test']
+
+
 
     elif args.dataset_name == 'few_nerd_local':
         file_list = {}
@@ -300,14 +319,14 @@ def main():
                 load_from_cache_file= False, remove_columns=['tags'],
                 desc = "Running ix mapping ==>")
         # ['id', 'tokens', 'tags_coarse', 'tags_fine']
-    else:
-        data_files = {}
-        if args.train_file is not None:
-            data_files["train"] = args.train_file
-        if args.validation_file is not None:
-            data_files["dev"] = args.validation_file
-        extension = args.train_file.split(".")[-1]
-        raw_datasets = load_dataset(extension, data_files=data_files)
+    # else:
+    #     data_files = {}
+    #     if args.train_file is not None:
+    #         data_files["train"] = args.train_file
+    #     if args.validation_file is not None:
+    #         data_files["dev"] = args.validation_file
+    #     extension = args.train_file.split(".")[-1]
+    #     raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
 
     if args.debug_cnt > 0:     
@@ -316,7 +335,8 @@ def main():
         random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
         raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
 
-    raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
+    if 'dev' in raw_datasets.keys()
+        raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
 
     column_names = raw_datasets["train"].column_names
     features = raw_datasets["train"].features
