@@ -296,9 +296,15 @@ def main():
 
 
         ids = list(set([ii['id'] for ii in raw_datasets['train_test']]))
+
         random.shuffle(ids)
         split_ix = int(len(ids)*0.8)
-        ids_train = ids[:split_ix]
+        if args.debug_cnt > 0: 
+            assert args.debug_cnt < split_ix
+            ids_train = ids[:args.debug_cnt]
+        else:
+            ids_train = ids[:split_ix]
+            
         ids_test = ids[split_ix:]
 
 
@@ -329,11 +335,11 @@ def main():
     #     raw_datasets = load_dataset(extension, data_files=data_files)
     # Trim a number of training examples
 
-    if args.debug_cnt > 0:     
-        # raw_datasets['train_dev'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["dev"]])
-        
-        random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
-        raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
+        if args.debug_cnt > 0:     
+            # raw_datasets['train_dev'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["dev"]])
+            
+            random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
+            raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
 
     if 'dev' in raw_datasets.keys():
         raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
