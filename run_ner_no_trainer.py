@@ -335,7 +335,7 @@ def main():
         random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
         raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
 
-    if 'dev' in raw_datasets.keys()
+    if 'dev' in raw_datasets.keys():
         raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
 
     column_names = raw_datasets["train"].column_names
