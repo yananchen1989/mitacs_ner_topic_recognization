@@ -1,3 +1,2 @@
-# nlp4quantumpapers
+# mitacs project: NER and Topic recognization
 
-Natural language understanding of quantum computing academic papers from arxiv. 
