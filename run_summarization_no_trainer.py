@@ -654,13 +654,13 @@ def main():
                     labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
                 if isinstance(generated_tokens, tuple):
                     generated_tokens = generated_tokens[0]
-                decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
-                decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+                decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=False)
+                decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=False)
 
                 print("decoded_preds===>", decoded_preds)
                 print("decoded_labels===>", decoded_labels)
                 print('--------------\n')
-                
+
 
                 decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
 
