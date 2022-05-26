@@ -673,10 +673,12 @@ def main():
 
                 decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
 
-                print("decoded_preds===>", decoded_preds)
-                print("decoded_labels===>", decoded_labels)
-                print('--------------\n')
-                
+                if step < 8:
+                    print("epoch: {} step: {}".format(epoch, step))
+                    print("decoded_preds===>", decoded_preds)
+                    print("decoded_labels===>", decoded_labels)
+                    print('--------------\n')
+
                 metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
 
 
