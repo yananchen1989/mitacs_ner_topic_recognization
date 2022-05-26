@@ -525,20 +525,31 @@ def main():
 
         return preds, labels
 
+
+
+
+
     def postprocess_text_ner(decoded_preds, decoded_labels):
         y_true = []
         y_pred = [] 
 
         for decoded_pred, decoded_label in zip(decoded_preds, decoded_labels):
-            pred_tokens = decoded_pred.split()
-            label_tokens = decoded_label.split()
+            decoded_pred = decoded_pred.replace('</s>','').replace('<pad>', '')
+            decoded_label = decoded_label.replace('</s>','').replace('<pad>', '')
+            label_tokens, pred_tokens = [], []
+            for i, j in zip(tokenizer.additional_special_tokens[:-1], tokenizer.additional_special_tokens[1:]):
+                if i not in decoded_label :
+                    continue
 
-            if len(label_tokens) > len(pred_tokens):
-                pred_tokens += ['O'] * (len(label_tokens) - len(pred_tokens))
-            if len(label_tokens) < len(pred_tokens):
-                pred_tokens = pred_tokens[:len(label_tokens)]
+                ref_ner = decoded_label.split(i)[1].split(j)[0].strip()
+                if i in decoded_pred:
+                    gen_ner = decoded_pred.split(i)[1].split(j)[0].strip()
+                else:
+                    gen_ner = 'O'
+                label_tokens.append(ref_ner)
+                pred_tokens.append(gen_ner)
 
-            assert len(pred_tokens) == len(label_tokens)
+            assert len(label_tokens) == len(pred_tokens)
             y_true.append(label_tokens)
             y_pred.append(pred_tokens)
         return y_pred, y_true
