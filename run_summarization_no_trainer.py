@@ -657,15 +657,17 @@ def main():
                 decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
                 decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
+                print("decoded_preds===>", decoded_preds)
+                print("decoded_labels===>", decoded_labels)
+                print('--------------\n')
+                
 
                 decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
 
                 metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
 
 
-                # print("decoded_preds===>", decoded_preds)
-                # print("decoded_labels===>", decoded_labels)
-                # print('--------------\n')
+
         # result = metric.compute(use_stemmer=True)
         # # Extract a few results from ROUGE
         # result = {key: value.mid.fmeasure * 100 for key, value in result.items()}

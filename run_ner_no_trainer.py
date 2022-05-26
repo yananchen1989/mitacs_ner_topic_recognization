@@ -304,9 +304,8 @@ def main():
             ids_train = ids[:args.debug_cnt]
         else:
             ids_train = ids[:split_ix]
-            
-        ids_test = ids[split_ix:]
 
+        ids_test = ids[split_ix:]
 
         raw_datasets['train'] = raw_datasets.filter(lambda example: example['id'] in ids_train)['train_test']
         raw_datasets['test'] = raw_datasets.filter(lambda example: example['id'] in ids_test)['train_test']
