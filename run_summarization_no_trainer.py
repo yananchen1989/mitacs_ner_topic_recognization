@@ -538,7 +538,7 @@ def main():
             decoded_label = decoded_label.replace('</s>','').replace('<pad>', '')
             label_tokens, pred_tokens = [], []
             for i, j in zip(tokenizer.additional_special_tokens[:-1], tokenizer.additional_special_tokens[1:]):
-                if i not in decoded_label :
+                if i not in decoded_label or decoded_label.endswith(i):
                     continue
 
                 ref_ner = decoded_label.split(i)[1].split(j)[0].strip()
