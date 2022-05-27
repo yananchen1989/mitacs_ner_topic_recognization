@@ -542,8 +542,14 @@ def main():
                     continue
 
                 ref_ner = decoded_label.split(i)[1].split(j)[0].strip()
+                if not ref_ner:
+                    print("blank==>ref_ner")
+                    ref_ner = 'O'
                 if i in decoded_pred:
                     gen_ner = decoded_pred.split(i)[1].split(j)[0].strip()
+                    if not gen_ner:
+                        gen_ner = 'O'
+                        print("blank==>gen_ner")
                 else:
                     gen_ner = 'O'
                 label_tokens.append(ref_ner)

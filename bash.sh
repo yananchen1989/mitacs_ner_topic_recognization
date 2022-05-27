@@ -26,7 +26,7 @@ CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
-            --debug_cnt 20480  \
+            --debug_cnt -1  \
             --model_type t5  --local_files_only --tags_column tags_coarse
 
 
@@ -46,6 +46,10 @@ CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
 
 
 sbatch submit_t5_nerd.slurm 1024 tags_coarse
+sbatch submit_t5_nerd.slurm 2048 tags_coarse
+sbatch submit_t5_nerd.slurm -1 tags_coarse
+
+
 
 
 
