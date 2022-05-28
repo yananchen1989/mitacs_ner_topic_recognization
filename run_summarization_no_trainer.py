@@ -649,6 +649,9 @@ def main():
             "max_length": args.val_max_target_length if args is not None else config.max_length,
             "num_beams": args.num_beams,
         }
+
+        decoded_preds_all = []
+        decoded_labels_all = []
         for step, batch in enumerate(eval_dataloader):
             with torch.no_grad():
                 generated_tokens = accelerator.unwrap_model(model).generate(
@@ -676,18 +679,13 @@ def main():
                 decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=False)
                 decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=False)
 
+                decoded_preds_all.extend(decoded_preds)
+                decoded_labels_all.extend(decoded_labels)
 
+        assert len(decoded_preds_all) == len(decoded_labels_all)
+        decoded_preds_, decoded_labels_ = postprocess_text_ner(decoded_preds_all, decoded_labels_all)
 
-
-                decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
-
-                # if step < 4:
-                #     print("epoch: {} step: {}".format(epoch, step))
-                #     print("decoded_preds===>", decoded_preds)
-                #     print("decoded_labels===>", decoded_labels)
-                #     print('--------------\n')
-
-                metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
+        metric_ner.add_batch(predictions=decoded_preds_, references=decoded_labels_)
 
 
 
