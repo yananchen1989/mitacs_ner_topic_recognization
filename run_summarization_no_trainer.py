@@ -684,7 +684,7 @@ def main():
 
         assert len(decoded_preds_all) == len(decoded_labels_all)
         decoded_preds_, decoded_labels_ = postprocess_text_ner(decoded_preds_all, decoded_labels_all)
-
+        print(random.sample(list(zip(decoded_labels_, decoded_preds_)), 32))
         metric_ner.add_batch(predictions=decoded_preds_, references=decoded_labels_)
 
 
