@@ -543,15 +543,15 @@ def main():
 
                 ref_ner = decoded_label.split(i)[1].split(j)[0].strip()
                 if not ref_ner:
-                    print(i, j, "===>", decoded_label)
-                    print("blank==>ref_ner")
+                    # print(i, j, "===>", decoded_label)
+                    # print("blank==>ref_ner")
                     ref_ner = 'O'
                 if i in decoded_pred:
                     gen_ner = decoded_pred.split(i)[1].split(j)[0].strip()
                     if not gen_ner:
-                        print(i, j, "===>", decoded_pred)
+                        # print(i, j, "===>", decoded_pred)
                         gen_ner = 'O'
-                        print("blank==>gen_ner")
+                        # print("blank==>gen_ner")
                 else:
                     gen_ner = 'O'
                 label_tokens.append(ref_ner)
@@ -681,11 +681,11 @@ def main():
 
                 decoded_preds, decoded_labels = postprocess_text_ner(decoded_preds, decoded_labels)
 
-                if step < 8:
-                    print("epoch: {} step: {}".format(epoch, step))
-                    print("decoded_preds===>", decoded_preds)
-                    print("decoded_labels===>", decoded_labels)
-                    print('--------------\n')
+                # if step < 4:
+                #     print("epoch: {} step: {}".format(epoch, step))
+                #     print("decoded_preds===>", decoded_preds)
+                #     print("decoded_labels===>", decoded_labels)
+                #     print('--------------\n')
 
                 metric_ner.add_batch(predictions=decoded_preds, references=decoded_labels)
 
