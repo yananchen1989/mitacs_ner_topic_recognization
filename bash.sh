@@ -15,7 +15,7 @@ CUDA_VISIBLE_DEVICES=0  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
 
 
 
-CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
+CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
             --num_train_epochs 12 \
             --model_name_or_path  t5-large \
             --per_device_train_batch_size 8   --per_device_eval_batch_size 512 \
@@ -26,28 +26,15 @@ CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
-            --debug_cnt 1024  \
+            --debug_cnt 2048  \
             --model_type t5  --local_files_only --tags_column tags_coarse
 
 
 
-sbatch submit_t5_nerd.slurm 1024 tags_coarse;
-sbatch submit_t5_nerd.slurm 2048 tags_coarse;
-sbatch submit_t5_nerd.slurm -1   tags_coarse;
+sbatch submit_t5_nerd.slurm 1024 tags_fine;
+sbatch submit_t5_nerd.slurm 2048 tags_fine;
+sbatch submit_t5_nerd.slurm -1   tags_fine;
 
-
-
-# t5-base
-0 tags_coarse 2048 {'precision': 0.4344045480566138, 'recall': 0.30484772505315944, 'f1': 0.35827346913856606}
-
-0 tags_coarse 1024 {'precision': 0.0007484482602879376, 'recall': 0.0012051781100867866, 'f1': 0.0009234247382303149}
-
-
-
-
-
-# t5-large 
-0 tags_coarse 2048 {'precision': 0.5266319243389307, 'recall': 0.47245752439793043, 'f1': 0.4980759541733905}
 
 
 

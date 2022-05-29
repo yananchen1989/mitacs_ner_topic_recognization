@@ -715,7 +715,7 @@ def main():
                 # "accuracy": results["overall_accuracy"],
             }
         
-        print("t5_ner_report ==>",  epoch, args.tags_column, args.debug_cnt, report)
+        print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
         # accelerator.wait_for_everyone()
         # unwrapped_model = accelerator.unwrap_model(model)
 
