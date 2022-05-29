@@ -716,12 +716,12 @@ def main():
             }
         
         print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
-        # accelerator.wait_for_everyone()
-        # unwrapped_model = accelerator.unwrap_model(model)
+        accelerator.wait_for_everyone()
+        unwrapped_model = accelerator.unwrap_model(model)
 
-        # epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
-        # os.makedirs(epoch_output_dir, exist_ok=True)
-        # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
+        epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
+        os.makedirs(epoch_output_dir, exist_ok=True)
+        unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
 
 
 
