@@ -151,6 +151,14 @@ def parse_args():
         action="store_true",
     )
     parser.add_argument(
+        "--lstm",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--crf",
+        action="store_true",
+    )
+    parser.add_argument(
         "--learning_rate",
         type=float,
         default=1e-5,
@@ -378,7 +386,7 @@ def main():
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name, num_labels=num_labels, \
             cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
-    elif args.model_name_or_path and not args.model_name_or_path.endswith('-crf'):
+    elif args.model_name_or_path:
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
                 cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     else:
@@ -400,13 +408,14 @@ def main():
             cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
 
     if args.model_name_or_path:
-        if args.model_name_or_path == 'bert-large-uncased-crf':
-            model = BertCRF.from_pretrained('bert-large-uncased', num_labels=num_labels, \
-                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
-        elif args.model_name_or_path == 'bert-large-uncased-lstm-crf':
-            model = BertLstmCRF.from_pretrained('bert-large-uncased', num_labels=num_labels, \
-                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
         
+        if args.crf and not args.lstm:
+            model = BertCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
+                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+        elif args.crf and args.lstm:
+            model = BertLstmCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
+                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+
         else:
             model = AutoModelForTokenClassification.from_pretrained(
                 args.model_name_or_path,
