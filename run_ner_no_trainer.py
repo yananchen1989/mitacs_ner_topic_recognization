@@ -51,6 +51,7 @@ from transformers import (
 from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
 from utils.process_func import * 
+from utils.crf_bert import * 
 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/token-classification/requirements.txt")
@@ -379,7 +380,7 @@ def main():
             cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     elif args.model_name_or_path:
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+                cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     else:
         config = CONFIG_MAPPING[args.model_type]()
         logger.warning("You are instantiating a new config instance from scratch.")
@@ -399,11 +400,19 @@ def main():
             cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
 
     if args.model_name_or_path:
-        model = AutoModelForTokenClassification.from_pretrained(
-            args.model_name_or_path,
-            from_tf=bool(".ckpt" in args.model_name_or_path),
-            config=config, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
+        if args.model_name_or_path == 'bert-large-uncased-crf':
+            model = BertCRF.from_pretrained('bert-large-uncased', num_labels=num_labels, \
+                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+        elif args.model_name_or_path == 'bert-large-uncased-lstm-crf':
+            model = BertLstmCRF.from_pretrained('bert-large-uncased', num_labels=num_labels, \
+                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+        
+        else:
+            model = AutoModelForTokenClassification.from_pretrained(
+                args.model_name_or_path,
+                from_tf=bool(".ckpt" in args.model_name_or_path),
+                config=config, \
+                cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
         )
     else:
         logger.info("Training new model from scratch")
