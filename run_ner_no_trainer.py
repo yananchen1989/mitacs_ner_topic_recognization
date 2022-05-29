@@ -378,7 +378,7 @@ def main():
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name, num_labels=num_labels, \
             cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
-    elif args.model_name_or_path:
+    elif args.model_name_or_path and not args.model_name_or_path.endswith('-crf'):
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
                 cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
     else:

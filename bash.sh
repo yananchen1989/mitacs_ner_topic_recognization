@@ -15,6 +15,23 @@ CUDA_VISIBLE_DEVICES=0  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
 
 
 
+CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+          --dataset_name "tqi" \
+          --model_name_or_path bert-large-uncased-crf \
+          --dataset_config_name "supervised" \
+          --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
+          --text_column_name "tokens" \
+          --label_column_name "tags" \
+          --num_train_epochs 12 \
+          --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
+          --debug_cnt  -1 \
+          --local_files_only
+
+
+
+
+
+
 CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
             --num_train_epochs 12 \
             --model_name_or_path  t5-large \
@@ -36,7 +53,7 @@ sbatch submit_t5_nerd.slurm 2048 tags_fine;
 sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 
-
+sbatch submit_t5_nerd_da.slurm -1   tags_coarse;
 
 
 
