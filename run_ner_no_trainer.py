@@ -51,7 +51,7 @@ from transformers import (
 from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
 from utils.process_func import * 
-from utils.crf_bert import * 
+# from utils.crf_bert import * 
 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/token-classification/requirements.txt")
@@ -150,14 +150,14 @@ def parse_args():
         "--local_files_only",
         action="store_true",
     )
-    parser.add_argument(
-        "--lstm",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--crf",
-        action="store_true",
-    )
+    # parser.add_argument(
+    #     "--lstm",
+    #     action="store_true",
+    # )
+    # parser.add_argument(
+    #     "--crf",
+    #     action="store_true",
+    # )
     parser.add_argument(
         "--learning_rate",
         type=float,
@@ -409,20 +409,20 @@ def main():
 
     if args.model_name_or_path:
         
-        if args.crf and not args.lstm:
-            model = BertCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
-        elif args.crf and args.lstm:
-            model = BertLstmCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-                        cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+        # if args.crf and not args.lstm:
+        #     model = BertCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
+        #                 cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+        # elif args.crf and args.lstm:
+        #     model = BertLstmCRF.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
+        #                 cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
 
-        else:
-            model = AutoModelForTokenClassification.from_pretrained(
-                args.model_name_or_path,
-                from_tf=bool(".ckpt" in args.model_name_or_path),
-                config=config, \
-                cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
-        )
+        # else:
+        model = AutoModelForTokenClassification.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config, \
+            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
+    )
     else:
         logger.info("Training new model from scratch")
         model = AutoModelForTokenClassification.from_config(config)
