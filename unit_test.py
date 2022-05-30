@@ -34,10 +34,7 @@ import datasets
 
 
 
-# for each sample, write to each row
-
-
-tokenizer_t5 = AutoTokenizer.from_pretrained("facebook/bart-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=False)
+tags_column = 'tags_coarse'
 
 
 from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
@@ -45,10 +42,8 @@ import datasets
 tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 print(tokenizer_t5)
 
-t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da")
+t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/epoch_5")
 gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=0)
-
-
 
 
 file_list = {}
@@ -57,7 +52,7 @@ for dsn in ['dev','test','train']:
 raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 import multiprocessing
-tags_column = 'tags'
+
 def t5_format(example):
     source_ll = []
     target_ll = []
@@ -70,108 +65,79 @@ def t5_format(example):
 
     return example
 
-processed_datasets_t5 = raw_datasets.map(t5_format, 
+from utils.process_func import * 
+dataset_ix = raw_datasets.map(map_func, 
                 batched=False,
                 num_proc= multiprocessing.cpu_count() ,
-                load_from_cache_file= False, 
+                load_from_cache_file=not True, remove_columns=['tags'],
+                desc = "Running ix mapping ==>")
+
+processed_datasets_t5 = dataset_ix.map(t5_format, 
+                batched=False,
+                num_proc= multiprocessing.cpu_count() ,
+                load_from_cache_file=False, 
                 desc = "Running t5 mapping ==>")
-
-
-
-
-
-
 
 
 
 import torch
 device = torch.device("cuda:{}".format(0) if torch.cuda.is_available() else "cpu")
 
-
-import seqeval
-y_true = []
-y_pred = [] 
-for ii in range(len(processed_datasets_t5['test'])):
-
-    text1 = processed_datasets_t5['test'][ii]['text1']
-    text2 = processed_datasets_t5['test'][ii]['text2']
-    text2_ids = tokenizer_t5.encode(text2)
-    text2_decode = tokenizer_t5.decode(tokenizer_t5.encode(text2), clean_up_tokenization_spaces=True, skip_special_tokens=True)
-
-    # result_t5 = gen_nlp(text1, max_length=1024, \
-    #                                         do_sample=False, \
-    #                                         # top_p=0.9, top_k=0, temperature=1.2,\
-    #                                         # repetition_penalty=1.2, num_return_sequences= 8,\
-    #                                         clean_up_tokenization_spaces=True)
-
-    inputs = tokenizer_t5(text1, return_tensors='pt')
-
-    output = t5_nerd.generate(input_ids=inputs['input_ids'].to(device), 
-                   attention_mask=inputs['attention_mask'].to(device), do_sample=False, max_length=1024)
-
-    output_decode = tokenizer_t5.decode(output[0], clean_up_tokenization_spaces=True, skip_special_tokens=True)
-
-    output_decode_ori = tokenizer_t5.decode(output[0], clean_up_tokenization_spaces=True).replace('</s>','')
+def clean_gen_span(span):
+    for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.eos_token, tokenizer_t5.unk_token, tokenizer_t5.pad_token]:
+        span = span.replace(iden, '')
+    return span.strip()
 
 
-    result_ners = []
-    for i, j in zip(tokenizer_t5.additional_special_tokens[:-1], tokenizer_t5.additional_special_tokens[1:]):
-        if i not in text2 :
-            continue
+with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') as f:
 
-        ref_ner = text2.split(i)[1].split(j)[0].strip()
-        if i in output_decode_ori:
-            gen_ner = output_decode_ori.split(i)[1].split(j)[0].strip()
-        else:
-            gen_ner = 'O'
-        result_ners.append((i, ref_ner, gen_ner))
+    for ii in range(len(processed_datasets_t5['train'])):
 
-    assert len(result_ners) == len(text1.split())
-    print(result_ners, '\n')
-    
+        text1 = processed_datasets_t5['train'][ii]['text2']
+        text2 = processed_datasets_t5['train'][ii]['text1']
+        # text2_ids = tokenizer_t5.encode(text2)
+        # text2_decode = tokenizer_t5.decode(tokenizer_t5.encode(text2), clean_up_tokenization_spaces=True, skip_special_tokens=True)
 
+        inputs = tokenizer_t5(text1, return_tensors='pt')
 
-    
+        output = t5_nerd.generate(input_ids=inputs['input_ids'].to(device), 
+                       attention_mask=inputs['attention_mask'].to(device), do_sample=False, max_length=1024,
+                       top_p=0.9, top_k=0, temperature=1.2 )
 
+        # output_decode = tokenizer_t5.decode(output[0], clean_up_tokenization_spaces=True, skip_special_tokens=True)
 
+        output_decode_ori = tokenizer_t5.decode(output[0], clean_up_tokenization_spaces=True).replace('</s>','')
+        print("+++{}+++".format(ii))
+        idens = []
+        ix = 0
+        for tag, i in zip(text1.split(), text2.split()):
+            iden = "<extra_id_{}>".format(ix)
+            iden_ = "<extra_id_{}>".format(ix+1)
 
+            if iden in output_decode_ori:
+                span = output_decode_ori.split(iden)[1].split(iden_)[0]  
+                span = clean_gen_span(span)
+            else:
+                span = '.'
 
-
-
-
-
-from transformers import AutoConfig,AutoModelForTokenClassification
-
-config = AutoConfig.from_pretrained("bert-base-cased", num_labels=100, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache")
-
-model = AutoModelForTokenClassification.from_pretrained("bert-base-cased", config=config, \
-                        cache_dir="/scratch/w/wluyliu/yananc/cache")
-
-
-
-from transformers import AutoConfig, AutoModelForNextSentencePrediction
-
-# Download configuration from huggingface.co and cache.
-config = AutoConfig.from_pretrained("bert-base-cased")
-model = AutoModelForNextSentencePrediction.from_pretrained("bert-base-cased", config=config, \
-                                    cache_dir="/scratch/w/wluyliu/yananc/cache")
-
-
-config = AutoConfig.from_pretrained("bert-base-cased")
-model = BertModel.from_pretrained("bert-base-cased", config=config, \
-                                    cache_dir="/scratch/w/wluyliu/yananc/cache")
+            print(tag.replace(iden, ''), '==>', i.replace(iden, ''), '--->', span)
+            idens.append(span)
+            ix += 1
+        print(idens)
+        dic = {}
+        dic['id'] = ii
+        dic['tokens'] = idens
+        dic[tags_column] = processed_datasets_t5['test'][ii][tags_column]
+        json_string = json.dumps(dic)
+        f.write(json_string+'\n')
+        print('\n\n') 
 
 
 
 
-
-
-
-
-
-
-
+file_list = {}
+file_list['da_coarse'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json'
+raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
 
@@ -208,55 +174,6 @@ model = BertModel.from_pretrained("bert-base-cased", config=config, \
 
 
 
-
-
-import spacy
-ner_spacy_model = spacy.load('en_core_web_lg', disable=["tok2vec", "tagger", "attribute_ruler", "lemmatizer"])
-
-
-import requests
-import re
-from collections import Counter
-
-content = '''
-The West lost self-confidence — and both Russian and Chinese leaders rubbed it in, putting out the word that these chaotic democratic systems were a spent force.
-And then a totally unexpected thing happened: Russia and China each overreached.
-Vladimir Putin invaded Ukraine and, to his surprise, invited an indirect war with NATO and the West. China insisted that it was smart enough to have its own local solution to a pandemic, leaving millions of Chinese underprotected or unprotected and, in effect,
-'''
-
-article = ner_spacy_model(content)
-labels = [x.label_ for x in article.ents]
-Counter(labels)
-
-
-sentences = [x for x in article.sents]
-
-
-
-texts = [
-    "Net income was $9.4 million compared to the prior year of $2.7 million.",
-    "Revenue exceeded twelve billion dollars, with a loss of $1b.",
-]
-
-nlp = spacy.load("en_core_web_sm")
-for doc in nlp.pipe(texts, disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"]):
-    # Do something with the doc here
-    print([(ent.text, ent.label_) for ent in doc.ents])
-
-
-
-from spacy import displacy
-displacy.render(ner_spacy_model(content.strip()), jupyter=True, style='ent')
-
-text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
-
-nlp = spacy.load("en_core_web_sm")
-doc = nlp(text)
-html = displacy.render(doc, style="ent", page=True)
-
-
-with open("ner_spacy_test.html", "w") as ff:
-    ff.write(html+'------------\n') 
 
 
 
