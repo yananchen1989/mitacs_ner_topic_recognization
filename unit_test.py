@@ -37,14 +37,15 @@ import datasets
 # for each sample, write to each row
 
 
+tokenizer_t5 = AutoTokenizer.from_pretrained("facebook/bart-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=False)
 
 
-from transformers import T5Tokenizer, AutoModelWithLMHead, pipeline
+from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
 import datasets
-tokenizer_t5 = T5Tokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
+tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 print(tokenizer_t5)
 
-t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes_ner/t5_nerd/epoch_6")
+t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da")
 gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=0)
 
 
@@ -125,6 +126,7 @@ for ii in range(len(processed_datasets_t5['test'])):
             gen_ner = 'O'
         result_ners.append((i, ref_ner, gen_ner))
 
+    assert len(result_ners) == len(text1.split())
     print(result_ners, '\n')
     
 
@@ -138,18 +140,27 @@ for ii in range(len(processed_datasets_t5['test'])):
 
 
 
+from transformers import AutoConfig,AutoModelForTokenClassification
+
+config = AutoConfig.from_pretrained("bert-base-cased", num_labels=100, \
+            cache_dir="/scratch/w/wluyliu/yananc/cache")
+
+model = AutoModelForTokenClassification.from_pretrained("bert-base-cased", config=config, \
+                        cache_dir="/scratch/w/wluyliu/yananc/cache")
 
 
 
+from transformers import AutoConfig, AutoModelForNextSentencePrediction
+
+# Download configuration from huggingface.co and cache.
+config = AutoConfig.from_pretrained("bert-base-cased")
+model = AutoModelForNextSentencePrediction.from_pretrained("bert-base-cased", config=config, \
+                                    cache_dir="/scratch/w/wluyliu/yananc/cache")
 
 
-
-
-
-
-
-
-
+config = AutoConfig.from_pretrained("bert-base-cased")
+model = BertModel.from_pretrained("bert-base-cased", config=config, \
+                                    cache_dir="/scratch/w/wluyliu/yananc/cache")
 
 
 

@@ -308,6 +308,7 @@ def main():
 
         random.shuffle(ids)
         split_ix = int(len(ids)*0.8)
+        print("ids:{} split_ix:{}".format(len(ids), split_ix))
         if args.debug_cnt > 0: 
             assert args.debug_cnt < split_ix
             ids_train = ids[:args.debug_cnt]
