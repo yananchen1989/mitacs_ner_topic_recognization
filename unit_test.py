@@ -88,10 +88,12 @@ def clean_gen_span(span):
         span = span.replace(iden, '')
     return span.strip()
 
+ixs = list(range(len(processed_datasets_t5['train'])))
+random.shuffle(ixs)
 
 with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') as f:
 
-    for ii in range(len(processed_datasets_t5['train'])):
+    for ii in ixs:
 
         text1 = processed_datasets_t5['train'][ii]['text2']
         text2 = processed_datasets_t5['train'][ii]['text1']
@@ -127,7 +129,8 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') a
         dic = {}
         dic['id'] = ii
         dic['tokens'] = idens
-        dic[tags_column] = processed_datasets_t5['test'][ii][tags_column]
+        dic[tags_column] = processed_datasets_t5['train'][ii][tags_column]
+        assert len(dic[tags_column]) == len(dic['tokens'])
         json_string = json.dumps(dic)
         f.write(json_string+'\n')
         print('\n\n') 
@@ -135,9 +138,9 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') a
 
 
 
-file_list = {}
-file_list['da_coarse'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json'
-raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+# file_list = {}
+# file_list['da_coarse'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json'
+# raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
 

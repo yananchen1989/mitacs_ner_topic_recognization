@@ -640,85 +640,84 @@ def main():
             if completed_steps >= args.max_train_steps:
                 break
 
-        logger.info("begin to eval")
-        model.eval()
-        if args.val_max_target_length is None:
-            args.val_max_target_length = args.max_target_length
+        if epoch % 5 == 0 and epoch > 0:
+            logger.info("begin to eval")
+            model.eval()
+            if args.val_max_target_length is None:
+                args.val_max_target_length = args.max_target_length
 
-        gen_kwargs = {
-            "max_length": args.val_max_target_length if args is not None else config.max_length,
-            "num_beams": args.num_beams,
-        }
-
-        decoded_preds_all = []
-        decoded_labels_all = []
-        for step, batch in enumerate(eval_dataloader):
-            with torch.no_grad():
-                generated_tokens = accelerator.unwrap_model(model).generate(
-                    batch["input_ids"],
-                    attention_mask=batch["attention_mask"],
-                    **gen_kwargs,
-                )
-
-                generated_tokens = accelerator.pad_across_processes(
-                    generated_tokens, dim=1, pad_index=tokenizer.pad_token_id
-                )
-                labels = batch["labels"]
-                if not args.pad_to_max_length:
-                    # If we did not pad to max length, we need to pad the labels too
-                    labels = accelerator.pad_across_processes(batch["labels"], dim=1, pad_index=tokenizer.pad_token_id)
-
-                generated_tokens = accelerator.gather(generated_tokens).cpu().numpy()
-                labels = accelerator.gather(labels).cpu().numpy()
-
-                if args.ignore_pad_token_for_loss:
-                    # Replace -100 in the labels as we can't decode them.
-                    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-                if isinstance(generated_tokens, tuple):
-                    generated_tokens = generated_tokens[0]
-                decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=False)
-                decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=False)
-
-                decoded_preds_all.extend(decoded_preds)
-                decoded_labels_all.extend(decoded_labels)
-
-        assert len(decoded_preds_all) == len(decoded_labels_all)
-        decoded_preds_, decoded_labels_ = postprocess_text_ner(decoded_preds_all, decoded_labels_all)
-        print(random.sample(list(zip(decoded_labels_, decoded_preds_)), 32))
-        metric_ner.add_batch(predictions=decoded_preds_, references=decoded_labels_)
-
-
-
-        # result = metric.compute(use_stemmer=True)
-        # # Extract a few results from ROUGE
-        # result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
-        # result = {k: round(v, 4) for k, v in result.items()}
-        # logger.info(result)
-
-        return_entity_level_metrics = False
-        results = metric_ner.compute()
-        # if return_entity_level_metrics:
-        #     # Unpack nested dictionaries
-        #     final_results = {}
-        #     for key, value in results.items():
-        #         if isinstance(value, dict):
-        #             for n, v in value.items():
-        #                 final_results[f"{key}_{n}"] = v
-        #         else:
-        #             final_results[key] = value
-        #     return final_results
-        # else:
-        report = {
-                "precision": results["overall_precision"],
-                "recall": results["overall_recall"],
-                "f1": results["overall_f1"],
-                # "accuracy": results["overall_accuracy"],
+            gen_kwargs = {
+                "max_length": args.val_max_target_length if args is not None else config.max_length,
+                "num_beams": args.num_beams,
             }
-        
-        print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
+
+            decoded_preds_all = []
+            decoded_labels_all = []
+            for step, batch in enumerate(eval_dataloader):
+                with torch.no_grad():
+                    generated_tokens = accelerator.unwrap_model(model).generate(
+                        batch["input_ids"],
+                        attention_mask=batch["attention_mask"],
+                        **gen_kwargs,
+                    )
+
+                    generated_tokens = accelerator.pad_across_processes(
+                        generated_tokens, dim=1, pad_index=tokenizer.pad_token_id
+                    )
+                    labels = batch["labels"]
+                    if not args.pad_to_max_length:
+                        # If we did not pad to max length, we need to pad the labels too
+                        labels = accelerator.pad_across_processes(batch["labels"], dim=1, pad_index=tokenizer.pad_token_id)
+
+                    generated_tokens = accelerator.gather(generated_tokens).cpu().numpy()
+                    labels = accelerator.gather(labels).cpu().numpy()
+
+                    if args.ignore_pad_token_for_loss:
+                        # Replace -100 in the labels as we can't decode them.
+                        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+                    if isinstance(generated_tokens, tuple):
+                        generated_tokens = generated_tokens[0]
+                    decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=False)
+                    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=False)
+
+                    decoded_preds_all.extend(decoded_preds)
+                    decoded_labels_all.extend(decoded_labels)
+
+            assert len(decoded_preds_all) == len(decoded_labels_all)
+            decoded_preds_, decoded_labels_ = postprocess_text_ner(decoded_preds_all, decoded_labels_all)
+            print(random.sample(list(zip(decoded_labels_, decoded_preds_)), 32))
+            metric_ner.add_batch(predictions=decoded_preds_, references=decoded_labels_)
+
+            # result = metric.compute(use_stemmer=True)
+            # # Extract a few results from ROUGE
+            # result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
+            # result = {k: round(v, 4) for k, v in result.items()}
+            # logger.info(result)
+
+            return_entity_level_metrics = False
+            results = metric_ner.compute()
+            # if return_entity_level_metrics:
+            #     # Unpack nested dictionaries
+            #     final_results = {}
+            #     for key, value in results.items():
+            #         if isinstance(value, dict):
+            #             for n, v in value.items():
+            #                 final_results[f"{key}_{n}"] = v
+            #         else:
+            #             final_results[key] = value
+            #     return final_results
+            # else:
+            report = {
+                    "precision": results["overall_precision"],
+                    "recall": results["overall_recall"],
+                    "f1": results["overall_f1"],
+                    # "accuracy": results["overall_accuracy"],
+                }
+            print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
+
+
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
-
         epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
         os.makedirs(epoch_output_dir, exist_ok=True)
         unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
