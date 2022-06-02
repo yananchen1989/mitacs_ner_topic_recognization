@@ -150,10 +150,10 @@ def parse_args():
         "--local_files_only",
         action="store_true",
     )
-    # parser.add_argument(
-    #     "--lstm",
-    #     action="store_true",
-    # )
+    parser.add_argument(
+        "--da",
+        action="store_true",
+    )
     # parser.add_argument(
     #     "--crf",
     #     action="store_true",
@@ -303,7 +303,6 @@ def main():
         file_list['train_test'] = "/scratch/w/wluyliu/yananc/sentence_level_tokens.json"
         raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-
         ids = list(set([ii['id'] for ii in raw_datasets['train_test']]))
 
         random.shuffle(ids)
@@ -358,6 +357,10 @@ def main():
             
             random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
             raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
+
+        if args.da:
+            raw_datasets['train'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["da"]])
+
 
     if 'dev' in raw_datasets.keys():
         raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
