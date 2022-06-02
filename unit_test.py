@@ -126,16 +126,16 @@ while ii <= len(processed_datasets_t5_shuffle['train']):
     ii += bs
     torch.cuda.empty_cache()
 
-
+assert len(output_texts) == len(processed_datasets_t5_shuffle['train'])
 
 
 with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') as f:
 
-    for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train'][:len(output_texts)]['id'], \
-                                      processed_datasets_t5_shuffle['train'][:len(output_texts)]['text2'], \
-                                      processed_datasets_t5_shuffle['train'][:len(output_texts)]['text1'], \
+    for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train']['id'], \
+                                      processed_datasets_t5_shuffle['train']['text2'], \
+                                      processed_datasets_t5_shuffle['train']['text1'], \
                                       output_texts, \
-                                      processed_datasets_t5_shuffle['train'][:len(output_texts)][tags_column]):
+                                      processed_datasets_t5_shuffle['train'][tags_column]):
         idens = []
         ix = 0
         for tag, i in zip(text1.split(), text2.split()):
