@@ -152,7 +152,7 @@ def parse_args():
     )
     parser.add_argument(
         "--da",
-        action="store_true",
+        type=int
     )
     # parser.add_argument(
     #     "--crf",
@@ -698,7 +698,7 @@ def main():
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
-        print("roberta_ner_report ==>",  epoch, args.label_column_name, args.debug_cnt, eval_metric)
+        print("roberta_ner_report ==>",  epoch, args.label_column_name, args.debug_cnt, 'da:', args.da, eval_metric)
 
         if args.push_to_hub and epoch < args.num_train_epochs - 1:
             accelerator.wait_for_everyone()
