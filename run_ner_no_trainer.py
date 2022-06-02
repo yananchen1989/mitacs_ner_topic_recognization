@@ -357,9 +357,10 @@ def main():
             
             random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
             raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
+            raw_datasets['da'] = raw_datasets['da'].select(random_ixs)
 
         if args.da:
-            raw_datasets['train'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["da"]])
+            raw_datasets['train'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["da"]]).shuffle()
 
 
     if 'dev' in raw_datasets.keys():

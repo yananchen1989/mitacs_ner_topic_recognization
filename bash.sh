@@ -1,17 +1,31 @@
 
 
 
-CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "tqi" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
           --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
           --text_column_name "tokens" \
-          --label_column_name "tags" \
+          --label_column_name "tags_coarse" \
           --num_train_epochs 12 \
           --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
           --debug_cnt  64 \
-          --local_files_only
+          --local_files_only --da
+
+
+
+CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+          --dataset_name "few_nerd_local" \
+          --model_name_or_path roberta-large \
+          --dataset_config_name "supervised" \
+          --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_fewnerd' \
+          --text_column_name "tokens" \
+          --label_column_name "tags_coarse" \
+          --num_train_epochs 12 \
+          --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
+          --debug_cnt  -1 \
+          --local_files_only --da
 
 
 
@@ -50,7 +64,7 @@ sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 sbatch submit_t5_nerd_da.slurm -1   tags_coarse;
 
-
+283524
 
 ############################  
 module load anaconda3;source activate env
