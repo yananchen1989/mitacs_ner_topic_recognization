@@ -15,7 +15,7 @@ CUDA_VISIBLE_DEVICES=2  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
 
 
 
-CUDA_VISIBLE_DEVICES=3  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "few_nerd_local" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
@@ -64,7 +64,18 @@ sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 sbatch submit_t5_nerd_da.slurm -1   tags_coarse;
 
-283524
+
+
+
+
+
+
+sbatch submit_roberta_nerd.slurm -1 0
+sbatch submit_roberta_nerd.slurm -1 1
+
+
+
+
 
 ############################  
 module load anaconda3;source activate env

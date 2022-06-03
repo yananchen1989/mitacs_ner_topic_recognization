@@ -241,6 +241,13 @@ def parse_args():
         default=5e-5,
         help="Initial learning rate (after the potential warmup period) to use.",
     )
+
+    parser.add_argument(
+        "--binomial",
+        type=float,
+        default=1
+    )
+
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
     parser.add_argument("--num_train_epochs", type=int, default=7, help="Total number of training epochs to perform.")
     parser.add_argument(
@@ -434,10 +441,14 @@ def main():
     def t5_format(example):
         source_ll = []
         target_ll = []
-        for i in range( min(len(example['tokens']), len(tokenizer.additional_special_tokens) )):
+        length = min(len(example['tokens']), len(tokenizer.additional_special_tokens) )
+        mask_binomial = np.random.binomial(size=length, n=1, p = args.binomial)
+        for i in range( length ):
             source_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
-            target_ll.append(tokenizer.additional_special_tokens[i] + example[args.tags_column][i] )
-
+            if mask_binomial[i]:
+                target_ll.append(tokenizer.additional_special_tokens[i] + example[args.tags_column][i] )
+            else:
+                target_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
         example['text1'] = ' '.join(source_ll)
         example['text2'] = ' '.join(target_ll)
 
@@ -718,7 +729,7 @@ def main():
 
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
-        epoch_output_dir = "{}/epoch_{}".format(args.output_dir, epoch)
+        epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
         os.makedirs(epoch_output_dir, exist_ok=True)
         unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
 

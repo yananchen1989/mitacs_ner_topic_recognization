@@ -45,12 +45,22 @@ raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/s
 
 
 
+
+
 tags_column = 'tags_coarse'
 
 from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
 import datasets,multiprocessing
 tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 print(tokenizer_t5)
+
+
+
+# special_tokens_dict = {'additional_special_tokens': ['[C1]','[C2]','[C3]','[C4]']}
+# num_added_toks = tokenizer.add_special_tokens(special_tokens_dict)
+# model.resize_token_embeddings(len(tokenizer))
+
+
 
 t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/epoch_9")
 gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=gpu)
