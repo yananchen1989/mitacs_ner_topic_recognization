@@ -62,16 +62,18 @@ sbatch submit_t5_nerd.slurm 2048 tags_fine;
 sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 
-sbatch submit_t5_nerd_da.slurm -1   tags_coarse;
+sbatch submit_t5_nerd_da.slurm -1 0.8;
+sbatch submit_t5_nerd_da.slurm -1 0.5;
+sbatch submit_t5_nerd_da.slurm -1 0.3;
+sbatch submit_t5_nerd_da.slurm -1 0.15;
 
 
+CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/unit_test.py --binomial 0.5
 
+CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/unit_test.py --binomial 0.8
 
-
-
-
-sbatch submit_roberta_nerd.slurm -1 0
-sbatch submit_roberta_nerd.slurm -1 1
+sbatch submit_roberta_nerd.slurm 10240 0
+sbatch submit_roberta_nerd.slurm 10240 1
 
 
 
