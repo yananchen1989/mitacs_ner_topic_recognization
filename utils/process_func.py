@@ -129,7 +129,7 @@ def sep_trunk(df_tmp):
     return results
 
 
-
+import numpy as np 
 from transformers import AutoTokenizer
 tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 
