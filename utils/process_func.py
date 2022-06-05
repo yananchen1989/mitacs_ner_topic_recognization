@@ -127,3 +127,24 @@ def sep_trunk(df_tmp):
         mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
         results.append((' ; '.join(mentions), tag))
     return results
+
+
+
+from transformers import AutoTokenizer
+tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
+
+def t5_format(example):
+    source_ll = []
+    target_ll = []
+    length = min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )
+    mask_binomial = np.random.binomial(size=length, n=1, p = args.binomial)
+    for i in range( length ):
+        source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
+        if mask_binomial[i]:
+            target_ll.append(tokenizer_t5.additional_special_tokens[i] + example[args.tags_column][i] )
+        else:
+            target_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
+    example['text1'] = ' '.join(source_ll)
+    example['text2'] = ' '.join(target_ll)
+
+    return example
