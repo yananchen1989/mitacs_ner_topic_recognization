@@ -68,7 +68,24 @@ print(tokenizer_t5)
 
 t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/binomial_{}/epoch_7".format(args.binomial))
 # gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer_t5=tokenizer_t5, device=gpu)
- 
+
+
+def t5_format(example):
+    source_ll = []
+    target_ll = []
+    length = min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )
+    mask_binomial = np.random.binomial(size=length, n=1, p = args.binomial)
+    for i in range( length ):
+        source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
+        if mask_binomial[i]:
+            target_ll.append(tokenizer_t5.additional_special_tokens[i] + example[tags_column][i] )
+        else:
+            target_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
+    example['text1'] = ' '.join(source_ll)
+    example['text2'] = ' '.join(target_ll)
+
+    return example
+
 
 from utils.process_func import * 
 dataset_ix = raw_datasets.map(map_func, 

@@ -453,8 +453,7 @@ def main():
         example['text2'] = ' '.join(target_ll)
 
         return example
-    
-
+        
 
     def preprocess_function(examples):
         inputs = examples[args.text_column]
