@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--binomial",
     type=float,
+    choices=[0.8, 0.3, 0.5, 0.15],
     default=1
 )
 args = parser.parse_args()
