@@ -112,7 +112,7 @@ def clean_gen_span(span):
 processed_datasets_t5_shuffle = processed_datasets_t5.shuffle()
 
 
-bs = 256
+bs = 128
 ii = 0 
 output_texts = []
 while ii <= len(processed_datasets_t5_shuffle['train']):
