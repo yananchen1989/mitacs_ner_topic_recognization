@@ -2,13 +2,18 @@
 import pandas as pd 
 import json,random
 import numpy as np 
-import datasets
+import datasets,argparse
 # ds_nerd = datasets.load_dataset('dfki-nlp/few-nerd', "supervised", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # # ds_notes = datasets.load_dataset('conll2012_ontonotesv5', "english_v12", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # # ds_conll = datasets.load_dataset('conll2003', cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-
-
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--binomial",
+    type=float,
+    default=1
+)
+args = parser.parse_args()
 
 # prepare few nerd dataset
 # file_list = {}
@@ -44,15 +49,12 @@ raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/s
 
 
 
-
-
-
 tags_column = 'tags_coarse'
 
 from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
 import datasets,multiprocessing
-tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
-print(tokenizer_t5)
+tokenizer = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
+print(tokenizer)
 
 
 
@@ -62,17 +64,20 @@ print(tokenizer_t5)
 
 
 
-t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/epoch_9")
-gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer_t5, device=gpu)
+t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/binomial_{}/epoch_7".format(args.binomial))
+# gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer=tokenizer, device=gpu)
  
-
 def t5_format(example):
     source_ll = []
     target_ll = []
-    for i in range( min(len(example['tokens']), len(tokenizer_t5.additional_special_tokens) )):
-        source_ll.append(tokenizer_t5.additional_special_tokens[i] + example['tokens'][i] )
-        target_ll.append(tokenizer_t5.additional_special_tokens[i] + example[tags_column][i] )
-
+    length = min(len(example['tokens']), len(tokenizer.additional_special_tokens) )
+    mask_binomial = np.random.binomial(size=length, n=1, p = args.binomial)
+    for i in range( length ):
+        source_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
+        if mask_binomial[i]:
+            target_ll.append(tokenizer.additional_special_tokens[i] + example[tags_column][i] )
+        else:
+            target_ll.append(tokenizer.additional_special_tokens[i] + example['tokens'][i] )
     example['text1'] = ' '.join(source_ll)
     example['text2'] = ' '.join(target_ll)
 
@@ -101,7 +106,7 @@ import torch
 device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() else "cpu")
 
 def clean_gen_span(span):
-    for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.unk_token, tokenizer_t5.eos_token, tokenizer_t5.pad_token]:
+    for iden in tokenizer.additional_special_tokens + [tokenizer.unk_token, tokenizer.eos_token, tokenizer.pad_token]:
         span = span.replace(iden, '')
     return span.strip()
 
@@ -109,27 +114,37 @@ def clean_gen_span(span):
 processed_datasets_t5_shuffle = processed_datasets_t5.shuffle()
 
 
-bs = 128
+bs = 512
 ii = 0 
 output_texts = []
 while ii <= len(processed_datasets_t5_shuffle['train']):
     text1s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text2']
     text2s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text1']
-    # text2_ids = tokenizer_t5.encode(text2)
-    # text2_decode = tokenizer_t5.decode(tokenizer_t5.encode(text2), clean_up_tokenization_spaces=True, skip_special_tokens=True)
 
-    inputs = tokenizer_t5(text1s, return_tensors='pt', padding=True, truncation=True)
+    text2s_ori = []
+    for t in text2s:
+        text2_decode = tokenizer.decode(tokenizer.encode(t), clean_up_tokenization_spaces=True, skip_special_tokens=True)
+        text2s_ori.append(text2_decode)
+
+
+    inputs = tokenizer(text1s, return_tensors='pt', padding=True, truncation=True)
 
     output = t5_nerd.generate(input_ids=inputs['input_ids'].to(device), 
                    attention_mask=inputs['attention_mask'].to(device), do_sample=False, max_length=1024,
-                   top_p=0.9, top_k=0, temperature=1.2 )
+                   top_p=0.9, top_k=0, temperature=1.2 ) 
 
-    # output_decode = tokenizer_t5.decode(output, clean_up_tokenization_spaces=True, skip_special_tokens=True)
-
-    output_decode_ori = tokenizer_t5.batch_decode(output, clean_up_tokenization_spaces=True)
+    output_decode = tokenizer.batch_decode(output, clean_up_tokenization_spaces=True, skip_special_tokens=True)
+    output_decode_ori = tokenizer.batch_decode(output, clean_up_tokenization_spaces=True)
 
     output_texts.extend([dec.replace('</s>','').replace('<pad>','') for dec in output_decode_ori])
     
+
+
+
+    # for l, p in zip(text2s_ori, output_decode): 
+    #     print(l)
+    #     print(p)
+    #     print()
 
     print(ii, inputs['input_ids'].shape)
 
@@ -139,7 +154,7 @@ while ii <= len(processed_datasets_t5_shuffle['train']):
 assert len(output_texts) == len(processed_datasets_t5_shuffle['train'])
 
 
-with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') as f:
+with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial), 'w') as f:
 
     for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train']['id'], \
                                       processed_datasets_t5_shuffle['train']['text2'], \
@@ -156,9 +171,9 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json', 'w') a
                 span = text_gen.split(iden)[1].split(iden_)[0]  
                 span = clean_gen_span(span)
                 if not span:
-                    span = tokenizer_t5.unk_token
+                    span = tokenizer.unk_token
             else:
-                span = tokenizer_t5.unk_token
+                span = tokenizer.unk_token
 
             print(tag.replace(iden, ''), '==>', i.replace(iden, ''), '--->', span)
             idens.append(span)
