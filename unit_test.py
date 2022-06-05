@@ -42,6 +42,8 @@ args = parser.parse_args()
 #             ix += 1
 #     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
 gpu = 0
+import torch
+device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() else "cpu")
 
 
 file_list = {}
@@ -58,16 +60,13 @@ import datasets,multiprocessing
 tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
 print(tokenizer_t5)
 
-
-
 # special_tokens_dict = {'additional_special_tokens': ['[C1]','[C2]','[C3]','[C4]']}
 # num_added_toks = tokenizer_t5.add_special_tokens(special_tokens_dict)
 # model.resize_token_embeddings(len(tokenizer_t5))
 
-
-
 t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/binomial_{}/epoch_7".format(args.binomial))
-# gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer_t5=tokenizer_t5, device=gpu)
+t5_nerd.to(device)
+#gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer_t5=tokenizer_t5, device=gpu)
 
 
 def t5_format(example):
@@ -103,8 +102,6 @@ processed_datasets_t5 = dataset_ix.map(t5_format,
 # processed_datasets_t5.save_to_disk("/scratch/w/wluyliu/yananc/few_nerd_supervised")
 
 
-import torch
-device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() else "cpu")
 
 def clean_gen_span(span):
     for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.unk_token, tokenizer_t5.eos_token, tokenizer_t5.pad_token]:
