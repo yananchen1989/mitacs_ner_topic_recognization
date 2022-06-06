@@ -1,18 +1,19 @@
 
 
-
-CUDA_VISIBLE_DEVICES=0  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+for gpu in 0 1 2 3 
+do
+CUDA_VISIBLE_DEVICES=${gpu} nohup  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "tqi" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
           --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
           --text_column_name "tokens" \
           --label_column_name "tags" \
-          --num_train_epochs 12 \
+          --num_train_epochs 20 \
           --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
-          --debug_cnt  32 \
-          --local_files_only 
-
+          --debug_cnt  16 \
+          --local_files_only  > bert_tagger_tqi_16_${gpu}.log & 
+done
 
 
 CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
@@ -22,7 +23,7 @@ CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
           --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_fewnerd' \
           --text_column_name "tokens" \
           --label_column_name "tags_coarse" \
-          --num_train_epochs 12 \
+          --num_train_epochs 20 \
           --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
           --debug_cnt  -1 \
           --local_files_only --da
@@ -35,7 +36,6 @@ CUDA_VISIBLE_DEVICES=3 python -u unit_test.py
 
 
           
-
 
 
 
@@ -67,19 +67,20 @@ sbatch submit_t5_nerd_da.slurm -1 0.5;
 sbatch submit_t5_nerd_da.slurm -1 0.3;
 sbatch submit_t5_nerd_da.slurm -1 0.15;
 
-
-CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/unit_test.py --binomial 0.5
-
-CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/unit_test.py --binomial 0.8
-
-sbatch submit_roberta_nerd.slurm 10240 0
-sbatch submit_roberta_nerd.slurm 10240 1
-
-
 sbatch test.slurm 0.8;
 sbatch test.slurm 0.5;
 sbatch test.slurm 0.3;
 sbatch test.slurm 0.15;
+
+for samplecnt in 1024 2048 10240 -1
+do
+    for p in 0.8 0.5 0.3 0.15
+    do
+    sbatch submit_roberta_nerd.slurm ${samplecnt} ${p};
+    done
+done
+
+
 
 
 

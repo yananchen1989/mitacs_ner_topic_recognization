@@ -631,9 +631,9 @@ def main():
             return final_results
         else:
             return {
-                "precision": results["overall_precision"],
-                "recall": results["overall_recall"],
-                "f1": results["overall_f1"]
+                "precision": round(results["overall_precision"], 4),
+                "recall": round(results["overall_recall"], 4),
+                "f1": round(results["overall_f1"],4)
                 # "accuracy": results["overall_accuracy"],
             }
 
@@ -702,7 +702,8 @@ def main():
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
-        print("roberta_ner_report ==>",  epoch, args.label_column_name, args.debug_cnt, 'da:', args.da, eval_metric)
+        print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
+                            args.binomial,   epoch, eval_metric)
 
         if args.push_to_hub and epoch < args.num_train_epochs - 1:
             accelerator.wait_for_everyone()
