@@ -179,6 +179,11 @@ def parse_args():
         help="Number of updates steps to accumulate before performing a backward/update pass.",
     )
     parser.add_argument(
+        "--binomial",
+        type=float,
+        default=1
+    )
+    parser.add_argument(
         "--lr_scheduler_type",
         type=SchedulerType,
         default="linear",
@@ -328,9 +333,8 @@ def main():
         raw_datasets_ = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
         file_list = {}
-        file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json'        
+        file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial)        
         raw_datasets_['da'] = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')['da'].rename_column("tags_coarse", "tags")
-
 
         raw_datasets = raw_datasets_.map(map_func, 
                 batched=False,
