@@ -76,8 +76,10 @@ for samplecnt in 1024 2048 10240 -1
 do
     for p in 0.8 0.5 0.3 0.15
     do
-    sbatch submit_roberta_nerd.slurm ${samplecnt} ${p};
+    sbatch submit_roberta_nerd.slurm ${samplecnt} 1 ${p};
+    sbatch submit_roberta_nerd.slurm ${samplecnt} 0 ${p};
     done
+
 done
 
 

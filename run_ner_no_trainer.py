@@ -343,25 +343,12 @@ def main():
                 desc = "Running ix mapping ==>")
 
 
-
-       
-        # ['id', 'tokens', 'tags_coarse', 'tags_fine']
-    # else:
-    #     data_files = {}
-    #     if args.train_file is not None:
-    #         data_files["train"] = args.train_file
-    #     if args.validation_file is not None:
-    #         data_files["dev"] = args.validation_file
-    #     extension = args.train_file.split(".")[-1]
-    #     raw_datasets = load_dataset(extension, data_files=data_files)
-    # Trim a number of training examples
-
         if args.debug_cnt > 0:     
             # raw_datasets['train_dev'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["dev"]])
             
-            random_ixs = random.sample(range(len(raw_datasets['train'])), args.debug_cnt)
-            raw_datasets['train'] = raw_datasets['train'].select(random_ixs)
-            raw_datasets['da'] = raw_datasets['da'].select(random_ixs)
+            random_ids = random.sample(raw_datasets['train']['id'], args.debug_cnt)
+            raw_datasets['train'] = raw_datasets['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
+            raw_datasets['da'] = raw_datasets['da'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
 
         if args.da:
             raw_datasets['train'] = datasets.concatenate_datasets([raw_datasets["train"], raw_datasets["da"]]).shuffle()
