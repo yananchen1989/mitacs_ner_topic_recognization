@@ -697,7 +697,7 @@ def main():
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
         print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
-                            args.binomial,   epoch, eval_metric)
+                               args.da_ver, epoch, eval_metric)
 
         if args.push_to_hub and epoch < args.num_train_epochs - 1:
             accelerator.wait_for_everyone()
