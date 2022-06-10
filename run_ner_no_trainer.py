@@ -645,6 +645,7 @@ def main():
     progress_bar = tqdm(range(args.max_train_steps), disable=not accelerator.is_local_main_process)
     completed_steps = 0
 
+    best_f1 = 0
     for epoch in range(args.num_train_epochs):
         model.train()
         for step, batch in enumerate(train_dataloader):
@@ -698,6 +699,8 @@ def main():
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
         print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
                                args.da_ver, epoch, eval_metric)
+        if eval_metric['f1'] > best_f1:
+            best_f1 = eval_metric['f1']
 
         if args.push_to_hub and epoch < args.num_train_epochs - 1:
             accelerator.wait_for_everyone()
@@ -717,7 +720,8 @@ def main():
             tokenizer.save_pretrained(args.output_dir)
             if args.push_to_hub:
                 repo.push_to_hub(commit_message="End of training", auto_lfs_prune=True)
-
+    print("roberta_ner_report_final ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
+                               args.da_ver, best_f1)
 
 if __name__ == "__main__":
     main()

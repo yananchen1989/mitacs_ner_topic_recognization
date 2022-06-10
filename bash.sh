@@ -26,7 +26,7 @@ CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_n
           --num_train_epochs 20 \
           --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
           --debug_cnt  -1 \
-          --local_files_only --da
+          --local_files_only --da 1 --da_ver "fewnerd_SIS_1"
 
 
 
@@ -62,10 +62,26 @@ sbatch submit_t5_nerd.slurm 2048 tags_fine;
 sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 
+for samplecnt in 1024 2048 -1 
+do
+for da_ver in fewnerd_both_SIS_SR_0.1.1 fewnerd_both_SIS_SR_0.3 fewnerd_both_SIS_SR_0.5 \
+                fewnerd_SIS_0.1.1 fewnerd_SIS_0.3 fewnerd_SIS_0.5 fewnerd_SIS_0.7.7 fewnerd_SIS_1 \
+                fewnerd_SR_0.1.1 fewnerd_SR_0.3 fewnerd_SR_0.5 fewnerd_SR_0.7.7 fewnerd_SR_1 
+    do 
+        sbatch submit_roberta_nerd.slurm ${samplecnt} ${da_ver};
+    done
+done 
+
+
+
+
 sbatch submit_t5_nerd_da.slurm -1 0.8;
 sbatch submit_t5_nerd_da.slurm -1 0.5;
 sbatch submit_t5_nerd_da.slurm -1 0.3;
 sbatch submit_t5_nerd_da.slurm -1 0.15;
+
+
+
 
 sbatch test.slurm 0.8;
 sbatch test.slurm 0.5;
