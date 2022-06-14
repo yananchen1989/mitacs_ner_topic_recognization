@@ -44,7 +44,7 @@ CUDA_VISIBLE_DEVICES=3 python -u unit_test.py
 CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
             --num_train_epochs 7 \
             --model_name_or_path  t5-base \
-            --per_device_train_batch_size 16   --per_device_eval_batch_size 64 \
+            --per_device_train_batch_size 16   --per_device_eval_batch_size 128 \
             --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd_test' \
             --max_target_length 256 \
             --max_source_length 256 \
@@ -52,8 +52,8 @@ CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
-            --debug_cnt 1024  \
-            --model_type t5  --local_files_only --tags_column tags_coarse --seed 1 --binomial 0.7
+            --debug_cnt 10240  \
+            --model_type t5  --local_files_only --tags_column tags_coarse --seed 1 --binomial 0.5
 
 
 

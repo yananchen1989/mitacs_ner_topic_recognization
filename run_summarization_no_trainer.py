@@ -757,12 +757,11 @@ def main():
 
     processed_datasets_t5_shuffle = processed_datasets_t5_gen.shuffle()
 
-    bs = 128
     ii = 0 
     output_texts = []
     while ii <= len(processed_datasets_t5_shuffle['train']):
-        text1s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text2']
-        text2s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text1']
+        text1s = processed_datasets_t5_shuffle['train'][ii:ii+args.per_device_eval_batch_size ]['text2']
+        text2s = processed_datasets_t5_shuffle['train'][ii:ii+args.per_device_eval_batch_size ]['text1']
         if not text1s:
             break 
         text2s_ori = []
@@ -788,7 +787,7 @@ def main():
 
         print(ii, inputs['input_ids'].shape)
 
-        ii += bs
+        ii += args.per_device_eval_batch_size 
         torch.cuda.empty_cache()
 
     assert len(output_texts) == len(processed_datasets_t5_shuffle['train'])
