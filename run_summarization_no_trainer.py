@@ -796,14 +796,14 @@ def main():
 
     with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}_{}.json'.format(args.seed, args.binomial), 'w') as f:
 
-        for ii, text1, text2, text_gen, tags in zip(  processed_datasets_t5_shuffle['train']['id'], \
+        for ii, text2, text1, text_gen, tags in zip(  processed_datasets_t5_shuffle['train']['id'], \
                                                       processed_datasets_t5_shuffle['train']['text2'], \
                                                       processed_datasets_t5_shuffle['train']['text1'], \
                                                       output_texts, \
                                                       processed_datasets_t5_shuffle['train'][args.tags_column]):
             idens = []
             ix = 0
-            for tag, i in zip(text1.split(), text2.split()):
+            for tag, i in zip(text2.split(), text1.split()):
                 iden = "<extra_id_{}>".format(ix)
                 iden_ = "<extra_id_{}>".format(ix+1)
 
