@@ -62,17 +62,21 @@ sbatch submit_t5_nerd.slurm 2048 tags_fine;
 sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 
-for samplecnt in 1024 2048 -1 
+for i in 1 2 3 4 
 do
-for da_ver in fewnerd_both_SIS_SR_0.1.1 fewnerd_both_SIS_SR_0.3 fewnerd_both_SIS_SR_0.5 \
-                fewnerd_SIS_0.1.1 fewnerd_SIS_0.3 fewnerd_SIS_0.5 fewnerd_SIS_0.7.7 fewnerd_SIS_1 \
-                fewnerd_SR_0.1.1 fewnerd_SR_0.3 fewnerd_SR_0.5 fewnerd_SR_0.7.7 fewnerd_SR_1 
-    do 
-        sbatch submit_roberta_nerd.slurm ${samplecnt} ${da_ver};
+    for da in 0 1 
+    do
+        for samplecnt in 1024 2048 -1 
+        do
+        for da_ver in fewnerd_both_SIS_SR_0.1.1 fewnerd_both_SIS_SR_0.3 fewnerd_both_SIS_SR_0.5 \
+                        fewnerd_SIS_0.1.1 fewnerd_SIS_0.3 fewnerd_SIS_0.5 fewnerd_SIS_0.7.7 fewnerd_SIS_1 \
+                        fewnerd_SR_0.1.1 fewnerd_SR_0.3 fewnerd_SR_0.5 fewnerd_SR_0.7.7 fewnerd_SR_1 
+            do 
+                sbatch submit_roberta_nerd.slurm ${samplecnt} ${da_ver} ${da};
+            done
+        done 
     done
 done 
-
-
 
 
 sbatch submit_t5_nerd_da.slurm -1 0.8;

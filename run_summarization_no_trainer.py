@@ -248,6 +248,7 @@ def parse_args():
         default=1
     )
 
+
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
     parser.add_argument("--num_train_epochs", type=int, default=7, help="Total number of training epochs to perform.")
     parser.add_argument(
@@ -301,7 +302,8 @@ def parse_args():
     return args
 
 
-def main():
+
+def train():
     args = parse_args()
 
     if args.source_prefix is None and args.model_name_or_path in [
@@ -490,8 +492,10 @@ def main():
 
     if args.debug_cnt > 0:     
         # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
-        random_ixs = random.sample(range(len(processed_datasets_t5['train'])), args.debug_cnt)
-        processed_datasets_t5['train'] = processed_datasets_t5['train'].select(random_ixs)
+        random.seed(args.seed)
+        random_ids = random.sample(processed_datasets_t5['train']['id'], args.debug_cnt)
+        processed_datasets_t5['train'] = processed_datasets_t5['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
+
     processed_datasets_t5['test'] = datasets.concatenate_datasets([processed_datasets_t5["test"], processed_datasets_t5["dev"]])
 
     processed_datasets = processed_datasets_t5.map(
@@ -726,13 +730,102 @@ def main():
             print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
 
 
-        accelerator.wait_for_everyone()
-        unwrapped_model = accelerator.unwrap_model(model)
-        epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
-        os.makedirs(epoch_output_dir, exist_ok=True)
-        unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
+        # accelerator.wait_for_everyone()
+        # unwrapped_model = accelerator.unwrap_model(model)
+        # epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
+        # os.makedirs(epoch_output_dir, exist_ok=True)
+        # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
+        return model
 
+def gen(model):
+    tokenizer_t5 = tokenizer
+    processed_datasets_t5_gen = processed_datasets_t5.map(t5_format, 
+                    batched=False,
+                    num_proc= multiprocessing.cpu_count() ,
+                    load_from_cache_file=not args.overwrite_cache, 
+                    desc = "Running t5 mapping ==>")
+    def clean_gen_span(span):
+        for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.unk_token, tokenizer_t5.eos_token, tokenizer_t5.pad_token]:
+            span = span.replace(iden, '')
+        return span.strip()
+
+
+    processed_datasets_t5_shuffle = processed_datasets_t5_gen.shuffle()
+
+    bs = 128
+    ii = 0 
+    output_texts = []
+    while ii <= len(processed_datasets_t5_shuffle['train']):
+        text1s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text2']
+        text2s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text1']
+
+        text2s_ori = []
+        for t in text2s:
+            text2_decode = tokenizer_t5.decode(tokenizer_t5.encode(t), clean_up_tokenization_spaces=True, skip_special_tokens=True)
+            text2s_ori.append(text2_decode)
+
+
+        inputs = tokenizer_t5(text1s, return_tensors='pt', padding=True, truncation=True)
+
+        output = t5_nerd.generate(input_ids=inputs['input_ids'].to(device), 
+                       attention_mask=inputs['attention_mask'].to(device), do_sample=False, max_length=1024,
+                       top_p=0.9, top_k=0, temperature=1.2 ) 
+
+        output_decode = tokenizer_t5.batch_decode(output, clean_up_tokenization_spaces=True, skip_special_tokens=True)
+        output_decode_ori = tokenizer_t5.batch_decode(output, clean_up_tokenization_spaces=True)
+
+        output_texts.extend([dec.replace('</s>','').replace('<pad>','') for dec in output_decode_ori])
+        
+        # for l, p in zip(text2s_ori, output_decode): 
+        #     print(l)
+        #     print(p)
+        #     print()
+
+        print(ii, inputs['input_ids'].shape)
+
+        ii += bs
+        torch.cuda.empty_cache()
+
+    assert len(output_texts) == len(processed_datasets_t5_shuffle['train'])
+
+
+    with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}_{}.json'.format(args.seed, args.binomial), 'w') as f:
+
+        for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train']['id'], \
+                                          processed_datasets_t5_shuffle['train']['text2'], \
+                                          processed_datasets_t5_shuffle['train']['text1'], \
+                                          output_texts, \
+                                          processed_datasets_t5_shuffle['train'][tags_column]):
+            idens = []
+            ix = 0
+            for tag, i in zip(text1.split(), text2.split()):
+                iden = "<extra_id_{}>".format(ix)
+                iden_ = "<extra_id_{}>".format(ix+1)
+
+                if iden in text_gen:
+                    span = text_gen.split(iden)[1].split(iden_)[0]  
+                    span = clean_gen_span(span)
+                    if not span:
+                        span = tokenizer_t5.unk_token
+                else:
+                    span = tokenizer_t5.unk_token
+
+                print(tag.replace(iden, ''), '==>', i.replace(iden, ''), '--->', span)
+                idens.append(span)
+                ix += 1
+            print(idens)
+            dic = {}
+            dic['id'] = ii
+            dic['tokens'] = idens
+            dic[tags_column] = tags[:len(idens)]
+            assert len(dic[tags_column]) == len(dic['tokens'])
+            print()
+
+            json_string = json.dumps(dic)
+            f.write(json_string+'\n')
+            print('\n\n') 
 
 
 if __name__ == "__main__":
-    main()
+    model = train()
+    gen(model)
