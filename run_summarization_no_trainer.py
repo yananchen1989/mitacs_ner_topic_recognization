@@ -735,10 +735,9 @@ def train():
         # epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
         # os.makedirs(epoch_output_dir, exist_ok=True)
         # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
-        return model
+    return model
 
-def gen():
-    tokenizer_t5 = tokenizer
+def gen(model, tokenizer_t5):
     processed_datasets_t5_gen = processed_datasets_t5.map(t5_format, 
                     batched=False,
                     num_proc= multiprocessing.cpu_count() ,
@@ -827,7 +826,7 @@ def gen():
 
 
 if __name__ == "__main__":
-    train()
+    model, tokenizer_t5 = train()
     logger.info("training completed")
-    gen()
+    gen(model, tokenizer_t5)
     logger.info("inference completed")
