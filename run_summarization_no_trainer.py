@@ -305,6 +305,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    device = torch.device("cuda:{}".format(0) if torch.cuda.is_available() else "cpu")
 
     if args.source_prefix is None and args.model_name_or_path in [
         "t5-small",
