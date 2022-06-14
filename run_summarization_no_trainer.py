@@ -303,7 +303,7 @@ def parse_args():
 
 
 
-def train():
+def main():
     args = parse_args()
 
     if args.source_prefix is None and args.model_name_or_path in [
@@ -364,7 +364,13 @@ def train():
         file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
     raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
+    if args.debug_cnt > 0:     
+        # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+        random.seed(args.seed)
+        random_ids = random.sample(raw_datasets['train']['id'], args.debug_cnt)
+        raw_datasets['train'] = raw_datasets['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
 
+    raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -490,13 +496,13 @@ def train():
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
 
-    if args.debug_cnt > 0:     
-        # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
-        random.seed(args.seed)
-        random_ids = random.sample(processed_datasets_t5['train']['id'], args.debug_cnt)
-        processed_datasets_t5['train'] = processed_datasets_t5['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
+    # if args.debug_cnt > 0:     
+    #     # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
+    #     random.seed(args.seed)
+    #     random_ids = random.sample(processed_datasets_t5['train']['id'], args.debug_cnt)
+    #     processed_datasets_t5['train'] = processed_datasets_t5['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
 
-    processed_datasets_t5['test'] = datasets.concatenate_datasets([processed_datasets_t5["test"], processed_datasets_t5["dev"]])
+    # processed_datasets_t5['test'] = datasets.concatenate_datasets([processed_datasets_t5["test"], processed_datasets_t5["dev"]])
 
     processed_datasets = processed_datasets_t5.map(
         preprocess_function,
@@ -735,16 +741,16 @@ def train():
         # epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
         # os.makedirs(epoch_output_dir, exist_ok=True)
         # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
-    return unwrapped_model, tokenizer
+    # return unwrapped_model, tokenizer
 
-def gen(model, tokenizer_t5):
+
     processed_datasets_t5_gen = processed_datasets_t5.map(t5_format, 
                     batched=False,
                     num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
     def clean_gen_span(span):
-        for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.unk_token, tokenizer_t5.eos_token, tokenizer_t5.pad_token]:
+        for iden in tokenizer.additional_special_tokens + [tokenizer.unk_token, tokenizer.eos_token, tokenizer.pad_token]:
             span = span.replace(iden, '')
         return span.strip()
 
@@ -760,18 +766,18 @@ def gen(model, tokenizer_t5):
 
         text2s_ori = []
         for t in text2s:
-            text2_decode = tokenizer_t5.decode(tokenizer_t5.encode(t), clean_up_tokenization_spaces=True, skip_special_tokens=True)
+            text2_decode = tokenizer.decode(tokenizer.encode(t), clean_up_tokenization_spaces=True, skip_special_tokens=True)
             text2s_ori.append(text2_decode)
 
 
-        inputs = tokenizer_t5(text1s, return_tensors='pt', padding=True, truncation=True)
+        inputs = tokenizer(text1s, return_tensors='pt', padding=True, truncation=True)
 
-        output = t5_nerd.generate(input_ids=inputs['input_ids'].to(device), 
+        output = unwrapped_model.generate(input_ids=inputs['input_ids'].to(device), 
                        attention_mask=inputs['attention_mask'].to(device), do_sample=False, max_length=1024,
                        top_p=0.9, top_k=0, temperature=1.2 ) 
 
-        output_decode = tokenizer_t5.batch_decode(output, clean_up_tokenization_spaces=True, skip_special_tokens=True)
-        output_decode_ori = tokenizer_t5.batch_decode(output, clean_up_tokenization_spaces=True)
+        output_decode = tokenizer.batch_decode(output, clean_up_tokenization_spaces=True, skip_special_tokens=True)
+        output_decode_ori = tokenizer.batch_decode(output, clean_up_tokenization_spaces=True)
 
         output_texts.extend([dec.replace('</s>','').replace('<pad>','') for dec in output_decode_ori])
         
@@ -805,9 +811,9 @@ def gen(model, tokenizer_t5):
                     span = text_gen.split(iden)[1].split(iden_)[0]  
                     span = clean_gen_span(span)
                     if not span:
-                        span = tokenizer_t5.unk_token
+                        span = tokenizer.unk_token
                 else:
-                    span = tokenizer_t5.unk_token
+                    span = tokenizer.unk_token
 
                 print(tag.replace(iden, ''), '==>', i.replace(iden, ''), '--->', span)
                 idens.append(span)
@@ -826,7 +832,4 @@ def gen(model, tokenizer_t5):
 
 
 if __name__ == "__main__":
-    model, tokenizer_t5 = train()
-    logger.info("training completed")
-    gen(model, tokenizer_t5)
-    logger.info("inference completed")
+    main()
