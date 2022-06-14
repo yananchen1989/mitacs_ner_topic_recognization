@@ -654,7 +654,7 @@ def train():
             if completed_steps >= args.max_train_steps:
                 break
 
-        if epoch % 5 == 0 and epoch > 0:
+        if  epoch > 20:
             logger.info("begin to eval")
             model.eval()
             if args.val_max_target_length is None:
