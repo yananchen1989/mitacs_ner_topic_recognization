@@ -42,9 +42,9 @@ CUDA_VISIBLE_DEVICES=3 python -u unit_test.py
 
 
 CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_summarization_no_trainer.py \
-            --num_train_epochs 12 \
-            --model_name_or_path  t5-large \
-            --per_device_train_batch_size 8   --per_device_eval_batch_size 256 \
+            --num_train_epochs 7 \
+            --model_name_or_path  t5-base \
+            --per_device_train_batch_size 32   --per_device_eval_batch_size 64 \
             --output_dir '/scratch/w/wluyliu/yananc/finetunes/t5_nerd_test' \
             --max_target_length 128 \
             --max_source_length 128 \
@@ -52,8 +52,8 @@ CUDA_VISIBLE_DEVICES=2 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_su
             --overwrite_cache True \
             --text_column text1 \
             --summary_column text2 \
-            --debug_cnt 2048  \
-            --model_type t5  --local_files_only --tags_column tags_fine
+            --debug_cnt 1024  \
+            --model_type t5  --local_files_only --tags_column tags_coarse --seed 1
 
 
 
@@ -62,21 +62,20 @@ sbatch submit_t5_nerd.slurm 2048 tags_fine;
 sbatch submit_t5_nerd.slurm -1   tags_fine;
 
 
-for i in 1 2 3 4 
+
+for da in 1 0
 do
-    for da in 0 1 
+    for samplecnt in 1024 2048 
     do
-        for samplecnt in 1024 2048 -1 
-        do
-        for da_ver in fewnerd_both_SIS_SR_0.1.1 fewnerd_both_SIS_SR_0.3 fewnerd_both_SIS_SR_0.5 \
-                        fewnerd_SIS_0.1.1 fewnerd_SIS_0.3 fewnerd_SIS_0.5 fewnerd_SIS_0.7.7 fewnerd_SIS_1 \
-                        fewnerd_SR_0.1.1 fewnerd_SR_0.3 fewnerd_SR_0.5 fewnerd_SR_0.7.7 fewnerd_SR_1 
-            do 
-                sbatch submit_roberta_nerd.slurm ${samplecnt} ${da_ver} ${da};
-            done
-        done 
-    done
-done 
+    for da_ver in fewnerd_both_SIS_SR_0.1.1 fewnerd_both_SIS_SR_0.3 fewnerd_both_SIS_SR_0.5 \
+                    fewnerd_SIS_0.1.1 fewnerd_SIS_0.3 fewnerd_SIS_0.5 fewnerd_SIS_0.7.7 fewnerd_SIS_1 \
+                    fewnerd_SR_0.1.1 fewnerd_SR_0.3 fewnerd_SR_0.5 fewnerd_SR_0.7.7 fewnerd_SR_1 
+        do 
+            sbatch submit_roberta_nerd.slurm ${samplecnt} ${da_ver} ${da};
+        done
+    done 
+done
+
 
 
 sbatch submit_t5_nerd_da.slurm -1 0.8;
