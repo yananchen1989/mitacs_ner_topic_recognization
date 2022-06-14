@@ -737,7 +737,7 @@ def train():
         # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
         return model
 
-def gen(model):
+def gen():
     tokenizer_t5 = tokenizer
     processed_datasets_t5_gen = processed_datasets_t5.map(t5_format, 
                     batched=False,
@@ -827,5 +827,7 @@ def gen(model):
 
 
 if __name__ == "__main__":
-    model = train()
-    gen(model)
+    train()
+    logger.info("training completed")
+    gen()
+    logger.info("inference completed")
