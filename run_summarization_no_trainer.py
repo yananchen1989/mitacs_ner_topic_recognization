@@ -114,7 +114,7 @@ def parse_args():
     parser.add_argument(
         "--max_source_length",
         type=int,
-        default=1024,
+        default=128,
         help="The maximum total input sequence length after "
         "tokenization.Sequences longer than this will be truncated, sequences shorter will be padded.",
     )
@@ -131,7 +131,7 @@ def parse_args():
     parser.add_argument(
         "--max_target_length",
         type=int,
-        default=256,
+        default=128,
         help="The maximum total sequence length for target text after "
         "tokenization. Sequences longer than this will be truncated, sequences shorter will be padded."
         "during ``evaluate`` and ``predict``.",
@@ -157,7 +157,7 @@ def parse_args():
     parser.add_argument(
         "--debug_cnt",
         type=int,
-        default=-1,
+        default=1024,
     )
     parser.add_argument(
         "--num_beams",
@@ -173,7 +173,7 @@ def parse_args():
     )
     parser.add_argument(
         "--model_name_or_path",
-        default='t5-large',
+        default='t5-base',
         type=str,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
         # required=True,
@@ -274,7 +274,7 @@ def parse_args():
         "--num_warmup_steps", type=int, default=0, help="Number of steps for the warmup in the lr scheduler."
     )
     parser.add_argument("--output_dir", type=str, default=None, help="Where to store the final model.")
-    parser.add_argument("--seed", type=int, default=None, help="A seed for reproducible training.")
+    parser.add_argument("--seed", type=int, default=99, help="A seed for reproducible training.")
     parser.add_argument(
         "--model_type",
         type=str,
@@ -372,6 +372,14 @@ def main():
         raw_datasets['train'] = raw_datasets['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
 
     raw_datasets['test'] = datasets.concatenate_datasets([raw_datasets["test"], raw_datasets["dev"]])
+    random.seed(args.seed)
+    random_ids_test = random.sample(raw_datasets['test']['id'], 10240)
+    raw_datasets['test'] = raw_datasets['test'].filter(lambda example: example['id'] in random_ids_test, num_proc= multiprocessing.cpu_count())
+
+    raw_datasets.pop('dev')
+
+    print("raw_datasets summary")
+    print(raw_datasets)
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -497,13 +505,6 @@ def main():
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
 
-    # if args.debug_cnt > 0:     
-    #     # processed_datasets['train_dev'] = datasets.concatenate_datasets([processed_datasets["train"], processed_datasets["dev"]])
-    #     random.seed(args.seed)
-    #     random_ids = random.sample(processed_datasets_t5['train']['id'], args.debug_cnt)
-    #     processed_datasets_t5['train'] = processed_datasets_t5['train'].filter(lambda example: example['id'] in random_ids, num_proc= multiprocessing.cpu_count())
-
-    # processed_datasets_t5['test'] = datasets.concatenate_datasets([processed_datasets_t5["test"], processed_datasets_t5["dev"]])
 
     processed_datasets = processed_datasets_t5.map(
         preprocess_function,
@@ -513,9 +514,6 @@ def main():
         load_from_cache_file=not args.overwrite_cache,
         desc="Running tokenizer ===>",
     )
-
-    # train_dataset = processed_datasets["train"]
-    # eval_dataset = processed_datasets["dev"]
 
 
     train_dataset =  processed_datasets['train']
@@ -737,8 +735,8 @@ def main():
             print("t5_ner_report ==>",  epoch, args.tags_column, args.max_target_length, args.debug_cnt, report)
 
 
-        accelerator.wait_for_everyone()
-        unwrapped_model = accelerator.unwrap_model(model)
+    accelerator.wait_for_everyone()
+    unwrapped_model = accelerator.unwrap_model(model)
         # epoch_output_dir = "{}/binomial_{}/epoch_{}".format(args.output_dir, args.binomial, epoch)
         # os.makedirs(epoch_output_dir, exist_ok=True)
         # unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
@@ -750,6 +748,7 @@ def main():
                     num_proc= multiprocessing.cpu_count() ,
                     load_from_cache_file=not args.overwrite_cache, 
                     desc = "Running t5 mapping ==>")
+
     def clean_gen_span(span):
         for iden in tokenizer.additional_special_tokens + [tokenizer.unk_token, tokenizer.eos_token, tokenizer.pad_token]:
             span = span.replace(iden, '')
@@ -764,12 +763,12 @@ def main():
     while ii <= len(processed_datasets_t5_shuffle['train']):
         text1s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text2']
         text2s = processed_datasets_t5_shuffle['train'][ii:ii+bs]['text1']
-
+        if not text1s:
+            break 
         text2s_ori = []
         for t in text2s:
             text2_decode = tokenizer.decode(tokenizer.encode(t), clean_up_tokenization_spaces=True, skip_special_tokens=True)
             text2s_ori.append(text2_decode)
-
 
         inputs = tokenizer(text1s, return_tensors='pt', padding=True, truncation=True)
 
@@ -797,11 +796,11 @@ def main():
 
     with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}_{}.json'.format(args.seed, args.binomial), 'w') as f:
 
-        for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train']['id'], \
-                                          processed_datasets_t5_shuffle['train']['text2'], \
-                                          processed_datasets_t5_shuffle['train']['text1'], \
-                                          output_texts, \
-                                          processed_datasets_t5_shuffle['train'][tags_column]):
+        for ii, text1, text2, text_gen, tags in zip(  processed_datasets_t5_shuffle['train']['id'], \
+                                                      processed_datasets_t5_shuffle['train']['text2'], \
+                                                      processed_datasets_t5_shuffle['train']['text1'], \
+                                                      output_texts, \
+                                                      processed_datasets_t5_shuffle['train'][args.tags_column]):
             idens = []
             ix = 0
             for tag, i in zip(text1.split(), text2.split()):
@@ -823,8 +822,8 @@ def main():
             dic = {}
             dic['id'] = ii
             dic['tokens'] = idens
-            dic[tags_column] = tags[:len(idens)]
-            assert len(dic[tags_column]) == len(dic['tokens'])
+            dic[args.tags_column] = tags[:len(idens)]
+            assert len(dic[args.tags_column]) == len(dic['tokens'])
             print()
 
             json_string = json.dumps(dic)
