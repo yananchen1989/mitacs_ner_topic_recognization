@@ -1,0 +1,13 @@
+{
+    "custom_theme": {
+        "labels": {
+            "group": "#feca74",
+            "university": "#7aecec",
+            "investor": "#aa9cfc",
+            "lab": "#e4e7d2",
+            "gov": "#bfe1d9",
+            "company": "#f0d0ff"
+        }
+    },
+    "global_css": ".prodigy-button-reject { display: none }"
+}
