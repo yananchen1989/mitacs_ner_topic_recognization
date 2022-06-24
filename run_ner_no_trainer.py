@@ -394,7 +394,9 @@ def main():
             train_syn_ll.append(raw_datasets\
                                 .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test']\
                                 .map(lambda example: tqi_replacement(example)))
-            
+        
+        train_syn_ll.append(raw_datasets\
+                                .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test'])
         raw_datasets['train'] = datasets.concatenate_datasets(train_syn_ll)
             
         raw_datasets['test'] = raw_datasets\
@@ -772,8 +774,7 @@ def main():
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
-        print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
-                               args.da_ver, epoch, eval_metric)
+        print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, epoch, eval_metric)
         if eval_metric['f1'] > best_f1:
             best_f1 = eval_metric['f1']
 
