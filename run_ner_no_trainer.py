@@ -52,7 +52,7 @@ from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
 from utils.process_func import * 
 # from utils.crf_bert import * 
-
+import pandas as pd 
 logger = logging.getLogger(__name__)
 require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/token-classification/requirements.txt")
 
@@ -109,6 +109,12 @@ def parse_args():
         "--debug_cnt",
         type=int,
         default=5000,
+    )
+
+    parser.add_argument(
+        "--k",
+        type=int,
+        default=1,
     )
 
     parser.add_argument(
@@ -308,26 +314,91 @@ def main():
     #         cache_dir='/scratch/w/wluyliu/yananc/cache')
 
 
+    def tqi_replacement(example):
+
+        if list(set(example['tags'])) == ['O']:
+            return example
+
+        tokens_ = []
+        tags_ = []
+
+        i = 0
+        while i < len(example['tokens']):
+
+            # print(i, token, tag)
+            if example['tags'][i] != 'O':
+                df_candidates_mention = df_tags.loc[df_tags['tag'] == example['tags'][i]]
+                candidate = df_candidates_mention.sample(1)['span'].tolist()[0]
+                candidate_tokens = candidate.split()
+                for j in range(i, len(example['tokens'])):
+                    if example['tags'][j] == 'O':
+                        break 
+                tokens_.extend(candidate_tokens)
+                tags_.extend(len(candidate_tokens) * [example['tags'][i]])
+                # print(example['tags'][i] , '==>',i)
+                if example['tags'][j] == 'O':
+                    i = j 
+                else:
+                    i = j+1
+
+            else:
+                tokens_.append(example['tokens'][i])
+                tags_.append(example['tags'][i])
+                i += 1
+
+                # print('O==>',i)
+        # for  token, tag in zip(tokens_, tags_):
+        #     print(token, tag)
+        assert len(tokens_) == len(tags_)
+        return {'id':example['id'], 'tokens':tokens_, 'tags':tags_}
+    
+
+
+
     if args.dataset_name == 'tqi':
+        # load dict
+        df_tags = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/datasets/QI-NERs.csv")
+        ixl = {i:j for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+        ixl_rev = {j:i for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+
         file_list={}
         file_list['train_test'] = "/scratch/w/wluyliu/yananc/sentence_level_tokens.json"
         raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
         ids = list(set([ii['id'] for ii in raw_datasets['train_test']]))
+        tags = set()
+        for ii in raw_datasets['train_test']:
+            tags.update(ii['tags'])
+        print("TQI tags set:", tags)
+
+        assert set(list(ixl.values())+ ['O'])  == tags
+
+
+        # for ii in range(len(raw_datasets['train_test'])):
+        #     print(ii)
+        #     example = raw_datasets['train_test'][ii]
+        #     example_ = tqi_replacement(example)
 
         random.shuffle(ids)
         split_ix = int(len(ids)*0.8)
         print("ids:{} split_ix:{}".format(len(ids), split_ix))
-        if args.debug_cnt > 0: 
-            assert args.debug_cnt < split_ix
-            ids_train = ids[:args.debug_cnt]
-        else:
-            ids_train = ids[:split_ix]
-
+        # if args.debug_cnt > 0: 
+        #     assert args.debug_cnt < split_ix
+        #     ids_train = ids[:args.debug_cnt]
+        # else:
+        ids_train = ids[:split_ix]
         ids_test = ids[split_ix:]
 
-        raw_datasets['train'] = raw_datasets.filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test']
-        raw_datasets['test'] = raw_datasets.filter(lambda example: example['id'] in ids_test, num_proc= multiprocessing.cpu_count())['train_test']
+        train_syn_ll = []
+        for _ in range(args.k): # 
+            train_syn_ll.append(raw_datasets\
+                                .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test']\
+                                .map(lambda example: tqi_replacement(example)))
+            
+        raw_datasets['train'] = datasets.concatenate_datasets(train_syn_ll)
+            
+        raw_datasets['test'] = raw_datasets\
+                                .filter(lambda example: example['id'] in ids_test, num_proc= multiprocessing.cpu_count())['train_test']
 
 
 
