@@ -774,7 +774,7 @@ def main():
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)
-        print("roberta_ner_report ==>",  args.label_column_name, args.debug_cnt, epoch, eval_metric)
+        print("roberta_ner_report ==>",   args.k, epoch,  eval_metric)
         if eval_metric['f1'] > best_f1:
             best_f1 = eval_metric['f1']
 
@@ -796,8 +796,7 @@ def main():
             tokenizer.save_pretrained(args.output_dir)
             if args.push_to_hub:
                 repo.push_to_hub(commit_message="End of training", auto_lfs_prune=True)
-    print("roberta_ner_report_final ==>",  args.label_column_name, args.debug_cnt, 'da:', args.da, \
-                               args.da_ver, best_f1)
+    print("roberta_ner_report_final ==>",   args.k,  best_f1)
 
 if __name__ == "__main__":
     main()
