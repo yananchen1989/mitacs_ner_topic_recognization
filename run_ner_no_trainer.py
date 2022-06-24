@@ -338,6 +338,10 @@ def main():
         file_list['da'] = '/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(args.da_ver)   
         raw_datasets_ = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 
+
+
+
+
         # file_list = {}
         # file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial)        
              

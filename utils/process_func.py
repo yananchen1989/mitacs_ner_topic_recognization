@@ -73,21 +73,6 @@ def load_dsn(dsn):
 
 
 #################### NER ###################
-tag_corarse = ['O']
-tag_fine = ['O']
-with open("/home/w/wluyliu/yananc/nlp4quantumpapers/utils/few_nerd_tag_map.tsv", 'r') as f:
-    for line in f:
-        if line.strip() == 'O':
-            continue
-
-        if line.strip().split('-')[0] not in tag_corarse:
-            tag_corarse.append(line.strip().split('-')[0])
-        
-        tag_fine.append(line.strip())
-
-
-tag_map_fine = {e:ix for ix, e in enumerate(tag_fine)}
-tag_map_coarse = {e:ix for ix, e in enumerate(tag_corarse)}
 
 
 def map_func(example):

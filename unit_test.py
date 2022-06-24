@@ -21,26 +21,36 @@ args = parser.parse_args()
 # file_list = {}
 # for dsn in ['dev','test','train']:
 
+import glob
+files = glob.glob("/scratch/w/wluyliu/yananc/fewnerd_augmented/fewnerd_*")
 
-#     with open("/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.txt".format(dsn), 'r') as f:
-#         file = f.readlines()
+for ff in files:
+    with open(ff, 'r') as f:
+        file = f.readlines()
 
-#     split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
+    split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
 
-#     with open('./few_nerd_supervised/{}.json'.format(dsn), 'w') as f:
-#         ix = 0
-#         for i, j in zip(split_ix[0:-1], split_ix[1:]):
+    with open('/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(ff.split('/')[-1]), 'w') as f:
+        ix = 0
+        for i, j in zip(split_ix[0:-1], split_ix[1:]):
 
-#             tokens = file[i:j]
-#             dic = {}
-#             dic['id'] = ix
-#             dic['tokens'] = [ii.strip().split('\t')[0] for ii in tokens if ii!='\n']
-#             dic['tags'] = [ii.strip().split('\t')[1] for ii in tokens if ii!='\n']
-#             json_string = json.dumps(dic)
+            tokens = file[i:j]
+            dic = {}
+            dic['id'] = ix
+            dic['tokens'] = [ii.strip().split('\t')[0].strip() for ii in tokens if ii!='\n']
+            dic['tags'] = [ii.strip().split('\t')[1].strip() for ii in tokens if ii!='\n']
+            json_string = json.dumps(dic)
 
-#             f.write(json_string+'\n')
-#             ix += 1
-#     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
+            f.write(json_string+'\n')
+            ix += 1
+    # file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(file.split('/')[-1])
+    print(ff.split('/')[-1])
+
+
+
+
+
+
 gpu = 0
 import torch
 device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() else "cpu")
@@ -206,7 +216,6 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.js
 
 
 
-    
 
 
 
@@ -223,11 +232,35 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.js
 
 
 
+infos = []
+with open("log", 'r') as f:
+    for line in f:
+        tokens = line.split('tags_fine')[-1].strip().split()
+
+
+        samplecnt = int(tokens[0])
+        da = int(tokens[2])
+        da_ver = tokens[3]
+        f1 = float(tokens[-1])
+        infos.append((samplecnt, da, da_ver, f1))
+
+import pandas as pd
+df = pd.DataFrame(infos, columns=['samplecnt','da','da_ver', 'f1'])
+
+for da_ver in df['da_ver'].unique():
+    print(da_ver, df.loc[(df['samplecnt']==-1) & (df['da']==1) & (df['da_ver']==da_ver), 'f1'].mean())
+
+
+
+df.loc[(df['da']==0) & (df['samplecnt']==1024)]
 
 
 
 
 
+with open("sentence_level_tokens.json", 'r') as f:
+    for line in f:
+        example = json.loads(line.strip()) 
 
 
 
