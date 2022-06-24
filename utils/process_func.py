@@ -100,16 +100,32 @@ def map_func(example):
     return example
 
 
-def sep_trunk(df_tmp):
-    results = []
-    for tag in df_tmp['tags'].unique():
-        if tag == 'O':
-            continue 
+# def sep_trunk(df_tmp):
+    
 
-        df_tmp_f = df_tmp.loc[df_tmp['tags']==tag]
+    
 
-        list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
-        mentions = [' '.join(df_tag['tokens'].tolist()) for df_tag in list_of_df]
+
+#     for tag in df_tmp['tag'].unique():
+#         if tag == 'O':
+#             continue 
+#         df_candidates_mention = df_tags.loc[df_tags['tag'] == tag]
+#         df_tmp_f = df_tmp.loc[df_tmp['tag']==tag]
+
+#         list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
+        
+        
+#         for dfi in list_of_df:
+#             ixi = list(dfi.index)
+#             candidate = df_candidates_mention.sample(1)['span'].tolist()[0]
+#             candidate_tokens = candidate.split()
+
+
+
+
+
+
+        mentions = [' '.join(df_tag['token'].tolist()) for df_tag in list_of_df]
         results.append((' ; '.join(mentions), tag))
     return results
 
