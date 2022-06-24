@@ -125,9 +125,9 @@ def map_func(example):
 
 
 
-        mentions = [' '.join(df_tag['token'].tolist()) for df_tag in list_of_df]
-        results.append((' ; '.join(mentions), tag))
-    return results
+    #     mentions = [' '.join(df_tag['token'].tolist()) for df_tag in list_of_df]
+    #     results.append((' ; '.join(mentions), tag))
+    # return results
 
 
 
