@@ -390,10 +390,11 @@ def main():
         ids_test = ids[split_ix:]
 
         train_syn_ll = []
-        for _ in range(args.k): # 
-            train_syn_ll.append(raw_datasets\
-                                .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test']\
-                                .map(lambda example: tqi_replacement(example)))
+        if args.k > 0: 
+            for _ in range(args.k): # 
+                train_syn_ll.append(raw_datasets\
+                                    .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test']\
+                                    .map(lambda example: tqi_replacement(example)))
         
         train_syn_ll.append(raw_datasets\
                                 .filter(lambda example: example['id'] in ids_train, num_proc= multiprocessing.cpu_count())['train_test'])
