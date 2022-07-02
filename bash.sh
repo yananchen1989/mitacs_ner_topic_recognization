@@ -18,26 +18,42 @@ done
 
 
 
-CUDA_VISIBLE_DEVICES=1  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+CUDA_VISIBLE_DEVICES=1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "tqi" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
           --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
           --text_column_name "tokens" \
-          --label_column_name "tags_coarse" \
+          --label_column_name "tags" \
           --num_train_epochs 20 \
-          --per_device_train_batch_size 32 --per_device_eval_batch_size 32 \
-          --debug_cnt  -1 \
-          --local_files_only --da 1 --da_ver "fewnerd_SIS_1"
+          --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
+          --k  1 \
+          --local_files_only
 
 
 
 
 
-CUDA_VISIBLE_DEVICES=3 python -u unit_test.py 
+CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/topic_classification_augmentation/run_clm_no_trainer.py \
+        --num_train_epochs 7 \
+        --train_file '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_train_gpt.csv' \
+        --validation_file '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_test_gpt.csv' \
+        --model_name_or_path gpt2 \
+        --per_device_train_batch_size 32 \
+        --per_device_eval_batch_size 32 \
+        --output_dir /scratch/w/wluyliu/yananc/finetunes/gpt2_fewnerd \
+        --preprocessing_num_workers 128 --overwrite_cache True 
+        
 
 
+         --debug_cnt 5000000
           
+
+
+
+
+
+
 
 
 

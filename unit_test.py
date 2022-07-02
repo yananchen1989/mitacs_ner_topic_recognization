@@ -1,6 +1,6 @@
 #############  ########## CUDA_VISIBLE_DEVICES
 import pandas as pd 
-import json,random
+import json,random,multiprocessing
 import numpy as np 
 import datasets,argparse
 from utils.process_func import * 
@@ -63,20 +63,16 @@ raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/s
 
 
 
+
+
+
 tags_column = 'tags_coarse'
 
-from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
-import datasets,multiprocessing
-tokenizer_t5 = AutoTokenizer.from_pretrained("t5-base", cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=True)
-print(tokenizer_t5)
+def gpt_format(example):
+    gpt_concat = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
+    example['text_gpt'] = gpt_concat
+    return example
 
-# special_tokens_dict = {'additional_special_tokens': ['[C1]','[C2]','[C3]','[C4]']}
-# num_added_toks = tokenizer_t5.add_special_tokens(special_tokens_dict)
-# model.resize_token_embeddings(len(tokenizer_t5))
-
-t5_nerd = AutoModelWithLMHead.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/t5_nerd_da_coarse/binomial_{}/epoch_7".format(args.binomial))
-t5_nerd.to(device)
-#gen_nlp  = pipeline("text2text-generation", model=t5_nerd, tokenizer_t5=tokenizer_t5, device=gpu)
 
 
 def t5_format(example):
@@ -103,11 +99,37 @@ dataset_ix = raw_datasets.map(map_func,
                 load_from_cache_file=not True, remove_columns=['tags'],
                 desc = "Running ix mapping ==>")
 
-processed_datasets_t5 = dataset_ix.map(t5_format, 
+processed_datasets_gpt = dataset_ix.map(gpt_format, 
                 batched=False,
                 num_proc= multiprocessing.cpu_count() ,
                 load_from_cache_file=False, 
                 desc = "Running t5 mapping ==>")
+
+
+infos = []
+for ix, text in zip(processed_datasets_gpt['test']['id'], processed_datasets_gpt['test']['text_gpt']):
+    infos.append((ix, text))
+
+df = pd.DataFrame(infos, columns=['ix','text_gpt'])
+
+df.to_csv("fewnerd_test_gpt.csv", index=False, sep='\t')
+
+
+
+tokenizer = AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+
+
+
+tokenizer_neo = AutoTokenizer.from_pretrained('EleutherAI/gpt-neo-2.7B', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+
+
+
+
+
+text = "<O>The <organization>Swedish <organization>national <organization>men <organization>'s <organization>ice <organization>hockey"
+
+
+
 
 # processed_datasets_t5.save_to_disk("/scratch/w/wluyliu/yananc/few_nerd_supervised")
 
@@ -253,16 +275,6 @@ for da_ver in df['da_ver'].unique():
 
 
 df.loc[(df['da']==0) & (df['samplecnt']==1024)]
-
-
-
-
-
-with open("sentence_level_tokens.json", 'r') as f:
-    for line in f:
-        example = json.loads(line.strip()) 
-
-
 
 
 

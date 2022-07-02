@@ -100,34 +100,81 @@ def map_func(example):
     return example
 
 
-# def sep_trunk(df_tmp):
-    
 
-    
+tags_coarse = ['O',
+ 'art',
+ 'building',
+ 'event',
+ 'location',
+ 'organization',
+ 'other',
+ 'person',
+ 'product']
 
-
-#     for tag in df_tmp['tag'].unique():
-#         if tag == 'O':
-#             continue 
-#         df_candidates_mention = df_tags.loc[df_tags['tag'] == tag]
-#         df_tmp_f = df_tmp.loc[df_tmp['tag']==tag]
-
-#         list_of_df = [d for _, d in df_tmp_f.groupby(df_tmp_f.index - np.arange(len(df_tmp_f)))]
-        
-        
-#         for dfi in list_of_df:
-#             ixi = list(dfi.index)
-#             candidate = df_candidates_mention.sample(1)['span'].tolist()[0]
-#             candidate_tokens = candidate.split()
-
-
-
-
-
-
-    #     mentions = [' '.join(df_tag['token'].tolist()) for df_tag in list_of_df]
-    #     results.append((' ; '.join(mentions), tag))
-    # return results
-
-
-
+tags_fine = ['O',
+ 'art-broadcastprogram',
+ 'art-film',
+ 'art-music',
+ 'art-other',
+ 'art-painting',
+ 'art-writtenart',
+ 'building-airport',
+ 'building-hospital',
+ 'building-hotel',
+ 'building-library',
+ 'building-other',
+ 'building-restaurant',
+ 'building-sportsfacility',
+ 'building-theater',
+ 'event-attack/battle/war/militaryconflict',
+ 'event-disaster',
+ 'event-election',
+ 'event-other',
+ 'event-protest',
+ 'event-sportsevent',
+ 'location-GPE',
+ 'location-bodiesofwater',
+ 'location-island',
+ 'location-mountain',
+ 'location-other',
+ 'location-park',
+ 'location-road/railway/highway/transit',
+ 'organization-company',
+ 'organization-education',
+ 'organization-government/governmentagency',
+ 'organization-media/newspaper',
+ 'organization-other',
+ 'organization-politicalparty',
+ 'organization-religion',
+ 'organization-showorganization',
+ 'organization-sportsleague',
+ 'organization-sportsteam',
+ 'other-astronomything',
+ 'other-award',
+ 'other-biologything',
+ 'other-chemicalthing',
+ 'other-currency',
+ 'other-disease',
+ 'other-educationaldegree',
+ 'other-god',
+ 'other-language',
+ 'other-law',
+ 'other-livingthing',
+ 'other-medical',
+ 'person-actor',
+ 'person-artist/author',
+ 'person-athlete',
+ 'person-director',
+ 'person-other',
+ 'person-politician',
+ 'person-scholar',
+ 'person-soldier',
+ 'product-airplane',
+ 'product-car',
+ 'product-food',
+ 'product-game',
+ 'product-other',
+ 'product-ship',
+ 'product-software',
+ 'product-train',
+ 'product-weapon']
