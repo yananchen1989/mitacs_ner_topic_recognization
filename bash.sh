@@ -42,11 +42,14 @@ CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_cl
         --per_device_eval_batch_size 16 \
         --output_dir /scratch/w/wluyliu/yananc/finetunes/gpt2_fewnerd \
         --preprocessing_num_workers 128 --overwrite_cache True --block_size 256 \
-         --debug_cnt -1
+         --debug_cnt {1}
           
 
 
-
+for k in 1024 2048 -1 
+do 
+    sbatch test.slurm ${k}
+done
 
 
 

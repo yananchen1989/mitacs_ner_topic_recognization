@@ -363,7 +363,7 @@ def main():
     #text_column_name = "text" if "text" in column_names else column_names[0]
 
     def tokenize_function(examples):
-        return tokenizer(examples['text'], truncation=False)
+        return tokenizer(examples['text'], truncation=True, padding=True, max_length=256)
 
     tokenized_datasets = raw_datasets.map(
         tokenize_function,
