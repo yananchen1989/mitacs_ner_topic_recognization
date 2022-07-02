@@ -22,7 +22,7 @@ https://huggingface.co/models?filter=causal-lm
 """
 # You can also adapt this script on your own causal language modeling task. Pointers for this are left as comments.
 
-import argparse
+import argparse,multiprocessing
 import logging
 import math
 import os
@@ -244,40 +244,67 @@ def main():
         elif args.dataset_name == 'c4':
             raw_datasets = datasets.load_dataset(args.dataset_name, "realnewslike", cache_dir='/scratch/w/wluyliu/yananc/cache')
         
+        elif args.dataset_name == 'fewnerd':
+            file_list = {}
+            for dsn in ['dev','test','train']:
+                file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
+            raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+            tags_column = 'tags_coarse'
+
+            def gpt_format(example):
+                gpt_concat = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
+                example['text_gpt'] = gpt_concat
+                return example  
+                
+            from utils.process_func import * 
+            dataset_ix = raw_datasets.map(map_func, 
+                            batched=False,
+                            num_proc= multiprocessing.cpu_count() ,
+                            load_from_cache_file=not True, remove_columns=['tags'],
+                            desc = "Running ix mapping ==>")
+
+            processed_datasets_gpt = dataset_ix.map(gpt_format, 
+                            batched=False,
+                            num_proc= multiprocessing.cpu_count() ,
+                            load_from_cache_file=False, 
+                            desc = "Running t5 mapping ==>")   
+            raw_datasets = processed_datasets_gpt
+
+
         # raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name)
-        if "validation" not in raw_datasets.keys():
-            raw_datasets["validation"] = load_dataset(
-                args.dataset_name,
-                args.dataset_config_name,
-                split=f"train[:{args.validation_split_percentage}%]",
-            )
-            raw_datasets["train"] = load_dataset(
-                args.dataset_name,
-                args.dataset_config_name,
-                split=f"train[{args.validation_split_percentage}%:]",
-            )
-    else:
-        data_files = {}
-        if args.train_file is not None:
-            data_files["train"] = args.train_file
-        if args.validation_file is not None:
-            data_files["validation"] = args.validation_file
-        extension = args.train_file.split(".")[-1]
-        if extension == "txt":
-            extension = "text"
-        raw_datasets = load_dataset(extension, data_files=data_files)
-        # If no validation data is there, validation_split_percentage will be used to divide the dataset.
-        if "validation" not in raw_datasets.keys():
-            raw_datasets["validation"] = load_dataset(
-                extension,
-                data_files=data_files,
-                split=f"train[:{args.validation_split_percentage}%]",
-            )
-            raw_datasets["train"] = load_dataset(
-                extension,
-                data_files=data_files,
-                split=f"train[{args.validation_split_percentage}%:]",
-            )
+        # if "validation" not in raw_datasets.keys():
+        #     raw_datasets["validation"] = load_dataset(
+        #         args.dataset_name,
+        #         args.dataset_config_name,
+        #         split=f"train[:{args.validation_split_percentage}%]",
+        #     )
+        #     raw_datasets["train"] = load_dataset(
+        #         args.dataset_name,
+        #         args.dataset_config_name,
+        #         split=f"train[{args.validation_split_percentage}%:]",
+        #     )
+    # else:
+    #     data_files = {}
+    #     if args.train_file is not None:
+    #         data_files["train"] = args.train_file
+    #     if args.validation_file is not None:
+    #         data_files["validation"] = args.validation_file
+    #     extension = args.train_file.split(".")[-1]
+    #     if extension == "txt":
+    #         extension = "text"
+    #     raw_datasets = load_dataset(extension, data_files=data_files)
+    #     # If no validation data is there, validation_split_percentage will be used to divide the dataset.
+    #     if "validation" not in raw_datasets.keys():
+    #         raw_datasets["validation"] = load_dataset(
+    #             extension,
+    #             data_files=data_files,
+    #             split=f"train[:{args.validation_split_percentage}%]",
+    #         )
+    #         raw_datasets["train"] = load_dataset(
+    #             extension,
+    #             data_files=data_files,
+    #             split=f"train[{args.validation_split_percentage}%:]",
+    #         )
 
     if args.debug_cnt > 0:
         raw_datasets['train'] = raw_datasets['train'].shuffle().select(range(args.debug_cnt))   
@@ -395,7 +422,7 @@ def main():
     )
 
     train_dataset = lm_datasets["train"]
-    eval_dataset = lm_datasets["validation"]
+    eval_dataset = lm_datasets["test"]
 
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):

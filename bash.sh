@@ -36,8 +36,7 @@ CUDA_VISIBLE_DEVICES=1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_
 
 CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/topic_classification_augmentation/run_clm_no_trainer.py \
         --num_train_epochs 7 \
-        --train_file '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_train_gpt.csv' \
-        --validation_file '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_test_gpt.csv' \
+        --dataset_name 'fewnerd' \
         --model_name_or_path gpt2 \
         --per_device_train_batch_size 32 \
         --per_device_eval_batch_size 32 \
