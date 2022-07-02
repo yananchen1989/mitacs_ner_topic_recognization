@@ -49,7 +49,7 @@ from transformers import (
     set_seed,
 )
 from transformers.utils.versions import require_version
-
+from utils.process_func import * 
 
 logger = logging.getLogger(__name__)
 
@@ -255,7 +255,7 @@ def main():
                 example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
                 return example  
                 
-            from utils.process_func import * 
+            
             dataset_ix = raw_datasets.map(map_func, 
                             batched=False,
                             num_proc= multiprocessing.cpu_count() ,
