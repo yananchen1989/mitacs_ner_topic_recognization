@@ -252,8 +252,7 @@ def main():
             tags_column = 'tags_coarse'
 
             def gpt_format(example):
-                gpt_concat = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
-                example['text_gpt'] = gpt_concat
+                example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
                 return example  
                 
             from utils.process_func import * 
@@ -269,7 +268,7 @@ def main():
                             load_from_cache_file=False, 
                             desc = "Running t5 mapping ==>")   
             raw_datasets = processed_datasets_gpt
-
+            print("raw_datasets done...")
 
         # raw_datasets = load_dataset(args.dataset_name, args.dataset_config_name)
         # if "validation" not in raw_datasets.keys():
