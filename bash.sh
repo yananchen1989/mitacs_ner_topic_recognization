@@ -34,18 +34,15 @@ CUDA_VISIBLE_DEVICES=1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_
 
 
 
-CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/topic_classification_augmentation/run_clm_no_trainer.py \
-        --num_train_epochs 7 \
+CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_clm_no_trainer.py \
+        --num_train_epochs 25 \
         --dataset_name 'fewnerd' \
         --model_name_or_path gpt2 \
-        --per_device_train_batch_size 32 \
-        --per_device_eval_batch_size 32 \
+        --per_device_train_batch_size 16 \
+        --per_device_eval_batch_size 16 \
         --output_dir /scratch/w/wluyliu/yananc/finetunes/gpt2_fewnerd \
-        --preprocessing_num_workers 128 --overwrite_cache True 
-        
-
-
-         --debug_cnt 5000000
+        --preprocessing_num_workers 128 --overwrite_cache True --block_size 256 \
+         --debug_cnt -1
           
 
 

@@ -555,12 +555,12 @@ def main():
 
             accelerator.wait_for_everyone()
             unwrapped_model = accelerator.unwrap_model(model)
-            epoch_output_dir = "{}/epoch_{}_ppl_{}".format(args.output_dir, epoch, perplexity)
+            epoch_output_dir = "{}/debugcnt_{}_epoch_{}_ppl_{}".format(args.output_dir, args.debug_cnt, epoch, perplexity)
             os.makedirs(epoch_output_dir, exist_ok=True)
             unwrapped_model.save_pretrained(epoch_output_dir, save_function=accelerator.save)
 
-            os.makedirs(args.output_dir, exist_ok=True)
-            unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
+            # os.makedirs(args.output_dir, exist_ok=True)
+            # unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
 
         # else:
         #     perplexiy_ll.append(-1)
