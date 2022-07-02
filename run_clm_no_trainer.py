@@ -245,6 +245,7 @@ def main():
         )
 
     # tokenizer.sep_token = '<|sep|>' # yanan
+    tokenizer.pad_token = tokenizer.eos_token
 
     for ent in tags_coarse:
         tokenizer.add_tokens('<{}>'.format(ent))
@@ -363,7 +364,7 @@ def main():
     #text_column_name = "text" if "text" in column_names else column_names[0]
 
     def tokenize_function(examples):
-        return tokenizer(examples['text'], truncation=True, padding=True, max_length=256)
+        return tokenizer(examples['text'], truncation=True, padding='max_length', max_length=256)
 
     tokenized_datasets = raw_datasets.map(
         tokenize_function,
