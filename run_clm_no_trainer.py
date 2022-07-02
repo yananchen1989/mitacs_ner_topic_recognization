@@ -226,6 +226,35 @@ def main():
     if args.seed is not None:
         set_seed(args.seed)
 
+    if args.config_name:
+        config = AutoConfig.from_pretrained(args.config_name)
+    elif args.model_name_or_path:
+        config = AutoConfig.from_pretrained(args.model_name_or_path, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+    else:
+        config = CONFIG_MAPPING[args.model_type]()
+        logger.warning("You are instantiating a new config instance from scratch.")
+
+    if args.tokenizer_name:
+        tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+    elif args.model_name_or_path:
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=not args.use_slow_tokenizer, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+    else:
+        raise ValueError(
+            "You are instantiating a new tokenizer from scratch. This is not supported by this script."
+            "You can do it from another script, save it, and load it from here, using --tokenizer_name."
+        )
+
+    # tokenizer.sep_token = '<|sep|>' # yanan
+
+    for ent in tags_coarse:
+        tokenizer.add_tokens('<{}>'.format(ent))
+
+    # tokenizer(text)
+
+    # tokenizer_neo(text)
+    # tokenizer.add_tokens(tokenizer.sep_token) # yanan
+
+
     # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
     # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
     # (the dataset will be downloaded automatically from the datasets Hub).
@@ -252,7 +281,7 @@ def main():
             tags_column = 'tags_coarse'
 
             def gpt_format(example):
-                example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
+                example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])]) + tokenizer.eos_token
                 return example  
                 
             
@@ -315,33 +344,6 @@ def main():
     #
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    if args.config_name:
-        config = AutoConfig.from_pretrained(args.config_name)
-    elif args.model_name_or_path:
-        config = AutoConfig.from_pretrained(args.model_name_or_path, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
-    else:
-        config = CONFIG_MAPPING[args.model_type]()
-        logger.warning("You are instantiating a new config instance from scratch.")
-
-    if args.tokenizer_name:
-        tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
-    elif args.model_name_or_path:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=not args.use_slow_tokenizer, cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
-    else:
-        raise ValueError(
-            "You are instantiating a new tokenizer from scratch. This is not supported by this script."
-            "You can do it from another script, save it, and load it from here, using --tokenizer_name."
-        )
-
-    # tokenizer.sep_token = '<|sep|>' # yanan
-
-    for ent in tags_coarse:
-        tokenizer.add_tokens('<{}>'.format(ent))
-
-    # tokenizer(text)
-
-    # tokenizer_neo(text)
-    # tokenizer.add_tokens(tokenizer.sep_token) # yanan
 
     if args.model_name_or_path:
         model = AutoModelForCausalLM.from_pretrained(
@@ -361,7 +363,7 @@ def main():
     #text_column_name = "text" if "text" in column_names else column_names[0]
 
     def tokenize_function(examples):
-        return tokenizer(examples['text'], truncation=True, max_length=512)
+        return tokenizer(examples['text'], truncation=False)
 
     tokenized_datasets = raw_datasets.map(
         tokenize_function,
