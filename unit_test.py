@@ -79,6 +79,12 @@ for dsn in ['dev','test','train']:
 raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
 tags_column = 'tags_coarse'
 
+tokenizer = transformers.AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+tokenizer.pad_token = tokenizer.eos_token
+
+for ent in tags_coarse:
+    tokenizer.add_tokens('<{}>'.format(ent))
+
 def gpt_format(example):
     example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])]) + tokenizer.eos_token
     return example  
@@ -106,11 +112,7 @@ gpt2 = transformers.GPT2LMHeadModel.from_pretrained("/scratch/w/wluyliu/yananc/f
 gpt2.trainable = False
 gpt2.config.pad_token_id=50256
 
-tokenizer = AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
-tokenizer.pad_token = tokenizer.eos_token
 
-for ent in tags_coarse:
-    tokenizer.add_tokens('<{}>'.format(ent))
 
 
 gen_nlp  = pipeline("text-generation", model=gpt2, tokenizer=tokenizer, device=0, return_full_text=True)
@@ -119,7 +121,7 @@ gen_nlp  = pipeline("text-generation", model=gpt2, tokenizer=tokenizer, device=0
 # ixs = list(range(len(processed_datasets_gpt['train'])))
 # random.shuffle(ixs)
 
-
+print("begin to generate")
 infos = []
 for example  in processed_datasets_gpt['train']:
      
