@@ -8,72 +8,161 @@ from utils.process_func import *
 # # ds_notes = datasets.load_dataset('conll2012_ontonotesv5', "english_v12", cache_dir='/scratch/w/wluyliu/yananc/cache')
 # # ds_conll = datasets.load_dataset('conll2003', cache_dir='/scratch/w/wluyliu/yananc/cache')
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--binomial",
-    type=float,
-    choices=[0.8, 0.3, 0.5, 0.15],
-    default=1
-)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument(
+#     "--binomial",
+#     type=float,
+#     choices=[0.8, 0.3, 0.5, 0.15],
+#     default=1
+# )
+# args = parser.parse_args()
 
 # prepare few nerd dataset
 # file_list = {}
 # for dsn in ['dev','test','train']:
 
-import glob
-files = glob.glob("/scratch/w/wluyliu/yananc/fewnerd_augmented/fewnerd_*")
+# import glob
+# files = glob.glob("/scratch/w/wluyliu/yananc/fewnerd_augmented/fewnerd_*")
 
-for ff in files:
-    with open(ff, 'r') as f:
-        file = f.readlines()
+# for ff in files:
+#     with open(ff, 'r') as f:
+#         file = f.readlines()
 
-    split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
+#     split_ix = [0] + [i for i in range(len(file)) if file[i] == '\n']
 
-    with open('/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(ff.split('/')[-1]), 'w') as f:
-        ix = 0
-        for i, j in zip(split_ix[0:-1], split_ix[1:]):
+#     with open('/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(ff.split('/')[-1]), 'w') as f:
+#         ix = 0
+#         for i, j in zip(split_ix[0:-1], split_ix[1:]):
 
-            tokens = file[i:j]
-            dic = {}
-            dic['id'] = ix
-            dic['tokens'] = [ii.strip().split('\t')[0].strip() for ii in tokens if ii!='\n']
-            dic['tags'] = [ii.strip().split('\t')[1].strip() for ii in tokens if ii!='\n']
-            json_string = json.dumps(dic)
+#             tokens = file[i:j]
+#             dic = {}
+#             dic['id'] = ix
+#             dic['tokens'] = [ii.strip().split('\t')[0].strip() for ii in tokens if ii!='\n']
+#             dic['tags'] = [ii.strip().split('\t')[1].strip() for ii in tokens if ii!='\n']
+#             json_string = json.dumps(dic)
 
-            f.write(json_string+'\n')
-            ix += 1
-    # file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(file.split('/')[-1])
-    print(ff.split('/')[-1])
+#             f.write(json_string+'\n')
+#             ix += 1
+#     # file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(file.split('/')[-1])
+#     print(ff.split('/')[-1])
+import argparse,multiprocessing
+import logging
+import math
+import os
+import random
 
-
-
-
-
-
-gpu = 0
+import datasets
 import torch
-device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() else "cpu")
+from datasets import load_dataset
+from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
+import pandas as pd
+import transformers
+from accelerate import Accelerator, DistributedType
+from transformers import (
+    CONFIG_MAPPING,
+    MODEL_MAPPING,
+    AdamW,
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    SchedulerType,
+    default_data_collator,
+    get_scheduler,
+    set_seed,
+)
 
 file_list = {}
 for dsn in ['dev','test','train']:
     file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
 raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
-
-
-
-
-
-
 tags_column = 'tags_coarse'
 
 def gpt_format(example):
-    gpt_concat = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])])
-    example['text_gpt'] = gpt_concat
-    return example
+    example['text'] = ' '.join(["<{}>{}".format(l, t) for t, l in zip(example['tokens'], example[tags_column])]) + tokenizer.eos_token
+    return example  
+    
+
+dataset_ix = raw_datasets.map(map_func, 
+                batched=False,
+                num_proc= multiprocessing.cpu_count() ,
+                load_from_cache_file=not True, remove_columns=['tags'],
+                desc = "Running ix mapping ==>")
+
+processed_datasets_gpt = dataset_ix.map(gpt_format, 
+                batched=False,
+                num_proc= multiprocessing.cpu_count() ,
+                load_from_cache_file=False, 
+                desc = "Running t5 mapping ==>")   
 
 
+
+from transformers import pipeline
+
+model_ver = "debugcnt_-1_epoch_6_ppl_2.4175580531029297"
+# model_ver = "debugcnt_1024_epoch_12_ppl_3.4826605776680615"
+gpt2 = transformers.GPT2LMHeadModel.from_pretrained("/scratch/w/wluyliu/yananc/finetunes/gpt2_fewnerd/{}".format(model_ver))
+gpt2.trainable = False
+gpt2.config.pad_token_id=50256
+
+tokenizer = AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+tokenizer.pad_token = tokenizer.eos_token
+
+for ent in tags_coarse:
+    tokenizer.add_tokens('<{}>'.format(ent))
+
+
+gen_nlp  = pipeline("text-generation", model=gpt2, tokenizer=tokenizer, device=0, return_full_text=True)
+
+
+# ixs = list(range(len(processed_datasets_gpt['train'])))
+# random.shuffle(ixs)
+
+
+infos = []
+for example  in processed_datasets_gpt['train']:
+     
+    prompt = ' '.join(example['text'].replace(tokenizer.pad_token,'').split()[:5])
+    result_gpt = gen_nlp(prompt, max_length=256, do_sample=False, temperature=0.5)
+
+    if example['id'] % 100:
+        print("generation ==> ", result_gpt[0]['generated_text'].strip())
+        print("reference ==> ", example['text'])
+        print()
+
+    infos.append((example['id'], result_gpt[0]['generated_text'].strip()))
+
+
+df = pd.DataFrame(infos, columns=['id','gen_text'])
+df.to_csv("/scratch/w/wluyliu/yananc/gpt_gen_fewnerd_nosample.csv", index=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
 
 def t5_format(example):
     source_ll = []
@@ -106,19 +195,18 @@ processed_datasets_gpt = dataset_ix.map(gpt_format,
                 desc = "Running t5 mapping ==>")
 
 
-infos = []
-for ix, text in zip(processed_datasets_gpt['test']['id'], processed_datasets_gpt['test']['text_gpt']):
-    infos.append((ix, text))
+for split in ['train', 'test']:
+    infos = []
+    for ix, text in zip(processed_datasets_gpt[split]['id'], processed_datasets_gpt[split]['text_gpt']):
+        infos.append((ix, text))
 
-df = pd.DataFrame(infos, columns=['ix','text_gpt'])
+    df = pd.DataFrame(infos, columns=['ix','text'])
 
-df.to_csv("fewnerd_test_gpt.csv", index=False, sep='\t')
+    df.to_csv("fewnerd_{}_gpt.csv".format(split), index=False, sep='\t')
 
 
 
 tokenizer = AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
-
-
 
 tokenizer_neo = AutoTokenizer.from_pretrained('EleutherAI/gpt-neo-2.7B', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
 
@@ -131,9 +219,31 @@ text = "<O>The <organization>Swedish <organization>national <organization>men <o
 
 
 
-# processed_datasets_t5.save_to_disk("/scratch/w/wluyliu/yananc/few_nerd_supervised")
 
+import transformers
+from accelerate import Accelerator, DistributedType
+from transformers import AutoTokenizer
 
+tokenizer = AutoTokenizer.from_pretrained('gpt2', cache_dir='/scratch/w/wluyliu/yananc/cache', local_files_only=True)
+
+tags_coarse = ['O',
+ 'art',
+ 'building',
+ 'event',
+ 'location',
+ 'organization',
+ 'other',
+ 'person',
+ 'product']
+
+for ent in tags_coarse:
+    tokenizer.add_tokens('<{}>'.format(ent))
+tokenizer.convert_tokens_to_ids([tokenizer.eos_token])
+tokenizer.pad_token = tokenizer.eos_token
+    
+
+sent = "<O> The <organization> Swedish <organization> national <organization> men <organization> 's <organization> ice <organization> hockey <organization> team <O> , <O> affectionately <O> known <O> as <O> `` <organization> Tre <organization> Kronor <O> `` <O> ( <other> English <O> : <organization> Three <organization> Crowns <O> ; <O> the <O> national <O> symbol <O> of <location> Sweden <O> ) <O> , <O> is <O> regarded <O> as <O> one <O> of <O> the <O> best <O> in <O> the <O> world <O> ." + tokenizer.eos_token
+tokenizer(sent,  truncation=True, padding='max_length', max_length=16)
 
 def clean_gen_span(span):
     for iden in tokenizer_t5.additional_special_tokens + [tokenizer_t5.unk_token, tokenizer_t5.eos_token, tokenizer_t5.pad_token]:
@@ -181,47 +291,9 @@ while ii <= len(processed_datasets_t5_shuffle['train']):
 assert len(output_texts) == len(processed_datasets_t5_shuffle['train'])
 
 
-with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial), 'w') as f:
-
-    for ii, text1, text2, text_gen, tags in zip(processed_datasets_t5_shuffle['train']['id'], \
-                                      processed_datasets_t5_shuffle['train']['text2'], \
-                                      processed_datasets_t5_shuffle['train']['text1'], \
-                                      output_texts, \
-                                      processed_datasets_t5_shuffle['train'][tags_column]):
-        idens = []
-        ix = 0
-        for tag, i in zip(text1.split(), text2.split()):
-            iden = "<extra_id_{}>".format(ix)
-            iden_ = "<extra_id_{}>".format(ix+1)
-
-            if iden in text_gen:
-                span = text_gen.split(iden)[1].split(iden_)[0]  
-                span = clean_gen_span(span)
-                if not span:
-                    span = tokenizer_t5.unk_token
-            else:
-                span = tokenizer_t5.unk_token
-
-            print(tag.replace(iden, ''), '==>', i.replace(iden, ''), '--->', span)
-            idens.append(span)
-            ix += 1
-        print(idens)
-        dic = {}
-        dic['id'] = ii
-        dic['tokens'] = idens
-        dic[tags_column] = tags[:len(idens)]
-        assert len(dic[tags_column]) == len(dic['tokens'])
-        print()
-
-        json_string = json.dumps(dic)
-        f.write(json_string+'\n')
-        print('\n\n') 
 
 
-
-# file_list = {}
-# file_list['da_coarse'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse.json'
-# raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+'''
 
 
 
@@ -243,38 +315,6 @@ with open('/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.js
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-infos = []
-with open("log", 'r') as f:
-    for line in f:
-        tokens = line.split('tags_fine')[-1].strip().split()
-
-
-        samplecnt = int(tokens[0])
-        da = int(tokens[2])
-        da_ver = tokens[3]
-        f1 = float(tokens[-1])
-        infos.append((samplecnt, da, da_ver, f1))
-
-import pandas as pd
-df = pd.DataFrame(infos, columns=['samplecnt','da','da_ver', 'f1'])
-
-for da_ver in df['da_ver'].unique():
-    print(da_ver, df.loc[(df['samplecnt']==-1) & (df['da']==1) & (df['da_ver']==da_ver), 'f1'].mean())
-
-
-
-df.loc[(df['da']==0) & (df['samplecnt']==1024)]
 
 
 
