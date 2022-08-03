@@ -1,8 +1,9 @@
 
 
-for gpu in 0 1 2 3 
-do
-CUDA_VISIBLE_DEVICES=${gpu} nohup  python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+
+
+
+CUDA_VISIBLE_DEVICES=-1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "tqi" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
@@ -11,30 +12,13 @@ CUDA_VISIBLE_DEVICES=${gpu} nohup  python -u /home/w/wluyliu/yananc/nlp4quantump
           --label_column_name "tags" \
           --num_train_epochs 20 \
           --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
-          --debug_cnt  16 \
-          --local_files_only  > bert_tagger_tqi_16_${gpu}.log & 
-done
-
-
-
-
-CUDA_VISIBLE_DEVICES=1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
-          --dataset_name "tqi" \
-          --model_name_or_path roberta-large \
-          --dataset_config_name "supervised" \
-          --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
-          --text_column_name "tokens" \
-          --label_column_name "tags" \
-          --num_train_epochs 20 \
-          --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
-          --k  1 \
           --local_files_only
 
 
 
 
 
-CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_clm_no_trainer.py \
+CUDA_VISIBLE_DEVICES=3 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_clm_no_trainer.py \
         --num_train_epochs 25 \
         --dataset_name 'fewnerd' \
         --model_name_or_path gpt2 \
@@ -42,7 +26,7 @@ CUDA_VISIBLE_DEVICES=0 python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_cl
         --per_device_eval_batch_size 16 \
         --output_dir /scratch/w/wluyliu/yananc/finetunes/gpt2_fewnerd \
         --preprocessing_num_workers 128 --overwrite_cache True --block_size 256 \
-         --debug_cnt {1}
+         --debug_cnt -1
           
 
 

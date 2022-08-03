@@ -114,7 +114,7 @@ def parse_args():
     parser.add_argument(
         "--k",
         type=int,
-        default=1,
+        default=0,
     )
 
     parser.add_argument(
@@ -158,11 +158,13 @@ def parse_args():
     )
     parser.add_argument(
         "--da",
-        type=int
+        type=int, default=-1,
     )
+    
     parser.add_argument(
         "--da_ver",
-        type=str
+        type=str,
+        help="Only used for fewnerd dataset for da experiments",
     )
 
     # parser.add_argument(
@@ -357,9 +359,9 @@ def main():
 
     if args.dataset_name == 'tqi':
         # load dict
-        df_tags = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/datasets/QI-NERs.csv")
-        ixl = {i:j for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
-        ixl_rev = {j:i for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+        # df_tags = pd.read_csv("/home/w/wluyliu/yananc/nlp4quantumpapers/datasets/QI-NERs.csv")
+        # ixl = {i:j for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
+        # ixl_rev = {j:i for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
 
         file_list={}
         file_list['train_test'] = "/scratch/w/wluyliu/yananc/sentence_level_tokens.json"
@@ -371,7 +373,7 @@ def main():
             tags.update(ii['tags'])
         print("TQI tags set:", tags)
 
-        assert set(list(ixl.values())+ ['O'])  == tags
+        # assert set(list(ixl.values())+ ['O'])  == tags
 
 
         # for ii in range(len(raw_datasets['train_test'])):
@@ -411,10 +413,6 @@ def main():
             file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
         file_list['da'] = '/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(args.da_ver)   
         raw_datasets_ = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
-
-
-
-
 
         # file_list = {}
         # file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial)        

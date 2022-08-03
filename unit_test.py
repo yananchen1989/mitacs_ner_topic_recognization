@@ -128,7 +128,7 @@ for example  in processed_datasets_gpt['train']:
     prompt = ' '.join(example['text'].replace(tokenizer.pad_token,'').split()[:5])
     result_gpt = gen_nlp(prompt, max_length=256, do_sample=False, temperature=0.5)
 
-    if example['id'] % 100:
+    if example['id'] % 100 == 0:
         print("generation ==> ", result_gpt[0]['generated_text'].strip())
         print("reference ==> ", example['text'])
         print()
