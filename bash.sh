@@ -2,17 +2,27 @@
 
 
 
-
-CUDA_VISIBLE_DEVICES=-1   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
+# for TQI
+CUDA_VISIBLE_DEVICES=3   python -u /home/w/wluyliu/yananc/nlp4quantumpapers/run_ner_no_trainer.py \
           --dataset_name "tqi" \
           --model_name_or_path roberta-large \
           --dataset_config_name "supervised" \
           --output_dir '/scratch/w/wluyliu/yananc/finetunes/roberta_tqi' \
           --text_column_name "tokens" \
           --label_column_name "tags" \
-          --num_train_epochs 20 \
+          --num_train_epochs 4 \
           --per_device_train_batch_size 16 --per_device_eval_batch_size 16 \
           --local_files_only
+
+
+
+
+
+
+
+
+
+
 
 
 
