@@ -388,6 +388,7 @@ def main():
         #     example = raw_datasets['train_test'][ii]
         #     example_ = tqi_replacement(example)
 
+        # randomly split the labelling samples into train and test split
         random.shuffle(ids)
         split_ix = int(len(ids)*0.8)
         print("ids:{} split_ix:{}".format(len(ids), split_ix))
@@ -413,7 +414,7 @@ def main():
                                 .filter(lambda example: example['id'] in ids_test, num_proc= multiprocessing.cpu_count())['train_test']
 
 
-
+    # this branch is not for TQI, ignore it
     elif args.dataset_name == 'few_nerd_local':
         file_list = {}
         for dsn in ['dev','test','train']:
@@ -694,7 +695,8 @@ def main():
             for pred, gold_label in zip(y_pred, y_true)
         ]
         return true_predictions, true_labels
-    # 
+    
+    # to get the result in terms of the metrics to evaluate the model's performance
     def compute_metrics():
         results = metric.compute()
         if args.return_entity_level_metrics:
