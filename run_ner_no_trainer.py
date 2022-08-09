@@ -60,6 +60,12 @@ require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/toke
 MODEL_CONFIG_CLASSES = list(MODEL_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 
+# cache path for your cached model, tokens, files etc...
+# automatically downloaded files are saved in this path
+CACHE_DIR = "/scratch/w/wluyliu/yananc/cache"
+
+# labelled samples from Prodigy 
+INPUT_SAMPLES_DIR = "./datasets/sentence_level_tokens.json"
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -364,8 +370,9 @@ def main():
         # ixl_rev = {j:i for i,j in enumerate(df_tags['tag'].drop_duplicates().tolist()) }
 
         file_list={}
-        file_list['train_test'] = "/scratch/w/wluyliu/yananc/sentence_level_tokens.json"
-        raw_datasets = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+        file_list['train_test'] = INPUT_SAMPLES_DIR 
+        raw_datasets = datasets.load_dataset('json', data_files=file_list, \
+                cache_dir=CACHE_DIR)
 
         ids = list(set([ii['id'] for ii in raw_datasets['train_test']]))
         tags = set()
@@ -412,7 +419,8 @@ def main():
         for dsn in ['dev','test','train']:
             file_list[dsn] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/{}.json'.format(dsn)
         file_list['da'] = '/scratch/w/wluyliu/yananc/fewnerd_augmented/{}.json'.format(args.da_ver)   
-        raw_datasets_ = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')
+        raw_datasets_ = datasets.load_dataset('json', data_files=file_list, \
+                cache_dir=CACHE_DIR)
 
         # file_list = {}
         # file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial)        
@@ -473,10 +481,10 @@ def main():
 
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name, num_labels=num_labels, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+            cache_dir=CACHE_DIR, local_files_only=args.local_files_only)
     elif args.model_name_or_path:
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, \
-                cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+                cache_dir=CACHE_DIR, local_files_only=args.local_files_only)
     else:
         config = CONFIG_MAPPING[args.model_type]()
         logger.warning("You are instantiating a new config instance from scratch.")
@@ -490,10 +498,10 @@ def main():
 
     if config.model_type in {"gpt2", "roberta"}:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, add_prefix_space=True, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+            cache_dir=CACHE_DIR, local_files_only=args.local_files_only)
     else:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, use_fast=True, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only)
+            cache_dir=CACHE_DIR, local_files_only=args.local_files_only)
 
     if args.model_name_or_path:
         
@@ -509,7 +517,7 @@ def main():
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
             config=config, \
-            cache_dir="/scratch/w/wluyliu/yananc/cache", local_files_only=args.local_files_only
+            cache_dir=CACHE_DIR, local_files_only=args.local_files_only
     )
     else:
         logger.info("Training new model from scratch")
@@ -665,7 +673,7 @@ def main():
     # Metrics
     
 
-    metric = datasets.load_metric("seqeval", cache_dir='/scratch/w/wluyliu/yananc/cache', experiment_id=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
+    metric = datasets.load_metric("seqeval", cache_dir=CACHE_DIR, experiment_id=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
     # https://github.com/huggingface/datasets/blob/master/metrics/seqeval/seqeval.py
     def get_labels(predictions, references):
         # Transform predictions and references tensos to numpy arrays
@@ -686,7 +694,7 @@ def main():
             for pred, gold_label in zip(y_pred, y_true)
         ]
         return true_predictions, true_labels
-
+    # 
     def compute_metrics():
         results = metric.compute()
         if args.return_entity_level_metrics:
@@ -704,7 +712,6 @@ def main():
                 "precision": round(results["overall_precision"], 4),
                 "recall": round(results["overall_recall"], 4),
                 "f1": round(results["overall_f1"],4)
-                # "accuracy": results["overall_accuracy"],
             }
 
     # Train!
@@ -761,15 +768,6 @@ def main():
                 references=refs,
             )  # predictions and preferences are expected to be a nested list of labels, not label_ids
 
-            # if step < 10:
-            #     print("++++++++++++{}++++++++++".format(step))
-            #     print(predictions)
-            #     print(labels)     
-                           
-            #     print("+++++++++++++++++++")
-            #     print(preds)
-            #     print(refs)
-            #     print('\n')
         # eval_metric = metric.compute()
         eval_metric = compute_metrics()
         # accelerator.print(f"epoch {epoch}:", args.label_column_name, args.debug_cnt, eval_metric)

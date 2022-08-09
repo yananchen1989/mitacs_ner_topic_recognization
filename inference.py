@@ -6,14 +6,17 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 from transformers import pipeline
 
+# this is where you save the model 
+MODEL_PATH = "/scratch/w/wluyliu/yananc/finetunes/roberta_tqi/"
+CONFIDENT = 0.8
 
-model_path = "/scratch/w/wluyliu/yananc/finetunes/roberta_tqi/"
-
-tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained(model_path)
-model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained(model_path)
+# reload the model from the disk to the memory (gpu)
+tokenizer_roberta_nerd_fine = AutoTokenizer.from_pretrained(MODEL_PATH)
+model_roberta_nerd_fine = AutoModelForTokenClassification.from_pretrained(MODEL_PATH)
 nlp_ner = pipeline("ner", model=model_roberta_nerd_fine, tokenizer=tokenizer_roberta_nerd_fine,\
                      aggregation_strategy="simple", device=1)
 
+# nlp_ner will be used for inference
 
 
 content = """
@@ -34,6 +37,7 @@ has been demonstrated on a practically valuable problem with implications for th
 """      
 
 def infer(content):
+    # split content into sentences
     sents = nltk.sent_tokenize(content)
 
     infos = []
@@ -44,17 +48,20 @@ def infer(content):
         if not res:
             continue
         for ii in res:
-            if ii['score'] >= 0.75: # hyper parameter
+            # hyper parameter, filter out predictions of low confidence 
+            # this can be changed based on practice
+            if ii['score'] >= CONFIDENT: 
                 infos.append((ii['entity_group'], ii['score'], ii['word']))
 
     df_res = pd.DataFrame(infos, columns=['label','score','entity'])
 
     df_res.sort_values('score', ascending=False, inplace=True)
-
     df_res.drop_duplicates(['entity'], inplace=True)
     return df_res
 
 df_res = infer(content)
+
+df_res.to_csv("df_res.csv", index=False)
 
 '''
      label     score       entity
