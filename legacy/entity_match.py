@@ -247,7 +247,7 @@ def output_prodigy_sentence_level_tokens(input_filenames, output_filename):
 
     Args:
         input_filenames (list[str]): List of filenames of the prodigy database exports in jsonl format.
-        output_filename (str): A jsonl file containing a collection of annotated sentence objects for each article.
+        output_filename (str): A json file containing a collection of annotated sentence objects for each article.
     """
     with open(output_filename, "w", encoding="utf-8") as out_file:
         for input_filename in input_filenames:
@@ -439,7 +439,7 @@ if __name__ == "__main__":
             "data/annotations_split3_first_50_Ian.jsonl",
             "data/Douglas_Annotations.jsonl",
         ],
-        "sentence_level_tokens.jsonl",
+        "sentence_level_tokens.json",
     )
     # entity_translation, patterns = create_dict_and_patterns("data/QI-NERs.csv")
     # data = load_articles("data/articles_full.json")
