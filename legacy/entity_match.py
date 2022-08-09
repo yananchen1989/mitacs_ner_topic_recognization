@@ -439,7 +439,7 @@ if __name__ == "__main__":
             "data/annotations_split3_first_50_Ian.jsonl",
             "data/Douglas_Annotations.jsonl",
         ],
-        "sentence_level_tokens.jsonl",
+        "sentence_level_tokens.json",
     )
     # entity_translation, patterns = create_dict_and_patterns("data/QI-NERs.csv")
     # data = load_articles("data/articles_full.json")
