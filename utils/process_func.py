@@ -75,29 +75,7 @@ def load_dsn(dsn):
 #################### NER ###################
 
 
-def map_func(example):
-    # tag_fine_ix = []
-    # tag_coarse_ix = []
-    tags_coarse = []
-    for tag in example['tags']:
-        # tag_fine_ix.append(tag_map_fine[tag])
-        if tag != 'O':
-            # tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
-            tags_coarse.append(tag.split('-')[0])
-        else:
-            # tag_coarse_ix.append(tag_map_coarse[tag])
-            tags_coarse.append(tag)
-    example['tags_coarse'] = tags_coarse
-    example['tags_fine'] = example['tags']
-    # example['tag_fine_ix'] = tag_fine_ix 
-    # example['tag_coarse_ix'] = tag_coarse_ix
 
-    for ii, jj in example.items():
-        if ii == 'id':
-            continue
-        assert len(jj) == len(example['tokens']) 
-
-    return example
 
 
 

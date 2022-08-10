@@ -50,7 +50,7 @@ from transformers import (
 )
 from transformers.file_utils import get_full_repo_name
 from transformers.utils.versions import require_version
-from utils.process_func import * 
+# from utils.process_func import * 
 # from utils.crf_bert import * 
 import pandas as pd 
 logger = logging.getLogger(__name__)
@@ -427,7 +427,30 @@ def main():
         # file_list['da'] = '/gpfs/fs0/scratch/w/wluyliu/yananc/few_nerd_supervised/da_coarse_binomal_{}.json'.format(args.binomial)        
              
         # raw_datasets_['da'] = datasets.load_dataset('json', data_files=file_list, cache_dir='/scratch/w/wluyliu/yananc/cache')['da']#.rename_column("tags_coarse", "tags")
+        def map_func(example):
+            # tag_fine_ix = []
+            # tag_coarse_ix = []
+            tags_coarse = []
+            for tag in example['tags']:
+                # tag_fine_ix.append(tag_map_fine[tag])
+                if tag != 'O':
+                    # tag_coarse_ix.append(tag_map_coarse[tag.split('-')[0]])
+                    tags_coarse.append(tag.split('-')[0])
+                else:
+                    # tag_coarse_ix.append(tag_map_coarse[tag])
+                    tags_coarse.append(tag)
+            example['tags_coarse'] = tags_coarse
+            example['tags_fine'] = example['tags']
+            # example['tag_fine_ix'] = tag_fine_ix 
+            # example['tag_coarse_ix'] = tag_coarse_ix
 
+            for ii, jj in example.items():
+                if ii == 'id':
+                    continue
+                assert len(jj) == len(example['tokens']) 
+
+            return example
+    
         raw_datasets = raw_datasets_.map(map_func, 
                 batched=False,
                 num_proc= multiprocessing.cpu_count() ,

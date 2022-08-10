@@ -8,3 +8,5 @@ flair==1.10
 gensim==3.8.3
 nltk>=3.5
 datasets==2.1.0
+accelerate==0.5.1
+huggingface_hub==0.2.1
