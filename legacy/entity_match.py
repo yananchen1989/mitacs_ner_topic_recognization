@@ -41,17 +41,6 @@ def load_articles(filename, output_filename):
     Returns:
         list[dict]: A list of articles represented in Python dictionary form.
     """
-    # special_character_mappings = {
-    #     ord("’"): "'",
-    #     ord("–"): "-",
-    #     ord("”"): '"',
-    #     ord("“"): '"',
-    #     ord("‘"): "'",
-    #     ord("—"): "-",
-    # }
-    # article["post_content"] = article["post_content"].translate(
-    #     special_character_mappings
-    # )
     with open(filename, "r", encoding="utf-8") as file:
         articles = json.load(file)
         for article in articles:
