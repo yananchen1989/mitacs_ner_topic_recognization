@@ -1,0 +1,2 @@
+#python3 entity_match.py export -i <input annotations file> -o <output sentence level tokens path (jsonl)>
+python3 entity_match.py export -i data/prodigy_annotations.jsonl -o data/sentence_level_tokens.json
