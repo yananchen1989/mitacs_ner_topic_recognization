@@ -6,12 +6,37 @@ import spacy
 from spacy.matcher import Matcher
 from nltk import tokenize
 
+import argparse
 
-def load_articles(filename):
+parser = argparse.ArgumentParser(
+    description="Load articles into prodigy or output prodigy sentence level tokens.",
+)
+parser.add_argument(
+    "command",
+    type=str,
+    help="The command to run. Either 'load' or 'export'",
+)
+parser.add_argument(
+    "-i",
+    "--input_file",
+    type=str,
+    help="The path to the json file containing the articles.",
+)
+parser.add_argument(
+    "-o",
+    "--output_file",
+    type=str,
+    help="The path to the json file to output the tokens to. Or the path of the jsonl file to write the articles to.",
+)
+args = parser.parse_args()
+
+
+def load_articles(filename, output_filename):
     """Loads the articles from the json file.
 
     Args:
         filename (str): The path to the json file containing the articles.
+        output_filename (str): The path to the output file in jsonl format.
 
     Returns:
         list[dict]: A list of articles represented in Python dictionary form.
@@ -36,6 +61,10 @@ def load_articles(filename):
                 .decode("utf-8")
                 .strip()
             )
+    with open(output_filename, "w", encoding="utf-8") as file:
+        for article in articles:
+            json.dump({"id": article["id"], "text": article["post_content"]}, file)
+            file.write("\n")
 
     return articles
 
@@ -241,78 +270,77 @@ def export_prodigy_sentence_level(input_filename, output_filename, entities):
                             # print(f"sent: {sentences[i]}, tag: ###, span: ###")
 
 
-def output_prodigy_sentence_level_tokens(input_filenames, output_filename):
+def output_prodigy_sentence_level_tokens(input_filename, output_filename):
     """Outputs the prodigy annotations to sentence level tokens for entity recoginition training. Takes in a list of
     input file names and outputs a single file concatenating all articles together in the output file.
 
     Args:
-        input_filenames (list[str]): List of filenames of the prodigy database exports in jsonl format.
+        input_filenames (str): Filename of the prodigy database export in jsonl format.
         output_filename (str): A json file containing a collection of annotated sentence objects for each article.
     """
     with open(output_filename, "w", encoding="utf-8") as out_file:
-        for input_filename in input_filenames:
-            with open(input_filename, "r", encoding="utf-8") as in_file:
-                id = 0
-                for line in in_file:
-                    annotation = json.loads(line)
-                    if annotation["answer"] == "accept":
-                        spans = iter(annotation["spans"])
-                        current_span = next(spans)
-                        sentences = tokenize.sent_tokenize(annotation["text"])
-                        all_tokens = annotation["tokens"]
-                        tokenizer = spacy.blank("en").tokenizer
-                        current_token_id = 0
-                        sentence_objects = []
-                        for sentence in sentences:
-                            obj = {"id": id, "tokens": [], "tags": []}
-                            sentence_tokens = tokenizer(sentence)
-                            for i in range(len(sentence_tokens)):
-                                if (
-                                    all_tokens[i + current_token_id]["text"]
-                                    != sentence_tokens[i].text
-                                ):
-                                    for _ in range(i, len(all_tokens)):
-                                        if (
-                                            all_tokens[i + current_token_id]["text"]
-                                            == sentence_tokens[i].text
-                                        ):
-                                            break
-                                        else:
-                                            current_token_id += 1
-                                else:
-                                    obj["tokens"].append(
-                                        all_tokens[i + current_token_id]["text"]
-                                    )
+        id = 0
+        with open(input_filename, "r", encoding="utf-8") as in_file:
+            for line in in_file:
+                annotation = json.loads(line)
+                if annotation["answer"] == "accept":
+                    spans = iter(annotation["spans"])
+                    current_span = next(spans)
+                    sentences = tokenize.sent_tokenize(annotation["text"])
+                    all_tokens = annotation["tokens"]
+                    tokenizer = spacy.blank("en").tokenizer
+                    current_token_id = 0
+                    sentence_objects = []
+                    for sentence in sentences:
+                        obj = {"id": id, "tokens": [], "tags": []}
+                        sentence_tokens = tokenizer(sentence)
+                        for i in range(len(sentence_tokens)):
+                            if (
+                                all_tokens[i + current_token_id]["text"]
+                                != sentence_tokens[i].text
+                            ):
+                                for _ in range(i, len(all_tokens)):
                                     if (
-                                        current_span["token_start"]
-                                        <= all_tokens[i + current_token_id]["id"]
-                                        <= current_span["token_end"]
+                                        all_tokens[i + current_token_id]["text"]
+                                        == sentence_tokens[i].text
                                     ):
-
-                                        obj["tags"].append(current_span["label"])
-                                        # print(
-                                        #     f"{all_tokens[i+current_token_id]['text']}: {current_span['label']}"
-                                        # )
-                                        if (
-                                            current_span["token_end"]
-                                            == all_tokens[i + current_token_id]["id"]
-                                        ):
-                                            try:
-                                                current_span = next(spans)
-                                            except StopIteration:
-                                                continue
+                                        break
                                     else:
-                                        obj["tags"].append("O")
-                                        # print(
-                                        #     f"{all_tokens[i+current_token_id]['text']}: O"
-                                        # )
+                                        current_token_id += 1
+                            else:
+                                obj["tokens"].append(
+                                    all_tokens[i + current_token_id]["text"]
+                                )
+                                if (
+                                    current_span["token_start"]
+                                    <= all_tokens[i + current_token_id]["id"]
+                                    <= current_span["token_end"]
+                                ):
 
-                            current_token_id += i + 1
-                            sentence_objects.append(obj)
-                        for obj in sentence_objects:
-                            json.dump(obj, out_file)
-                            out_file.write("\n")
-                    id += 1
+                                    obj["tags"].append(current_span["label"])
+                                    # print(
+                                    #     f"{all_tokens[i+current_token_id]['text']}: {current_span['label']}"
+                                    # )
+                                    if (
+                                        current_span["token_end"]
+                                        == all_tokens[i + current_token_id]["id"]
+                                    ):
+                                        try:
+                                            current_span = next(spans)
+                                        except StopIteration:
+                                            continue
+                                else:
+                                    obj["tags"].append("O")
+                                    # print(
+                                    #     f"{all_tokens[i+current_token_id]['text']}: O"
+                                    # )
+
+                        current_token_id += i + 1
+                        sentence_objects.append(obj)
+                    for obj in sentence_objects:
+                        json.dump(obj, out_file)
+                        out_file.write("\n")
+                id += 1
 
     return
 
@@ -432,17 +460,24 @@ def match_all_articles(entity_translation, articles, output_filename):
             writer.writerow(matches)
 
 
+"""
+# Loading Example
+python entity_match.py load -i data/articles.json -o data/prodigy_articles.jsonl
+
+# Export Example
+python entity_match.py export -i data/annotations.jsonl -o data/sentence_level_tokens.json
+"""
 if __name__ == "__main__":
     ENTITIES = ["group", "university", "investor", "lab", "gov", "company"]
-    output_prodigy_sentence_level_tokens(
-        [
-            "data/annotations_split3_first_50_Ian.jsonl",
-            "data/Douglas_Annotations.jsonl",
-        ],
-        "sentence_level_tokens.json",
-    )
+    if args.command == "load":
+        load_articles(args.input_file, args.output_file)
+        print(f"Articles loaded to {args.output_file}")
+    else:
+        output_prodigy_sentence_level_tokens(args.input_file, args.output_file)
+        print(f"Sentence level tokens output to {args.output_file}")
+
     # entity_translation, patterns = create_dict_and_patterns("data/QI-NERs.csv")
-    # data = load_articles("data/articles_full.json")
+
     # matches = match_entities(entity_translation, data[0], patterns)
 
     # export_prodigy_sentence_level(
