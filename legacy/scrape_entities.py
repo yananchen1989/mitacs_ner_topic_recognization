@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import argparse
 
 # import matplotlib.pyplot as plt
 # import seaborn as sns
@@ -78,6 +79,19 @@ ALL_KEYS = {
     "university": UNIVERSITY_KEYS,
 }
 
+parser = argparse.ArgumentParser(description="Scrape entities from LinkedIn")
+parser.add_argument(
+    "-i",
+    "--input_file",
+    help="Input inference file from execution of inference.py (csv)",
+    type=str,
+)
+parser.add_argument(
+    "-o",
+    "--output_file",
+    help="Output filename for scraped entities (jsonl)",
+)
+args = parser.parse_args()
 # Debug Function for testing of given named entities
 def parse_dictionary(entities_filename, entity_type):
     """Creates a list of the specified named entity type from a csv file of named entities. Where the first column
@@ -134,6 +148,28 @@ def scrape_entity(entity, output_filename, entity_type):
             file.write("\n")
 
 
+def get_entities_from_inference_file(input_filename):
+    """Gather entities from given inference file after model execution (csv) in order to call scrape_entities()
+    function to scrape information from LinkedIn.
+
+    Args:
+        input_filename (str): Inference file path from execution of inference.py
+
+    Returns:
+        list[str]: The list of named entities from the inference file
+        list[str]: The list of the corresponding entity types from the inference file
+    """
+    with open(input_filename, "r") as file:
+        reader = csv.reader(file)
+        next(reader)
+        entities = []
+        entity_types = []
+        for row in reader:
+            entities.append(row[2])
+            entity_types.append(row[0])
+    return entities, entity_types
+
+
 def scrape_entities(entities, output_filename, entity_types):
     """Scrape a list of entities from LinkedIn by name and creates a new file to store the data in jsonl format
 
@@ -178,7 +214,7 @@ def create_scrape_checklist(entities_filename, output_filename):
     csv file with the entity name and whether or not it was scraped.
 
     Args:
-        entities_filename (str): The file name of the file containing the entities to check
+        entities_filename (str): The file name of the file containing the entities to check (jsonl)
         output_filename (str): The file name of the file to output the checklist to (csv)
     """
     with open(entities_filename, "r", encoding="utf-8") as in_file:
@@ -240,38 +276,25 @@ def create_scrape_checklist(entities_filename, output_filename):
 #     plt.title(f"{entity_type} Features Found LinkedIn Querying")
 #     plt.savefig(f"entity_scraping/{entity_type}_scrape_features.png")
 #     plt.clf()
-
-
+"""
+# Example Command Line Execution
+python scrape_entities.py -i df_res.csv -o entity_information.jsonl
+"""
 if __name__ == "__main__":
 
     load_dotenv()
-    scrape_entities(
-        parse_dictionary("data/QI-NERs.csv", "university"),
-        "entity_scraping/university_scrape_info_linkedin.jsonl",
-        [
-            "university"
-            for _ in range(len(parse_dictionary("data/QI-NERs.csv", "university")))
-        ],
-    )
-
+    # scrape_entities(
+    #     parse_dictionary("data/QI-NERs.csv", "university"),
+    #     "entity_scraping/university_scrape_info_linkedin.jsonl",
+    #     [
+    #         "university"
+    #         for _ in range(len(parse_dictionary("data/QI-NERs.csv", "university")))
+    #     ],
+    # )
+    entities, entity_types = get_entities_from_inference_file(args.input_file)
+    scrape_entities(entities, args.output_file, entity_types)
+    print(f"Entity scraping complete in file {args.output_file}")
     # create_scrape_checklist(
     #     "entity_scraping/university_scrape_info_linkedin.jsonl",
     #     "entity_scraping/university_scrape_checklist.csv",
-    # )
-
-    # create_visualizations(
-    #     "entity_scraping/company_scrape_info_linkedin.jsonl",
-    #     "entity_scraping/company_scrape_checklist.csv",
-    #     "company",
-    # )
-
-    # create_visualizations(
-    #     "entity_scraping/university_scrape_info_linkedin.jsonl",
-    #     "entity_scraping/university_scrape_checklist.csv",
-    #     "university",
-    # )
-
-    # create_features_csv_file(
-    #     "entity_scraping/company_scrape_info_linkedin.jsonl",
-    #     "entity_scraping/company_scrape_info.csv",
     # )
